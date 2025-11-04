@@ -1,0 +1,37 @@
+[
+  {
+    "_id": "8aae436c3591dd4f961332e8",
+    "name": "Laura Meier",
+    "geburtsdatum": "1995-03-20T00:00:00Z",
+    "krankenkasse": "CSS",
+    "adresse_id": "cbd584a516c5614b9bed0d2f"
+  },
+  {
+    "_id": "5d027a7977ac31d8c88cccfb",
+    "name": "Tim Baumann",
+    "geburtsdatum": "1988-07-14T00:00:00Z",
+    "krankenkasse": "Helsana",
+    "adresse_id": "cb3abe666028006cf7bbf403"
+  },
+  {
+    "_id": "6bee8eb456c92eadd5010aec",
+    "name": "Sophie Keller",
+    "geburtsdatum": "1992-11-02T00:00:00Z",
+    "krankenkasse": "Sanitas",
+    "adresse_id": "7529bac0d89f797cca876a6f"
+  },
+  {
+    "_id": "7c8369b1d3293f7dec1d4a06",
+    "name": "Noah Frei",
+    "geburtsdatum": "2000-01-05T00:00:00Z",
+    "krankenkasse": null,
+    "adresse_id": "1834d339daee4305922cfd46"
+  },
+  {
+    "_id": "e49bc7e605b9a278874e2f7f",
+    "name": "Mila Rossi",
+    "geburtsdatum": "1985-06-30T00:00:00Z",
+    "krankenkasse": "SWICA",
+    "adresse_id": "10e7cb9c928d9cb715b0295e"
+  }
+]

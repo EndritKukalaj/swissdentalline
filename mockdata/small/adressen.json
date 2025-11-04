@@ -1,0 +1,74 @@
+[
+  {
+    "strasse": "Seestrasse 12",
+    "plz": "8008",
+    "ort": "Zürich",
+    "typ": "HOME",
+    "bezeichnung": null,
+    "_id": "cbd584a516c5614b9bed0d2f"
+  },
+  {
+    "strasse": "Aeschenvorstadt 3",
+    "plz": "4051",
+    "ort": "Basel",
+    "typ": "HOME",
+    "bezeichnung": null,
+    "_id": "cb3abe666028006cf7bbf403"
+  },
+  {
+    "strasse": "Länggassstrasse 22",
+    "plz": "3012",
+    "ort": "Bern",
+    "typ": "HOME",
+    "bezeichnung": null,
+    "_id": "7529bac0d89f797cca876a6f"
+  },
+  {
+    "strasse": "Avenue de la Gare 7",
+    "plz": "1003",
+    "ort": "Lausanne",
+    "typ": "HOME",
+    "bezeichnung": null,
+    "_id": "1834d339daee4305922cfd46"
+  },
+  {
+    "strasse": "Marktgasse 10",
+    "plz": "9000",
+    "ort": "St. Gallen",
+    "typ": "HOME",
+    "bezeichnung": null,
+    "_id": "10e7cb9c928d9cb715b0295e"
+  },
+  {
+    "strasse": "Bahnhofstrasse 1",
+    "plz": "8001",
+    "ort": "Zürich",
+    "typ": "PRAXIS",
+    "bezeichnung": "Praxis Zürich City",
+    "_id": "ce63e54dc48b477e35ccc36e"
+  },
+  {
+    "strasse": "Freie Strasse 45",
+    "plz": "4051",
+    "ort": "Basel",
+    "typ": "PRAXIS",
+    "bezeichnung": "Basel Dental Center",
+    "_id": "fda89617ce65cb74abc09dca"
+  },
+  {
+    "strasse": "Kramgasse 8",
+    "plz": "3011",
+    "ort": "Bern",
+    "typ": "PRAXIS",
+    "bezeichnung": "Bern Smile Klinik",
+    "_id": "df7ce79e44542f6e4b4ba4e3"
+  },
+  {
+    "strasse": "Rue de Bourg 12",
+    "plz": "1003",
+    "ort": "Lausanne",
+    "typ": "PRAXIS",
+    "bezeichnung": "Clinique Dentaire Lausanne",
+    "_id": "0f66ba982373f8302d5745be"
+  }
+]
