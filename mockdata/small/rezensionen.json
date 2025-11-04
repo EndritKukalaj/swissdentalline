@@ -1,0 +1,102 @@
+[
+  {
+    "_id": "f9b7dcff6c49bcc18bba692e",
+    "zahnarzt_id": "17981e8ac4cbe09d6b9334bc",
+    "patient_id": "8aae436c3591dd4f961332e8",
+    "bewertung": 4,
+    "text": "Sehr freundlich und kompetent.",
+    "datum": "2024-12-15T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "85bb3dfed0ae0204f911c1a0",
+    "zahnarzt_id": "dd17ec9b8d08af340bb97075",
+    "patient_id": "7c8369b1d3293f7dec1d4a06",
+    "bewertung": 5,
+    "text": "Wartezeit kurz, Behandlung top.",
+    "datum": "2024-11-21T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "be152fdc8b586bcff8cdc890",
+    "zahnarzt_id": "cfe29d3f75b5ab53e8a07b8d",
+    "patient_id": "e49bc7e605b9a278874e2f7f",
+    "bewertung": 5,
+    "text": "Gute Erklärung und angenehme Atmosphäre.",
+    "datum": "2024-12-14T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "855d9ef7e83ec7401be0a445",
+    "zahnarzt_id": "dd17ec9b8d08af340bb97075",
+    "patient_id": "e49bc7e605b9a278874e2f7f",
+    "bewertung": 4,
+    "text": "Schneller Termin, gerne wieder.",
+    "datum": "2024-12-09T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "b948c1b511816f0ded9f8585",
+    "zahnarzt_id": "17981e8ac4cbe09d6b9334bc",
+    "patient_id": "7c8369b1d3293f7dec1d4a06",
+    "bewertung": 4,
+    "text": "Sehr zufrieden mit der Behandlung.",
+    "datum": "2024-12-27T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "f58a78767c5f45ce3980c6da",
+    "zahnarzt_id": "7122c64e5a182215e0ba1585",
+    "patient_id": "7c8369b1d3293f7dec1d4a06",
+    "bewertung": 5,
+    "text": "Empfehlenswert!",
+    "datum": "2024-11-21T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "599be597bc2a0eee59fefc12",
+    "zahnarzt_id": "3121a356591646990aebe888",
+    "patient_id": "5d027a7977ac31d8c88cccfb",
+    "bewertung": 4,
+    "text": "Professionell und empathisch.",
+    "datum": "2024-11-20T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "28e9f3c29df03fd04b245bee",
+    "zahnarzt_id": "3121a356591646990aebe888",
+    "patient_id": "7c8369b1d3293f7dec1d4a06",
+    "bewertung": 5,
+    "text": "Moderne Praxis und nettes Team.",
+    "datum": "2024-12-16T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "f1798ad48c69c275b8ff720b",
+    "zahnarzt_id": "dd17ec9b8d08af340bb97075",
+    "patient_id": "8aae436c3591dd4f961332e8",
+    "bewertung": 4,
+    "text": "Hat mir die Angst genommen.",
+    "datum": "2024-12-04T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  },
+  {
+    "_id": "9b2b41d78470ed85a5e78c24",
+    "zahnarzt_id": "a3d49e0b58b391d81a97f5b7",
+    "patient_id": "8aae436c3591dd4f961332e8",
+    "bewertung": 5,
+    "text": "Preis/Leistung stimmt.",
+    "datum": "2024-11-26T08:00:00Z",
+    "approved": true,
+    "ai_kommentar": null
+  }
+]

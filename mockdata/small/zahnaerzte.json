@@ -1,0 +1,32 @@
+[
+  {
+    "_id": "17981e8ac4cbe09d6b9334bc",
+    "name": "Dr. Markus Huber",
+    "praxis_adresse_id": "ce63e54dc48b477e35ccc36e"
+  },
+  {
+    "_id": "7122c64e5a182215e0ba1585",
+    "name": "Dr. Julia Keller",
+    "praxis_adresse_id": "ce63e54dc48b477e35ccc36e"
+  },
+  {
+    "_id": "dd17ec9b8d08af340bb97075",
+    "name": "Dr. Luca Romano",
+    "praxis_adresse_id": "fda89617ce65cb74abc09dca"
+  },
+  {
+    "_id": "cfe29d3f75b5ab53e8a07b8d",
+    "name": "Dr. Anna Schmid",
+    "praxis_adresse_id": "df7ce79e44542f6e4b4ba4e3"
+  },
+  {
+    "_id": "3121a356591646990aebe888",
+    "name": "Dr. Pierre Dubois",
+    "praxis_adresse_id": "0f66ba982373f8302d5745be"
+  },
+  {
+    "_id": "a3d49e0b58b391d81a97f5b7",
+    "name": "Dr. Selina Roth",
+    "praxis_adresse_id": "df7ce79e44542f6e4b4ba4e3"
+  }
+]
