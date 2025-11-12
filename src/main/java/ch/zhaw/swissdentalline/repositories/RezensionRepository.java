@@ -3,6 +3,8 @@ package ch.zhaw.swissdentalline.repositories;
 import ch.zhaw.swissdentalline.dto.GesamtBewertungDTO;
 import ch.zhaw.swissdentalline.model.Rezension;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -15,5 +17,7 @@ public interface RezensionRepository extends MongoRepository<Rezension, String> 
             "{ '$match': { 'zahnarzt_id': ?0, 'approved': true } }",
             "{ '$group': { '_id': null, 'avgBewertung': { '$avg': '$bewertung' }, 'count': { '$count': {} } } }"
     })
-    List<GesamtBewertungDTO> getAverageRatingForDentist(String zahnarztId);
+    List<GesamtBewertungDTO> getGesamtBewertungById(String id);
+
+    Page<Rezension> findByZahnarztId(String zahnarztId, Pageable pageable);
 }

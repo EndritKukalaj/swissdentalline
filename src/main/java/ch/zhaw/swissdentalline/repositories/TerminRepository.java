@@ -32,5 +32,6 @@ public interface TerminRepository extends MongoRepository<Termin, String> {
 	    "{ '$group': { '_id': { '$dateToString': { 'format': '%Y-%m', 'date': '$datum' } }, 'revenue': { '$sum': '$preis' }, 'count': { '$count': {} } } }",
 	    "{ '$sort': { '_id': 1 } }"
     })
-    List<EinnahmenProMonatDTO> getMonthlyRevenueByDentist(String zahnarztId, Instant start, Instant end);
+    List<EinnahmenProMonatDTO> getEinnahmenProMonatById(String zahnarztId, Instant start, Instant end);
+
 }

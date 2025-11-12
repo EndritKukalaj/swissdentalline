@@ -12,5 +12,5 @@ public interface AdresseMapper {
     @Mapping(target = "id", ignore = true)
     Adresse toEntity(AdresseCreateDTO dto);
 
-    AdresseKompaktDTO toSummaryDto(Adresse entity);
+    AdresseKompaktDTO toKompaktDTO(Adresse entity);
 }

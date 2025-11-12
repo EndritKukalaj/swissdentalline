@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ZahnarztRepository extends MongoRepository<Zahnarzt, String> {
     List<Zahnarzt> findByPraxisAdresseId(String praxisAdresseId);
+
+    List<Zahnarzt> findByName(String name);
 }
