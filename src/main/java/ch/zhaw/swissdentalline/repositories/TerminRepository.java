@@ -1,9 +1,10 @@
 package ch.zhaw.swissdentalline.repositories;
 
+import ch.zhaw.swissdentalline.dto.EinnahmenProMonatDTO;
+import ch.zhaw.swissdentalline.dto.TerminStatusAggregationDTO;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
-import ch.zhaw.swissdentalline.model.TerminStatusAggregationDTO;
-import ch.zhaw.swissdentalline.model.EinnahmenProMonatDTO;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -28,7 +28,7 @@ public class Adresse {
     private String ort;
 
     @NonNull
-    private AddressType typ;
+    private AdressTyp typ;
 
     private String bezeichnung;
 }

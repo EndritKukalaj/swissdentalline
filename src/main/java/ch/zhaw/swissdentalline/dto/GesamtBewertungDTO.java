@@ -1,4 +1,4 @@
-package ch.zhaw.swissdentalline.model;
+package ch.zhaw.swissdentalline.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BewertungDTO {
+public class GesamtBewertungDTO {
     private Double bewertung;
     private Long anzahl;
 }

@@ -1,6 +1,6 @@
 package ch.zhaw.swissdentalline.model;
 
-public enum AddressType {
+public enum AdressTyp {
     HOME,
     PRAXIS
 }
