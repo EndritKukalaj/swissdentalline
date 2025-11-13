@@ -1,0 +1,198 @@
+package ch.zhaw.swissdentalline.service;
+
+import ch.zhaw.swissdentalline.dto.AdresseCreateDTO;
+import ch.zhaw.swissdentalline.dto.AdresseKompaktDTO;
+import ch.zhaw.swissdentalline.mapper.AdresseMapper;
+import ch.zhaw.swissdentalline.model.Adresse;
+import ch.zhaw.swissdentalline.model.AdressTyp;
+import ch.zhaw.swissdentalline.repositories.AdresseRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class AdresseServiceTest {
+
+    @Mock
+    AdresseRepository adresseRepository;
+
+    @Mock
+    AdresseMapper adresseMapper;
+
+    @InjectMocks
+    AdresseService adresseService;
+
+    private AdresseCreateDTO testDTO;
+    private Adresse testEntity;
+
+    @BeforeEach
+    void setUp() {
+        testDTO = new AdresseCreateDTO();
+        testDTO.setStrasse("Bahnhofstrasse 1");
+        testDTO.setPlz("8001");
+        testDTO.setOrt("Zürich");
+        testDTO.setTyp(AdressTyp.PRAXIS);
+
+        testEntity = new Adresse();
+        testEntity.setId("ce63e54dc48b477e35ccc36e");
+        testEntity.setStrasse(testDTO.getStrasse());
+        testEntity.setPlz(testDTO.getPlz());
+        testEntity.setOrt(testDTO.getOrt());
+        testEntity.setTyp(testDTO.getTyp());
+    }
+
+    @Test
+    void shouldCreateAdresse() {
+        when(adresseMapper.toEntity(testDTO)).thenReturn(testEntity);
+        when(adresseRepository.save(testEntity)).thenReturn(testEntity);
+
+        Adresse result = adresseService.createAdresse(testDTO);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo("ce63e54dc48b477e35ccc36e");
+    }
+
+    @Test
+    void updateAdresse_whenNotFound_throws() {
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        when(adresseRepository.findById("nonexistent")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> adresseService.updateAdresse("nonexistent", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void getAdresseById_happy() {
+        Adresse a = new Adresse();
+        a.setId("cbd584a516c5614b9bed0d2f");
+        when(adresseRepository.findById("cbd584a516c5614b9bed0d2f")).thenReturn(Optional.of(a));
+
+        Optional<Adresse> found = adresseService.getAdresseById("cbd584a516c5614b9bed0d2f");
+        assertThat(found).isPresent();
+        assertThat(found.get().getId()).isEqualTo("cbd584a516c5614b9bed0d2f");
+    }
+
+    @Test
+    void getAdresseById_empty() {
+        when(adresseRepository.findById("missing")).thenReturn(Optional.empty());
+        Optional<Adresse> notFound = adresseService.getAdresseById("missing");
+        assertThat(notFound).isEmpty();
+    }
+
+    @Test
+    void getAllAdressen_happy() {
+        Adresse a1 = new Adresse();
+        a1.setId("cbd584a516c5614b9bed0d2f");
+        Adresse a2 = new Adresse();
+        a2.setId("cb3abe666028006cf7bbf403");
+        when(adresseRepository.findAll()).thenReturn(List.of(a1, a2));
+        List<Adresse> first = adresseService.getAllAdressen();
+        assertThat(first).hasSize(2);
+    }
+
+    @Test
+    void getAllAdressen_empty() {
+        when(adresseRepository.findAll()).thenReturn(List.of());
+        List<Adresse> second = adresseService.getAllAdressen();
+        assertThat(second).isEmpty();
+    }
+
+    @Test
+    void getAdressenByType_happy() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Adresse a = new Adresse();
+        a.setId("ce63e54dc48b477e35ccc36e");
+
+        Page<Adresse> pageWith = new PageImpl<>(List.of(a), pageable, 1);
+
+        when(adresseRepository.findByTyp(AdressTyp.PRAXIS, pageable)).thenReturn(pageWith);
+        Page<Adresse> p1 = adresseService.getAdressenByType(AdressTyp.PRAXIS, pageable);
+        assertThat(p1.getContent()).hasSize(1);
+    }
+
+    @Test
+    void getAdressenByType_empty() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Adresse> pageEmpty = new PageImpl<>(List.of(), pageable, 0);
+        when(adresseRepository.findByTyp(AdressTyp.PRAXIS, pageable)).thenReturn(pageEmpty);
+        Page<Adresse> p2 = adresseService.getAdressenByType(AdressTyp.PRAXIS, pageable);
+        assertThat(p2.getContent()).isEmpty();
+    }
+
+    @Test
+    void updateAdresse_happy() {
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        dto.setStrasse("Avenue de la Gare 7");
+        dto.setPlz("1003");
+        dto.setOrt("Lausanne");
+        dto.setTyp(AdressTyp.HOME);
+
+        Adresse existing = new Adresse();
+        existing.setId("1834d339daee4305922cfd46");
+
+        when(adresseRepository.findById("1834d339daee4305922cfd46")).thenReturn(Optional.of(existing));
+        when(adresseRepository.save(existing)).thenReturn(existing);
+
+        Adresse updated = adresseService.updateAdresse("1834d339daee4305922cfd46", dto);
+
+        assertThat(updated.getOrt()).isEqualTo("Lausanne");
+        assertThat(updated.getTyp()).isEqualTo(AdressTyp.HOME);
+    }
+
+    @Test
+    void deleteAdresse_happy() {
+        when(adresseRepository.existsById("10e7cb9c928d9cb715b0295e")).thenReturn(true);
+        doNothing().when(adresseRepository).deleteById("10e7cb9c928d9cb715b0295e");
+        adresseService.deleteAdresse("10e7cb9c928d9cb715b0295e");
+        verify(adresseRepository).deleteById("10e7cb9c928d9cb715b0295e");
+    }
+
+    @Test
+    void deleteAdresse_notFound() {
+        when(adresseRepository.existsById("missing")).thenReturn(false);
+        assertThatThrownBy(() -> adresseService.deleteAdresse("missing"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: missing nicht gefunden");
+    }
+
+    @Test
+    void getAdresseKompakt_happy() {
+        Adresse a = new Adresse();
+        a.setId("ce63e54dc48b477e35ccc36e");
+        AdresseKompaktDTO kompakt = new AdresseKompaktDTO();
+        kompakt.setId("ce63e54dc48b477e35ccc36e");
+        kompakt.setPlz("8001");
+        kompakt.setOrt("Zürich");
+
+        when(adresseRepository.findById("ce63e54dc48b477e35ccc36e")).thenReturn(Optional.of(a));
+        when(adresseMapper.toKompaktDTO(a)).thenReturn(kompakt);
+
+        AdresseKompaktDTO result = adresseService.getAdresseKompakt("ce63e54dc48b477e35ccc36e");
+        assertThat(result.getId()).isEqualTo("ce63e54dc48b477e35ccc36e");
+        assertThat(result.getPlz()).isEqualTo("8001");
+    }
+
+    @Test
+    void getAdresseKompakt_notFound() {
+        when(adresseRepository.findById("missing")).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> adresseService.getAdresseKompakt("missing"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: missing nicht gefunden");
+    }
+}
