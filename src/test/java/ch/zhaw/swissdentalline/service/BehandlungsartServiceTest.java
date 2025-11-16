@@ -49,6 +49,7 @@ class BehandlungsartServiceTest {
 
     @Test
     void shouldCreateBehandlungsart() {
+        when(repo.findByName(testDTO.getName())).thenReturn(Optional.empty());
         when(mapper.toEntity(testDTO)).thenReturn(testEntity);
         when(repo.save(testEntity)).thenReturn(testEntity);
 
@@ -107,8 +108,10 @@ class BehandlungsartServiceTest {
 
         Behandlungsart existing = new Behandlungsart();
         existing.setId("f3e4a3dc565c278142bf0b44");
+        existing.setName("Alte Behandlung");
 
         when(repo.findById("f3e4a3dc565c278142bf0b44")).thenReturn(Optional.of(existing));
+        when(repo.findByName(newDto.getName())).thenReturn(Optional.empty());
         when(repo.save(existing)).thenReturn(existing);
 
         Behandlungsart updated = service.updateBehandlungsart("f3e4a3dc565c278142bf0b44", newDto);
@@ -131,5 +134,45 @@ class BehandlungsartServiceTest {
         assertThatThrownBy(() -> service.deleteBehandlungsart("missing"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Behandlungsart mit id: missing nicht gefunden");
+    }
+
+    // Validation tests for duplicate name
+    @Test
+    void create_withDuplicateName_throws() {
+        BehandlungsartCreateDTO dto = new BehandlungsartCreateDTO();
+        dto.setName("Dentalhygiene");
+        dto.setBeschreibung("Duplicate test");
+
+        Behandlungsart existing = new Behandlungsart();
+        existing.setId("existingId");
+        existing.setName("Dentalhygiene");
+
+        when(repo.findByName("Dentalhygiene")).thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> service.createBehandlungsart(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Behandlungsart mit Name 'Dentalhygiene' existiert bereits");
+    }
+
+    @Test
+    void update_withDuplicateName_throws() {
+        BehandlungsartCreateDTO dto = new BehandlungsartCreateDTO();
+        dto.setName("Dentalhygiene");
+        dto.setBeschreibung("Update test");
+
+        Behandlungsart existing = new Behandlungsart();
+        existing.setId("id1");
+        existing.setName("Alte Behandlung");
+
+        Behandlungsart duplicate = new Behandlungsart();
+        duplicate.setId("id2");
+        duplicate.setName("Dentalhygiene");
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(repo.findByName("Dentalhygiene")).thenReturn(Optional.of(duplicate));
+
+        assertThatThrownBy(() -> service.updateBehandlungsart("id1", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Behandlungsart mit Name 'Dentalhygiene' existiert bereits");
     }
 }

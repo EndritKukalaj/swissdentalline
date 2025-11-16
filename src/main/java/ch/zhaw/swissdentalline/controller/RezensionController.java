@@ -5,6 +5,7 @@ import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
 import ch.zhaw.swissdentalline.dto.RezensionModerationDTO;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.service.RezensionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +25,7 @@ public class RezensionController {
     RezensionService rezensionService;
 
     @PostMapping("/rezensionen")
-    public ResponseEntity<Rezension> createRezension(@RequestBody RezensionCreateDTO rezensionDTO) {
+    public ResponseEntity<Rezension> createRezension(@Valid @RequestBody RezensionCreateDTO rezensionDTO) {
         Rezension created = rezensionService.createRezension(rezensionDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -66,7 +67,7 @@ public class RezensionController {
     @PutMapping("/rezensionen/{id}")
     public ResponseEntity<Rezension> updateRezension(
             @PathVariable String id,
-            @RequestBody RezensionCreateDTO rezensionDTO) {
+            @Valid @RequestBody RezensionCreateDTO rezensionDTO) {
         try {
             Rezension updated = rezensionService.updateRezension(id, rezensionDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);
@@ -78,7 +79,7 @@ public class RezensionController {
     @PutMapping("/rezensionen/{id}/moderieren")
     public ResponseEntity<Rezension> moderateRezension(
             @PathVariable String id,
-            @RequestBody RezensionModerationDTO moderationDTO) {
+            @Valid @RequestBody RezensionModerationDTO moderationDTO) {
         try {
             Rezension moderated = rezensionService.moderateRezension(id, moderationDTO);
             return new ResponseEntity<>(moderated, HttpStatus.OK);

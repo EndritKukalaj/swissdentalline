@@ -4,6 +4,9 @@ import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
 import ch.zhaw.swissdentalline.mapper.ZahnarztMapper;
 import ch.zhaw.swissdentalline.model.Zahnarzt;
 import ch.zhaw.swissdentalline.repositories.ZahnarztRepository;
+import ch.zhaw.swissdentalline.repositories.AdresseRepository;
+import ch.zhaw.swissdentalline.model.Adresse;
+import ch.zhaw.swissdentalline.model.AdressTyp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +30,9 @@ class ZahnarztServiceTest {
     @Mock
     ZahnarztMapper mapper;
 
+    @Mock
+    AdresseRepository adresseRepository;
+
     @InjectMocks
     ZahnarztService service;
 
@@ -47,6 +53,12 @@ class ZahnarztServiceTest {
 
     @Test
     void shouldCreateZahnarzt() {
+        // Validations: PraxisAdresse muss existieren und Typ PRAXIS; kein Duplikat
+        Adresse praxis = new Adresse();
+        praxis.setId(testDTO.getPraxisAdresseId());
+        praxis.setTyp(AdressTyp.PRAXIS);
+        when(adresseRepository.findById(testDTO.getPraxisAdresseId())).thenReturn(Optional.of(praxis));
+        when(repo.findByNameAndPraxisAdresseId(testDTO.getName(), testDTO.getPraxisAdresseId())).thenReturn(Optional.empty());
         when(mapper.toEntity(testDTO)).thenReturn(testEntity);
         when(repo.save(testEntity)).thenReturn(testEntity);
 
@@ -123,6 +135,11 @@ class ZahnarztServiceTest {
         ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
         dto.setName("Dr. Julia Keller");
         dto.setPraxisAdresseId("ce63e54dc48b477e35ccc36e");
+        Adresse praxis = new Adresse();
+        praxis.setId(dto.getPraxisAdresseId());
+        praxis.setTyp(AdressTyp.PRAXIS);
+        when(adresseRepository.findById(dto.getPraxisAdresseId())).thenReturn(Optional.of(praxis));
+        when(repo.findByNameAndPraxisAdresseId(dto.getName(), dto.getPraxisAdresseId())).thenReturn(Optional.empty());
 
         Zahnarzt existing = new Zahnarzt(); existing.setId("7122c64e5a182215e0ba1585");
         when(repo.findById("7122c64e5a182215e0ba1585")).thenReturn(Optional.of(existing));
@@ -147,5 +164,124 @@ class ZahnarztServiceTest {
         assertThatThrownBy(() -> service.deleteZahnarzt("missing"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Zahnarzt mit id: missing nicht gefunden");
+    }
+
+    // Validation tests for PraxisAdresse foreign key, type PRAXIS, and duplicate
+    @Test
+    void create_withNonExistentPraxisAdresse_throws() {
+        ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
+        dto.setName("Dr. Test");
+        dto.setPraxisAdresseId("nonexistent");
+
+        when(adresseRepository.findById("nonexistent")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.createZahnarzt(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Praxis-Adresse mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void create_withNonPraxisAdresse_throws() {
+        ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
+        dto.setName("Dr. Test");
+        dto.setPraxisAdresseId("homeAdresseId");
+
+        Adresse homeAdresse = new Adresse();
+        homeAdresse.setId("homeAdresseId");
+        homeAdresse.setTyp(AdressTyp.HOME);
+
+        when(adresseRepository.findById("homeAdresseId")).thenReturn(Optional.of(homeAdresse));
+
+        assertThatThrownBy(() -> service.createZahnarzt(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: homeAdresseId ist keine Praxis-Adresse");
+    }
+
+    @Test
+    void create_withDuplicateZahnarzt_throws() {
+        ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
+        dto.setName("Dr. Markus Huber");
+        dto.setPraxisAdresseId("ce63e54dc48b477e35ccc36e");
+
+        Adresse praxis = new Adresse();
+        praxis.setId(dto.getPraxisAdresseId());
+        praxis.setTyp(AdressTyp.PRAXIS);
+
+        Zahnarzt existing = new Zahnarzt();
+        existing.setId("existingId");
+        existing.setName("Dr. Markus Huber");
+
+        when(adresseRepository.findById(dto.getPraxisAdresseId())).thenReturn(Optional.of(praxis));
+        when(repo.findByNameAndPraxisAdresseId(dto.getName(), dto.getPraxisAdresseId()))
+                .thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> service.createZahnarzt(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Zahnarzt mit gleichem Namen in dieser Praxis existiert bereits");
+    }
+
+    @Test
+    void update_withNonExistentPraxisAdresse_throws() {
+        ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
+        dto.setName("Dr. Test");
+        dto.setPraxisAdresseId("nonexistent");
+
+        Zahnarzt existing = new Zahnarzt();
+        existing.setId("zahnarztId");
+
+        when(repo.findById("zahnarztId")).thenReturn(Optional.of(existing));
+        when(adresseRepository.findById("nonexistent")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.updateZahnarzt("zahnarztId", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Praxis-Adresse mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void update_withNonPraxisAdresse_throws() {
+        ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
+        dto.setName("Dr. Test");
+        dto.setPraxisAdresseId("homeAdresseId");
+
+        Zahnarzt existing = new Zahnarzt();
+        existing.setId("zahnarztId");
+
+        Adresse homeAdresse = new Adresse();
+        homeAdresse.setId("homeAdresseId");
+        homeAdresse.setTyp(AdressTyp.HOME);
+
+        when(repo.findById("zahnarztId")).thenReturn(Optional.of(existing));
+        when(adresseRepository.findById("homeAdresseId")).thenReturn(Optional.of(homeAdresse));
+
+        assertThatThrownBy(() -> service.updateZahnarzt("zahnarztId", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: homeAdresseId ist keine Praxis-Adresse");
+    }
+
+    @Test
+    void update_withDuplicateZahnarzt_throws() {
+        ZahnarztCreateDTO dto = new ZahnarztCreateDTO();
+        dto.setName("Dr. Markus Huber");
+        dto.setPraxisAdresseId("ce63e54dc48b477e35ccc36e");
+
+        Zahnarzt existing = new Zahnarzt();
+        existing.setId("id1");
+
+        Adresse praxis = new Adresse();
+        praxis.setId(dto.getPraxisAdresseId());
+        praxis.setTyp(AdressTyp.PRAXIS);
+
+        Zahnarzt duplicate = new Zahnarzt();
+        duplicate.setId("id2");
+        duplicate.setName("Dr. Markus Huber");
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(adresseRepository.findById(dto.getPraxisAdresseId())).thenReturn(Optional.of(praxis));
+        when(repo.findByNameAndPraxisAdresseId(dto.getName(), dto.getPraxisAdresseId()))
+                .thenReturn(Optional.of(duplicate));
+
+        assertThatThrownBy(() -> service.updateZahnarzt("id1", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Zahnarzt mit gleichem Namen in dieser Praxis existiert bereits");
     }
 }

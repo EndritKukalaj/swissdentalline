@@ -1,10 +1,10 @@
 package ch.zhaw.swissdentalline.dto;
 
 import ch.zhaw.swissdentalline.model.TerminStatus;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,7 @@ public class TerminCreateDTO {
     private String behandlungsartId;
 
     @NotNull
+    @Future
     private Instant datum;
 
     @NotNull
@@ -33,7 +34,7 @@ public class TerminCreateDTO {
     private Integer dauerMinuten;
 
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Double preis;
 
     @NotNull

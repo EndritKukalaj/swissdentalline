@@ -3,6 +3,7 @@ package ch.zhaw.swissdentalline.controller;
 import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
 import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.service.PatientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class PatientController {
     PatientService patientService;
 
     @PostMapping("/patienten")
-    public ResponseEntity<Patient> createPatient(@RequestBody PatientCreateDTO patientDTO) {
+    public ResponseEntity<Patient> createPatient(@Valid @RequestBody PatientCreateDTO patientDTO) {
         Patient created = patientService.createPatient(patientDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -48,7 +49,7 @@ public class PatientController {
     @PutMapping("/patienten/{id}")
     public ResponseEntity<Patient> updatePatient(
             @PathVariable String id,
-            @RequestBody PatientCreateDTO patientDTO) {
+            @Valid @RequestBody PatientCreateDTO patientDTO) {
         try {
             Patient updated = patientService.updatePatient(id, patientDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);

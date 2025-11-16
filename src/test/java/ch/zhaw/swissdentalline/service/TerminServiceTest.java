@@ -7,6 +7,9 @@ import ch.zhaw.swissdentalline.mapper.TerminMapper;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
 import ch.zhaw.swissdentalline.repositories.TerminRepository;
+import ch.zhaw.swissdentalline.repositories.ZahnarztRepository;
+import ch.zhaw.swissdentalline.repositories.BehandlungsartRepository;
+import ch.zhaw.swissdentalline.repositories.PatientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +37,15 @@ class TerminServiceTest {
 
     @Mock
     TerminMapper mapper;
+
+    @Mock
+    ZahnarztRepository zahnarztRepository;
+
+    @Mock
+    BehandlungsartRepository behandlungsartRepository;
+
+    @Mock
+    PatientRepository patientRepository;
 
     @InjectMocks
     TerminService service;
@@ -63,6 +75,9 @@ class TerminServiceTest {
 
     @Test
     void shouldCreateTermin() {
+        // Arrange
+        when(zahnarztRepository.existsById(testDTO.getZahnarztId())).thenReturn(true);
+        when(behandlungsartRepository.existsById(testDTO.getBehandlungsartId())).thenReturn(true);
         when(mapper.toEntity(testDTO)).thenReturn(testEntity);
         when(repo.save(testEntity)).thenReturn(testEntity);
 
@@ -214,6 +229,9 @@ class TerminServiceTest {
         dto.setDauerMinuten(45);
         dto.setPreis(150.0);
 
+        when(zahnarztRepository.existsById(dto.getZahnarztId())).thenReturn(true);
+        when(behandlungsartRepository.existsById(dto.getBehandlungsartId())).thenReturn(true);
+
         Termin existing = new Termin();
         existing.setId("78892595995796e6de28e995");
         when(repo.findById("78892595995796e6de28e995")).thenReturn(Optional.of(existing));
@@ -252,7 +270,12 @@ class TerminServiceTest {
         Termin frei = new Termin();
         frei.setId("498242db8eedaefbb8f764cb");
         frei.setStatus(TerminStatus.FREI);
+        frei.setDatum(Instant.parse("2025-01-10T11:45:00Z"));
+        frei.setDauerMinuten(45);
         when(repo.findById("498242db8eedaefbb8f764cb")).thenReturn(Optional.of(frei));
+        // Foreign key + overlap validations
+        when(patientRepository.existsById("8aae436c3591dd4f961332e8")).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq("8aae436c3591dd4f961332e8"), any(), any())).thenReturn(List.of());
         when(repo.save(frei)).thenReturn(frei);
         Termin booked = service.bookTermin("498242db8eedaefbb8f764cb", true, "8aae436c3591dd4f961332e8");
         assertThat(booked.getStatus()).isEqualTo(TerminStatus.GEBUCHT);
@@ -298,5 +321,180 @@ class TerminServiceTest {
         assertThatThrownBy(() -> service.completeTermin("wrong"))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Nur gebuchte Termine können abgeschlossen werden");
+    }
+
+    // Validation tests for foreign keys and overlap
+    @Test
+    void create_withNonExistentZahnarzt_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("nonexistent");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.FREI);
+
+        when(zahnarztRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.createTermin(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Zahnarzt mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void create_withNonExistentBehandlungsart_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("nonexistent");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.FREI);
+
+        when(zahnarztRepository.existsById("cfe29d3f75b5ab53e8a07b8d")).thenReturn(true);
+        when(behandlungsartRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.createTermin(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Behandlungsart mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void create_withNonExistentPatient_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("nonexistent");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        when(zahnarztRepository.existsById("cfe29d3f75b5ab53e8a07b8d")).thenReturn(true);
+        when(behandlungsartRepository.existsById("f3e4a3dc565c278142bf0b44")).thenReturn(true);
+        when(patientRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.createTermin(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Patient mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void create_withOverlappingPatientTermin_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("8aae436c3591dd4f961332e8");
+        dto.setDatum(Instant.parse("2025-01-10T09:00:00Z"));
+        dto.setDauerMinuten(60);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        Termin overlapping = new Termin();
+        overlapping.setId("overlappingId");
+        overlapping.setDatum(Instant.parse("2025-01-10T09:30:00Z"));
+        overlapping.setDauerMinuten(45);
+
+        when(zahnarztRepository.existsById("cfe29d3f75b5ab53e8a07b8d")).thenReturn(true);
+        when(behandlungsartRepository.existsById("f3e4a3dc565c278142bf0b44")).thenReturn(true);
+        when(patientRepository.existsById("8aae436c3591dd4f961332e8")).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq("8aae436c3591dd4f961332e8"), any(), any()))
+                .thenReturn(List.of(overlapping));
+
+        assertThatThrownBy(() -> service.createTermin(dto))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Patient hat bereits einen Termin am")
+                .hasMessageContaining("der sich mit dem neuen Termin überschneidet");
+    }
+
+    @Test
+    void bookTermin_withNonExistentPatient_throws() {
+        Termin frei = new Termin();
+        frei.setId("terminId");
+        frei.setStatus(TerminStatus.FREI);
+
+        when(repo.findById("terminId")).thenReturn(Optional.of(frei));
+        when(patientRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.bookTermin("terminId", true, "nonexistent"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Patient mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void bookTermin_withOverlappingPatientTermin_throws() {
+        Termin frei = new Termin();
+        frei.setId("terminId");
+        frei.setStatus(TerminStatus.FREI);
+        frei.setDatum(Instant.parse("2025-01-10T10:00:00Z"));
+        frei.setDauerMinuten(45);
+
+        Termin overlapping = new Termin();
+        overlapping.setId("overlappingId");
+        overlapping.setDatum(Instant.parse("2025-01-10T10:15:00Z"));
+        overlapping.setDauerMinuten(30);
+
+        when(repo.findById("terminId")).thenReturn(Optional.of(frei));
+        when(patientRepository.existsById("8aae436c3591dd4f961332e8")).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq("8aae436c3591dd4f961332e8"), any(), any()))
+                .thenReturn(List.of(overlapping));
+
+        assertThatThrownBy(() -> service.bookTermin("terminId", true, "8aae436c3591dd4f961332e8"))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Patient hat bereits einen Termin am")
+                .hasMessageContaining("der sich mit dem neuen Termin überschneidet");
+    }
+
+    @Test
+    void update_withNonExistentZahnarzt_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("nonexistent");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.FREI);
+
+        Termin existing = new Termin();
+        existing.setId("terminId");
+
+        when(repo.findById("terminId")).thenReturn(Optional.of(existing));
+        when(zahnarztRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.updateTermin("terminId", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Zahnarzt mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void update_withOverlappingPatientTermin_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("8aae436c3591dd4f961332e8");
+        dto.setDatum(Instant.parse("2025-01-10T09:00:00Z"));
+        dto.setDauerMinuten(60);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        Termin existing = new Termin();
+        existing.setId("id1");
+
+        Termin overlapping = new Termin();
+        overlapping.setId("id2");
+        overlapping.setDatum(Instant.parse("2025-01-10T09:30:00Z"));
+        overlapping.setDauerMinuten(45);
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(zahnarztRepository.existsById("cfe29d3f75b5ab53e8a07b8d")).thenReturn(true);
+        when(behandlungsartRepository.existsById("f3e4a3dc565c278142bf0b44")).thenReturn(true);
+        when(patientRepository.existsById("8aae436c3591dd4f961332e8")).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq("8aae436c3591dd4f961332e8"), any(), any()))
+                .thenReturn(List.of(overlapping));
+
+        assertThatThrownBy(() -> service.updateTermin("id1", dto))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Patient hat bereits einen Termin am")
+                .hasMessageContaining("der sich mit dem neuen Termin überschneidet");
     }
 }

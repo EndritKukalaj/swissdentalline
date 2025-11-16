@@ -5,6 +5,7 @@ import ch.zhaw.swissdentalline.dto.AdresseKompaktDTO;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
 import ch.zhaw.swissdentalline.service.AdresseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +25,7 @@ public class AdresseController {
     AdresseService adresseService;
 
     @PostMapping("/adressen")
-    public ResponseEntity<Adresse> createAdresse(@RequestBody AdresseCreateDTO adresseDTO) {
+    public ResponseEntity<Adresse> createAdresse(@Valid @RequestBody AdresseCreateDTO adresseDTO) {
         Adresse created = adresseService.createAdresse(adresseDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -67,7 +68,7 @@ public class AdresseController {
     @PutMapping("/adressen/{id}")
     public ResponseEntity<Adresse> updateAdresse(
             @PathVariable String id,
-            @RequestBody AdresseCreateDTO adresseDTO) {
+            @Valid @RequestBody AdresseCreateDTO adresseDTO) {
         try {
             Adresse updated = adresseService.updateAdresse(id, adresseDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);

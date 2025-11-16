@@ -34,4 +34,7 @@ public interface TerminRepository extends MongoRepository<Termin, String> {
     })
     List<EinnahmenProMonatDTO> getEinnahmenProMonatById(String zahnarztId, Instant start, Instant end);
 
+    // Find overlapping appointments for a patient
+    List<Termin> findByPatientIdAndDatumBetween(String patientId, Instant start, Instant end);
+
 }

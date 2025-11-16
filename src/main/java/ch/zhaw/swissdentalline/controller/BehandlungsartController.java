@@ -3,6 +3,7 @@ package ch.zhaw.swissdentalline.controller;
 import ch.zhaw.swissdentalline.dto.BehandlungsartCreateDTO;
 import ch.zhaw.swissdentalline.model.Behandlungsart;
 import ch.zhaw.swissdentalline.service.BehandlungsartService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class BehandlungsartController {
     BehandlungsartService behandlungsartService;
 
     @PostMapping("/behandlungsarten")
-    public ResponseEntity<Behandlungsart> createBehandlungsart(@RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
+    public ResponseEntity<Behandlungsart> createBehandlungsart(@Valid @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
         Behandlungsart created = behandlungsartService.createBehandlungsart(behandlungsartDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -42,7 +43,7 @@ public class BehandlungsartController {
     @PutMapping("/behandlungsarten/{id}")
     public ResponseEntity<Behandlungsart> updateBehandlungsart(
             @PathVariable String id,
-            @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
+            @Valid @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
         try {
             Behandlungsart updated = behandlungsartService.updateBehandlungsart(id, behandlungsartDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);

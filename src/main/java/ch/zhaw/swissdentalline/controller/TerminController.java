@@ -6,6 +6,7 @@ import ch.zhaw.swissdentalline.dto.TerminStatusAggregationDTO;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
 import ch.zhaw.swissdentalline.service.TerminService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +27,7 @@ public class TerminController {
     TerminService terminService;
 
     @PostMapping("/termine")
-    public ResponseEntity<Termin> createTermin(@RequestBody TerminCreateDTO terminDTO) {
+    public ResponseEntity<Termin> createTermin(@Valid @RequestBody TerminCreateDTO terminDTO) {
         Termin created = terminService.createTermin(terminDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -94,7 +95,7 @@ public class TerminController {
     @PutMapping("/termine/{id}")
     public ResponseEntity<Termin> updateTermin(
             @PathVariable String id,
-            @RequestBody TerminCreateDTO terminDTO) {
+            @Valid @RequestBody TerminCreateDTO terminDTO) {
         try {
             Termin updated = terminService.updateTermin(id, terminDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);

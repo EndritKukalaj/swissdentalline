@@ -195,4 +195,51 @@ class AdresseServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Adresse mit id: missing nicht gefunden");
     }
+
+    // Validation tests for duplicate Praxis Bezeichnung
+    @Test
+    void create_praxisWithDuplicateBezeichnung_throws() {
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        dto.setStrasse("Bahnhofstrasse 1");
+        dto.setPlz("8001");
+        dto.setOrt("Zürich");
+        dto.setTyp(AdressTyp.PRAXIS);
+        dto.setBezeichnung("Zahnarztpraxis am Bahnhof");
+
+        Adresse existing = new Adresse();
+        existing.setId("existingId");
+        existing.setBezeichnung("Zahnarztpraxis am Bahnhof");
+
+        when(adresseRepository.findByBezeichnung("Zahnarztpraxis am Bahnhof")).thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> adresseService.createAdresse(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Praxis mit Bezeichnung 'Zahnarztpraxis am Bahnhof' existiert bereits");
+    }
+
+    @Test
+    void update_praxisWithDuplicateBezeichnung_throws() {
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        dto.setStrasse("Bahnhofstrasse 1");
+        dto.setPlz("8001");
+        dto.setOrt("Zürich");
+        dto.setTyp(AdressTyp.PRAXIS);
+        dto.setBezeichnung("Zahnarztpraxis am Bahnhof");
+
+        Adresse existing = new Adresse();
+        existing.setId("id1");
+        existing.setBezeichnung("Alte Praxis");
+        existing.setTyp(AdressTyp.PRAXIS);
+
+        Adresse duplicate = new Adresse();
+        duplicate.setId("id2");
+        duplicate.setBezeichnung("Zahnarztpraxis am Bahnhof");
+
+        when(adresseRepository.findById("id1")).thenReturn(Optional.of(existing));
+        when(adresseRepository.findByBezeichnung("Zahnarztpraxis am Bahnhof")).thenReturn(Optional.of(duplicate));
+
+        assertThatThrownBy(() -> adresseService.updateAdresse("id1", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Praxis mit Bezeichnung 'Zahnarztpraxis am Bahnhof' existiert bereits");
+    }
 }

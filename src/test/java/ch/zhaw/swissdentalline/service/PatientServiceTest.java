@@ -4,6 +4,7 @@ import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
 import ch.zhaw.swissdentalline.mapper.PatientMapper;
 import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.repositories.PatientRepository;
+import ch.zhaw.swissdentalline.repositories.AdresseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,9 @@ class PatientServiceTest {
 
     @Mock
     PatientMapper mapper;
+
+    @Mock
+    AdresseRepository adresseRepository;
 
     @InjectMocks
     PatientService service;
@@ -52,6 +56,10 @@ class PatientServiceTest {
 
     @Test
     void shouldCreatePatient() {
+        //  Adresse muss existieren, kein Duplikat
+        when(adresseRepository.existsById(testDTO.getAdresseId())).thenReturn(true);
+        when(repo.findByNameAndGeburtsdatumAndAdresseId(testDTO.getName(), testDTO.getGeburtsdatum(), testDTO.getAdresseId()))
+            .thenReturn(Optional.empty());
         when(mapper.toEntity(testDTO)).thenReturn(testEntity);
         when(repo.save(testEntity)).thenReturn(testEntity);
 
@@ -119,6 +127,9 @@ class PatientServiceTest {
         dto.setAdresseId("cb3abe666028006cf7bbf403");
         dto.setGeburtsdatum(new Date().toInstant());
         dto.setKrankenkasse("SWICA");
+        when(adresseRepository.existsById(dto.getAdresseId())).thenReturn(true);
+        when(repo.findByNameAndGeburtsdatumAndAdresseId(dto.getName(), dto.getGeburtsdatum(), dto.getAdresseId()))
+            .thenReturn(Optional.empty());
         
         Patient existing = new Patient();
         existing.setId("5d027a7977ac31d8c88cccfb");
@@ -145,5 +156,86 @@ class PatientServiceTest {
         assertThatThrownBy(() -> service.deletePatient("missing"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Patient mit id: missing nicht gefunden");
+    }
+
+    // Validation tests for foreign key and duplicate patient
+    @Test
+    void create_withNonExistentAdresse_throws() {
+        PatientCreateDTO dto = new PatientCreateDTO();
+        dto.setName("Laura Meier");
+        dto.setAdresseId("nonexistent");
+        dto.setGeburtsdatum(new Date().toInstant());
+        dto.setKrankenkasse("CSS");
+
+        when(adresseRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.createPatient(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void create_withDuplicatePatient_throws() {
+        PatientCreateDTO dto = new PatientCreateDTO();
+        dto.setName("Laura Meier");
+        dto.setAdresseId("cbd584a516c5614b9bed0d2f");
+        dto.setGeburtsdatum(new Date().toInstant());
+        dto.setKrankenkasse("CSS");
+
+        Patient existing = new Patient();
+        existing.setId("existingId");
+        existing.setName("Laura Meier");
+
+        when(adresseRepository.existsById(dto.getAdresseId())).thenReturn(true);
+        when(repo.findByNameAndGeburtsdatumAndAdresseId(dto.getName(), dto.getGeburtsdatum(), dto.getAdresseId()))
+                .thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> service.createPatient(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Patient mit gleichem Namen, Geburtsdatum und Adresse existiert bereits");
+    }
+
+    @Test
+    void update_withNonExistentAdresse_throws() {
+        PatientCreateDTO dto = new PatientCreateDTO();
+        dto.setName("Laura Meier");
+        dto.setAdresseId("nonexistent");
+        dto.setGeburtsdatum(new Date().toInstant());
+        dto.setKrankenkasse("CSS");
+
+        Patient existing = new Patient();
+        existing.setId("patientId");
+
+        when(repo.findById("patientId")).thenReturn(Optional.of(existing));
+        when(adresseRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.updatePatient("patientId", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Adresse mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void update_withDuplicatePatient_throws() {
+        PatientCreateDTO dto = new PatientCreateDTO();
+        dto.setName("Laura Meier");
+        dto.setAdresseId("cbd584a516c5614b9bed0d2f");
+        dto.setGeburtsdatum(new Date().toInstant());
+        dto.setKrankenkasse("CSS");
+
+        Patient existing = new Patient();
+        existing.setId("id1");
+
+        Patient duplicate = new Patient();
+        duplicate.setId("id2");
+        duplicate.setName("Laura Meier");
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(adresseRepository.existsById(dto.getAdresseId())).thenReturn(true);
+        when(repo.findByNameAndGeburtsdatumAndAdresseId(dto.getName(), dto.getGeburtsdatum(), dto.getAdresseId()))
+                .thenReturn(Optional.of(duplicate));
+
+        assertThatThrownBy(() -> service.updatePatient("id1", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Patient mit gleichem Namen, Geburtsdatum und Adresse existiert bereits");
     }
 }
