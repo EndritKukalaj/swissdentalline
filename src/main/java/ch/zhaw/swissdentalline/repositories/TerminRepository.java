@@ -28,9 +28,9 @@ public interface TerminRepository extends MongoRepository<Termin, String> {
 
     // Aggregation: monthly revenue and count for completed appointments of a dentist within a date range
     @Aggregation({
-	    "{ '$match': { 'zahnarzt_id': ?0, 'status': 'ABGESCHLOSSEN', 'datum': { '$gte': ?1, '$lte': ?2 } } }",
-	    "{ '$group': { '_id': { '$dateToString': { 'format': '%Y-%m', 'date': '$datum' } }, 'revenue': { '$sum': '$preis' }, 'count': { '$count': {} } } }",
-	    "{ '$sort': { '_id': 1 } }"
+        "{ '$match': { 'zahnarzt_id': ?0, 'status': 'ABGESCHLOSSEN', 'datum': { '$gte': ?1, '$lte': ?2 } } }",
+        "{ '$group': { '_id': { '$dateToString': { 'format': '%Y-%m', 'date': '$datum' } }, 'einnahmen': { '$sum': '$preis' }, 'anzahl': { '$sum': 1 } } }",
+        "{ '$sort': { '_id': 1 } }"
     })
     List<EinnahmenProMonatDTO> getEinnahmenProMonatById(String zahnarztId, Instant start, Instant end);
 

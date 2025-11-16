@@ -18,8 +18,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdresseService {
 
-    private AdresseRepository adresseRepository;
-    private AdresseMapper adresseMapper;
+    private final AdresseRepository adresseRepository;
+    private final AdresseMapper adresseMapper;
 
     public Adresse createAdresse(AdresseCreateDTO createDTO) {
         Adresse adresse = adresseMapper.toEntity(createDTO);

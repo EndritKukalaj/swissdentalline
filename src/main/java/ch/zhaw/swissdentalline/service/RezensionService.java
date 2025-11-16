@@ -35,9 +35,9 @@ public class RezensionService {
         return rezensionRepository.findAll();
     }
 
-    public List<Rezension> getRezensionenByZahnarzt(String zahnarztId, Pageable pageable) {
+    public Page<Rezension> getRezensionenByZahnarzt(String zahnarztId, Pageable pageable) {
         Page<Rezension> approved = rezensionRepository.findByZahnarztId(zahnarztId, pageable);
-        return approved.getContent();
+        return approved;
     }
 
     public Optional<GesamtBewertungDTO> getGesamtBewertungById(String id) {

@@ -15,7 +15,7 @@ public interface RezensionRepository extends MongoRepository<Rezension, String> 
     // Average rating for a dentist (approved only)
     @Aggregation({
             "{ '$match': { 'zahnarzt_id': ?0, 'approved': true } }",
-            "{ '$group': { '_id': null, 'avgBewertung': { '$avg': '$bewertung' }, 'count': { '$count': {} } } }"
+            "{ '$group': { '_id': null, 'bewertung': { '$avg': '$bewertung' }, 'anzahl': { '$count': {} } } }"
     })
     List<GesamtBewertungDTO> getGesamtBewertungById(String id);
 
