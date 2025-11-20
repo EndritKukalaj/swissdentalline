@@ -7,7 +7,10 @@
 
 <svelte:head>
   <link rel="icon" href={favicon} />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+  />
 </svelte:head>
 
 <nav class="custom-navbar">
@@ -40,25 +43,41 @@
         {#if isAuthenticated}
           <div class="nav-links">
             <a href="/" class="nav-link-item">
-              <i class="bi bi-speedometer2"></i>
-              Termine
+              <i class="bi bi-house-door"></i>
+              Übersicht
             </a>
-            <a href="/flex" class="nav-link-item">
-              <i class="bi bi-calendar-check"></i>
-              Flex-Termine
-            </a>
+            {#if user.user_roles.includes("Patient")}
+              <a href="/" class="nav-link-item">
+                <i class="bi bi-calendar-plus"></i>
+                Termin erfassen
+              </a>
+              <a href="/" class="nav-link-item">
+                <i class="bi bi-calendar2-range"></i>
+                Flex-Termine
+              </a>
+            {/if}
+            {#if user.user_roles.includes("Zahnarzt")}
+              <a href="/" class="nav-link-item">
+                <i class="bi bi-clock-history"></i>
+                Slots erfassen
+              </a>
+              <a href="/" class="nav-link-item">
+                <i class="bi bi-bar-chart-line"></i>
+                Statistiken
+              </a>
+            {/if}
           </div>
         {/if}
 
         <!-- User Actions -->
         <div class="nav-actions">
           {#if isAuthenticated}
-            <div class="user-info">
+            <a href="/profil" class="user-info" style="text-decoration: none;">
               <div class="user-avatar">
                 <i class="bi bi-person-circle"></i>
               </div>
               <span class="user-name">{user.name}</span>
-            </div>
+            </a>
             <form method="POST" action="/logout" style="display: inline;">
               <button type="submit" class="btn btn-outline-primary btn-sm">
                 Abmelden
@@ -89,7 +108,7 @@
   }
 
   .nav-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 1.5rem;
     display: flex;
@@ -124,7 +143,11 @@
   }
 
   .brand-text {
-    background: linear-gradient(135deg, var(--primary-turquoise), var(--accent-blue));
+    background: linear-gradient(
+      135deg,
+      var(--primary-turquoise),
+      var(--accent-blue)
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -149,7 +172,8 @@
     align-items: center;
     gap: 2rem;
     flex: 1;
-    justify-content: flex-end;
+    justify-content: space-between;
+    margin-left: 2rem;
   }
 
   .nav-links {
@@ -171,7 +195,7 @@
   }
 
   .nav-link-item::before {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -196,6 +220,8 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin-left: auto;
+    justify-content: flex-end;
   }
 
   .user-info {

@@ -20,6 +20,7 @@ async function signup(
       email: email,
       password: password,
       connection: "Username-Password-Authentication",
+      name: firstName && lastName ? `${firstName} ${lastName}` : email,
       // you can set any of these properties as well if needed
       // username: "johndoe", // if not provided, email will be used as username for login. if provided, username has to be validated (must not already exist)
       // given_name: "John",

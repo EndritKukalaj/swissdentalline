@@ -14,7 +14,7 @@
             <!-- Logo/Brand Section -->
             <div class="brand-section">
                 <div>
-                    <h1 class="brand-title">SwissDentalLine</h1>
+                    <h1 class="brand-title text-center">SwissDentalLine</h1>
                     <hr />
                 </div>
             </div>
@@ -162,7 +162,7 @@
         }
 
         .hero-image-wrapper {
-            min-height: 500px;
+            height: 500px;
         }
 
         .hero-title {

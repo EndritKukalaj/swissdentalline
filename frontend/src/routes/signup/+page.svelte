@@ -47,7 +47,18 @@
                         class="form-control"
                         id="firstName"
                         name="firstName"
-                        placeholder="Name"
+                        placeholder="Vorname"
+                        required
+                    />
+                </div>
+
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Nachname"
                         required
                     />
                 </div>
