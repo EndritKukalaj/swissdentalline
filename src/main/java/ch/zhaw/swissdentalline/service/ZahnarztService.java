@@ -1,6 +1,7 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
+import ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO;
 import ch.zhaw.swissdentalline.mapper.ZahnarztMapper;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
@@ -86,5 +87,43 @@ public class ZahnarztService {
             throw new IllegalArgumentException("Zahnarzt mit id: " + id + " nicht gefunden");
         }
         zahnarztRepository.deleteById(id);
+    }
+
+    public ZahnarztProfilDTO getProfilByName(String name, String email, String role) {
+        List<Zahnarzt> zahnaerzte = zahnarztRepository.findByName("Dr. " + name);
+        
+        if (zahnaerzte.isEmpty()) {
+            // Zahnarzt existiert noch nicht in Collection - gebe minimales Profil zurück
+            ZahnarztProfilDTO dto = new ZahnarztProfilDTO();
+            dto.setName(name);
+            dto.setEmail(email);
+            dto.setRole(role);
+            return dto;
+        }
+        
+        // Nehme ersten Treffer (bei mehreren Zahnärzten mit gleichem Namen)
+        Zahnarzt zahnarzt = zahnaerzte.get(0);
+        
+        // Lade Praxisadresse
+        String praxisname = null;
+        String praxisadresseFormatiert = null;
+        
+        if (zahnarzt.getPraxisAdresseId() != null) {
+            Optional<Adresse> praxisAdresse = adresseRepository.findById(zahnarzt.getPraxisAdresseId());
+            if (praxisAdresse.isPresent()) {
+                Adresse adr = praxisAdresse.get();
+                praxisname = adr.getBezeichnung(); 
+                praxisadresseFormatiert = String.format("%s, %s %s", adr.getStrasse(), adr.getPlz(), adr.getOrt());
+            }
+        }
+        
+        ZahnarztProfilDTO dto = new ZahnarztProfilDTO();
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setRole(role);
+        dto.setPraxisname(praxisname);
+        dto.setPraxisadresse(praxisadresseFormatiert);
+        
+        return dto;
     }
 }

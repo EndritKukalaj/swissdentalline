@@ -1,6 +1,7 @@
 package ch.zhaw.swissdentalline.controller;
 
 import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
+import ch.zhaw.swissdentalline.dto.PatientProfilDTO;
 import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.service.PatientService;
 import jakarta.validation.Valid;
@@ -66,5 +67,14 @@ public class PatientController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/patienten/profil")
+    public ResponseEntity<PatientProfilDTO> getProfil(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String role) {
+        PatientProfilDTO profil = patientService.getProfilByName(name, email, role);
+        return new ResponseEntity<>(profil, HttpStatus.OK);
     }
 }
