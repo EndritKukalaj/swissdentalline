@@ -1,11 +1,15 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
+import ch.zhaw.swissdentalline.dto.PatientProfilDTO;
 import ch.zhaw.swissdentalline.mapper.PatientMapper;
+import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
 import ch.zhaw.swissdentalline.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +19,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PatientService {
 
-    private final PatientRepository patientRepository;
-    private final PatientMapper patientMapper;
-    private final AdresseRepository adresseRepository;
+    @Autowired
+    private PatientRepository patientRepository;
+    @Autowired
+    private PatientMapper patientMapper;
+    @Autowired
+    private AdresseRepository adresseRepository;
 
     public Patient createPatient(PatientCreateDTO createDTO) {
         // Validate foreign key: AdresseId must exist
@@ -76,5 +83,39 @@ public class PatientService {
             throw new IllegalArgumentException("Patient mit id: " + id + " nicht gefunden");
         }
         patientRepository.deleteById(id);
+    }
+
+    public PatientProfilDTO getProfilByName(String name, String email, String role) {
+        List<Patient> patients = patientRepository.findByName(name);
+        
+        if (patients.isEmpty()) {
+            // Patient existiert noch nicht in Collection - gebe minimales Profil zurück
+            PatientProfilDTO dto = new PatientProfilDTO();
+            dto.setName(name);
+            dto.setEmail(email);
+            dto.setRole(role);
+            return dto;
+        }
+        Patient patient = patients.get(0);
+        
+        // Lade Adresse
+        String adresseFormatiert = null;
+        if (patient.getAdresseId() != null) {
+            Optional<Adresse> adresse = adresseRepository.findById(patient.getAdresseId());
+            if (adresse.isPresent()) {
+                Adresse adr = adresse.get();
+                adresseFormatiert = String.format("%s, %s %s", adr.getStrasse(), adr.getPlz(), adr.getOrt());
+            }
+        }
+        
+        PatientProfilDTO dto = new PatientProfilDTO();
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setRole(role);
+        dto.setAdresse(adresseFormatiert);
+        dto.setGeburtsdatum(patient.getGeburtsdatum());
+        dto.setKrankenkasse(patient.getKrankenkasse());
+        
+        return dto;
     }
 }

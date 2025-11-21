@@ -1,8 +1,10 @@
 package ch.zhaw.swissdentalline.controller;
 
 import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
+import ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO;
 import ch.zhaw.swissdentalline.model.Zahnarzt;
 import ch.zhaw.swissdentalline.service.ZahnarztService;
+import ch.zhaw.swissdentalline.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +21,23 @@ public class ZahnarztController {
     @Autowired
     ZahnarztService zahnarztService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/zahnaerzte")
     public ResponseEntity<Zahnarzt> createZahnarzt(@Valid @RequestBody ZahnarztCreateDTO zahnarztDTO) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Zahnarzt created = zahnarztService.createZahnarzt(zahnarztDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping("/zahnaerzte/{id}")
     public ResponseEntity<Zahnarzt> getZahnarztById(@PathVariable String id) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Optional<Zahnarzt> zahnarzt = zahnarztService.getZahnarztById(id);
         if (zahnarzt.isPresent()) {
             return new ResponseEntity<>(zahnarzt.get(), HttpStatus.OK);
@@ -36,18 +47,27 @@ public class ZahnarztController {
 
     @GetMapping("/zahnaerzte")
     public ResponseEntity<List<Zahnarzt>> getAllZahnaerzte() {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<Zahnarzt> zahnaerzte = zahnarztService.getAllZahnaerzte();
         return new ResponseEntity<>(zahnaerzte, HttpStatus.OK);
     }
 
     @GetMapping("/zahnaerzte/praxis/{praxisAdresseId}")
     public ResponseEntity<List<Zahnarzt>> findZahnaerzteByPraxisAdresse(@PathVariable String praxisAdresseId) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<Zahnarzt> zahnaerzte = zahnarztService.findByPraxisAdresse(praxisAdresseId);
         return new ResponseEntity<>(zahnaerzte, HttpStatus.OK);
     }
 
     @GetMapping("/zahnaerzte/name/{name}")
     public ResponseEntity<List<Zahnarzt>> findZahnaerzteByName(@PathVariable String name) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<Zahnarzt> zahnaerzte = zahnarztService.findByName(name);
         return new ResponseEntity<>(zahnaerzte, HttpStatus.OK);
     }
@@ -56,6 +76,9 @@ public class ZahnarztController {
     public ResponseEntity<Zahnarzt> updateZahnarzt(
             @PathVariable String id,
             @Valid @RequestBody ZahnarztCreateDTO zahnarztDTO) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Zahnarzt updated = zahnarztService.updateZahnarzt(id, zahnarztDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);
@@ -66,11 +89,26 @@ public class ZahnarztController {
 
     @DeleteMapping("/zahnaerzte/{id}")
     public ResponseEntity<Void> deleteZahnarzt(@PathVariable String id) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             zahnarztService.deleteZahnarzt(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/zahnaerzte/profil")
+    public ResponseEntity<ZahnarztProfilDTO> getProfil(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String role) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        ZahnarztProfilDTO profil = zahnarztService.getProfilByName(name, email, role);
+        return new ResponseEntity<>(profil, HttpStatus.OK);
     }
 }

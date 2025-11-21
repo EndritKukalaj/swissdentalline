@@ -23,7 +23,7 @@
             <div class="hero-section">
                 <div class="hero-image-wrapper">
                     <img
-                        src="/images/diana-polekhina-Q_o_ob-3Ny4-unsplash.jpg"
+                        src="/images/nahaufnahme.jpg"
                         alt="Dental Care"
                         class="hero-image"
                     />
@@ -92,8 +92,7 @@
     .hero-image-wrapper {
         position: relative;
         width: 100%;
-        height: 100%;
-        min-height: 400px;
+        height: 500px;
     }
 
     .hero-image {
@@ -101,6 +100,7 @@
         height: 100%;
         object-fit: cover;
         object-position: center;
+        transform: scale(1.1);
     }
 
     .hero-overlay {
@@ -110,10 +110,11 @@
         right: 0;
         background: linear-gradient(
             to top,
-            rgba(255, 193, 7, 1) 0%,
-            rgba(255, 193, 7, 0.9) 40%,
-            rgba(255, 193, 7, 0.7) 60%,
-            rgba(255, 193, 7, 0) 100%
+            rgba(0, 150, 136, 1) 0%,
+            rgba(0, 150, 136, 0.95) 30%,
+            rgba(0, 150, 136, 0.85) 50%,
+            rgba(0, 150, 136, 0.5) 70%,
+            rgba(0, 150, 136, 0) 100%
         );
         padding: 3rem 1.5rem 2rem;
     }

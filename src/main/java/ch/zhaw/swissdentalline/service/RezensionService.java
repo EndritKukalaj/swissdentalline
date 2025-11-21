@@ -7,6 +7,8 @@ import ch.zhaw.swissdentalline.mapper.RezensionMapper;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.repositories.RezensionRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RezensionService {
 
-    private final RezensionRepository rezensionRepository;
-    private final RezensionMapper rezensionMapper;
+    @Autowired
+    private RezensionRepository rezensionRepository;
+    @Autowired
+    private RezensionMapper rezensionMapper;
 
     public Rezension createRezension(RezensionCreateDTO createDTO) {
         Rezension rezension = rezensionMapper.toEntity(createDTO);

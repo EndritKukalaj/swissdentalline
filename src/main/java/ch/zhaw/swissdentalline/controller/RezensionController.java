@@ -5,6 +5,7 @@ import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
 import ch.zhaw.swissdentalline.dto.RezensionModerationDTO;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.service.RezensionService;
+import ch.zhaw.swissdentalline.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,14 +25,23 @@ public class RezensionController {
     @Autowired
     RezensionService rezensionService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/rezensionen")
     public ResponseEntity<Rezension> createRezension(@Valid @RequestBody RezensionCreateDTO rezensionDTO) {
+        if (!userService.userHasRole("Patient")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Rezension created = rezensionService.createRezension(rezensionDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping("/rezensionen/{id}")
     public ResponseEntity<Rezension> getRezensionById(@PathVariable String id) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Optional<Rezension> rezension = rezensionService.getRezensionById(id);
         if (rezension.isPresent()) {
             return new ResponseEntity<>(rezension.get(), HttpStatus.OK);
@@ -41,6 +51,9 @@ public class RezensionController {
 
     @GetMapping("/rezensionen")
     public ResponseEntity<List<Rezension>> getAllRezensionen() {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<Rezension> rezensionen = rezensionService.getAllRezensionen();
         return new ResponseEntity<>(rezensionen, HttpStatus.OK);
     }
@@ -50,6 +63,9 @@ public class RezensionController {
             @PathVariable String zahnarztId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<Rezension> rezensionen = rezensionService.getRezensionenByZahnarzt(zahnarztId, pageable);
         return new ResponseEntity<>(rezensionen, HttpStatus.OK);
@@ -57,6 +73,9 @@ public class RezensionController {
 
     @GetMapping("/rezensionen/zahnarzt/{zahnarztId}/bewertung")
     public ResponseEntity<GesamtBewertungDTO> getGesamtBewertung(@PathVariable String zahnarztId) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Optional<GesamtBewertungDTO> bewertung = rezensionService.getGesamtBewertungById(zahnarztId);
         if (bewertung.isPresent()) {
             return new ResponseEntity<>(bewertung.get(), HttpStatus.OK);
@@ -68,6 +87,9 @@ public class RezensionController {
     public ResponseEntity<Rezension> updateRezension(
             @PathVariable String id,
             @Valid @RequestBody RezensionCreateDTO rezensionDTO) {
+        if (!userService.userHasRole("Patient")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Rezension updated = rezensionService.updateRezension(id, rezensionDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);
@@ -80,6 +102,9 @@ public class RezensionController {
     public ResponseEntity<Rezension> moderateRezension(
             @PathVariable String id,
             @Valid @RequestBody RezensionModerationDTO moderationDTO) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Rezension moderated = rezensionService.moderateRezension(id, moderationDTO);
             return new ResponseEntity<>(moderated, HttpStatus.OK);
@@ -90,6 +115,9 @@ public class RezensionController {
 
     @DeleteMapping("/rezensionen/{id}")
     public ResponseEntity<Void> deleteRezension(@PathVariable String id) {
+        if (!userService.userHasRole("Patient")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             rezensionService.deleteRezension(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

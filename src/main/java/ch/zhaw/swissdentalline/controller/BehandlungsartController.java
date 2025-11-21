@@ -3,6 +3,7 @@ package ch.zhaw.swissdentalline.controller;
 import ch.zhaw.swissdentalline.dto.BehandlungsartCreateDTO;
 import ch.zhaw.swissdentalline.model.Behandlungsart;
 import ch.zhaw.swissdentalline.service.BehandlungsartService;
+import ch.zhaw.swissdentalline.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,23 @@ public class BehandlungsartController {
     @Autowired
     BehandlungsartService behandlungsartService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/behandlungsarten")
     public ResponseEntity<Behandlungsart> createBehandlungsart(@Valid @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Behandlungsart created = behandlungsartService.createBehandlungsart(behandlungsartDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping("/behandlungsarten/{id}")
     public ResponseEntity<Behandlungsart> getBehandlungsartById(@PathVariable String id) {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Optional<Behandlungsart> behandlungsart = behandlungsartService.getBehandlungsartById(id);
         if (behandlungsart.isPresent()) {
             return new ResponseEntity<>(behandlungsart.get(), HttpStatus.OK);
@@ -36,6 +46,9 @@ public class BehandlungsartController {
 
     @GetMapping("/behandlungsarten")
     public ResponseEntity<List<Behandlungsart>> getAllBehandlungsarten() {
+        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         List<Behandlungsart> behandlungsarten = behandlungsartService.getAllBehandlungsarten();
         return new ResponseEntity<>(behandlungsarten, HttpStatus.OK);
     }
@@ -44,6 +57,9 @@ public class BehandlungsartController {
     public ResponseEntity<Behandlungsart> updateBehandlungsart(
             @PathVariable String id,
             @Valid @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Behandlungsart updated = behandlungsartService.updateBehandlungsart(id, behandlungsartDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);
@@ -54,6 +70,9 @@ public class BehandlungsartController {
 
     @DeleteMapping("/behandlungsarten/{id}")
     public ResponseEntity<Void> deleteBehandlungsart(@PathVariable String id) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             behandlungsartService.deleteBehandlungsart(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

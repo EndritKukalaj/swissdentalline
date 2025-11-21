@@ -27,7 +27,7 @@
 
 <div class="profil-container">
   <div class="profil-header">
-    <img src="/images/diana-polekhina-NRFVdiM--BE-unsplash.jpg" alt="Profil Header" class="profil-header-img" />
+    <img src="/images/patientin-mit-einem-eingriff.jpg" alt="Profil Header" class="profil-header-img" />
     <div class="profil-title mt-4">
       <span class="profil-logo">Swiss Dental Line</span>
       <div class="profil-avatar">
@@ -92,7 +92,7 @@
 }
 .profil-header-img {
   width: 100%;
-  height: 320px;
+  height: 240px;
   object-fit: cover;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   margin-bottom: 0.5rem;

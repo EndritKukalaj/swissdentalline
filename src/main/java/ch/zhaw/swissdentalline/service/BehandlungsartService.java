@@ -5,6 +5,8 @@ import ch.zhaw.swissdentalline.mapper.BehandlungsartMapper;
 import ch.zhaw.swissdentalline.model.Behandlungsart;
 import ch.zhaw.swissdentalline.repositories.BehandlungsartRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +16,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BehandlungsartService {
 
-    private final BehandlungsartRepository behandlungsartRepository;
-    private final BehandlungsartMapper behandlungsartMapper;
+    @Autowired
+    private BehandlungsartRepository behandlungsartRepository;
+    @Autowired
+    private BehandlungsartMapper behandlungsartMapper;
 
     public Behandlungsart createBehandlungsart(BehandlungsartCreateDTO createDTO) {
         // Check for duplicate name
