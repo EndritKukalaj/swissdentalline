@@ -1,12 +1,12 @@
 <script>
-  import favicon from "$lib/assets/favicon.svg";
+  import icon from "$lib/assets/Logo.webp";
   import "./styles.css";
   let { data, children } = $props();
   let { user, isAuthenticated } = data;
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href={icon} />
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
