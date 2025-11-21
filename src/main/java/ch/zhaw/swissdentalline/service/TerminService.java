@@ -11,6 +11,8 @@ import ch.zhaw.swissdentalline.repositories.PatientRepository;
 import ch.zhaw.swissdentalline.repositories.TerminRepository;
 import ch.zhaw.swissdentalline.repositories.ZahnarztRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TerminService {
 
-    private final TerminRepository terminRepository;
-    private final TerminMapper terminMapper;
-    private final ZahnarztRepository zahnarztRepository;
-    private final BehandlungsartRepository behandlungsartRepository;
-    private final PatientRepository patientRepository;
+    @Autowired
+    private TerminRepository terminRepository;
+    @Autowired
+    private TerminMapper terminMapper;
+    @Autowired
+    private ZahnarztRepository zahnarztRepository;
+    @Autowired
+    private BehandlungsartRepository behandlungsartRepository;
+    @Autowired
+    private PatientRepository patientRepository;
 
     public Termin createTermin(TerminCreateDTO createDTO) {
         // Validate foreign keys

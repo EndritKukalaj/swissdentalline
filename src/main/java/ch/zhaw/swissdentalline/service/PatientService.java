@@ -8,6 +8,8 @@ import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
 import ch.zhaw.swissdentalline.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +19,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PatientService {
 
-    private final PatientRepository patientRepository;
-    private final PatientMapper patientMapper;
-    private final AdresseRepository adresseRepository;
+    @Autowired
+    private PatientRepository patientRepository;
+    @Autowired
+    private PatientMapper patientMapper;
+    @Autowired
+    private AdresseRepository adresseRepository;
 
     public Patient createPatient(PatientCreateDTO createDTO) {
         // Validate foreign key: AdresseId must exist

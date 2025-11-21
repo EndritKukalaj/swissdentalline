@@ -9,6 +9,8 @@ import ch.zhaw.swissdentalline.model.Zahnarzt;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
 import ch.zhaw.swissdentalline.repositories.ZahnarztRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +20,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ZahnarztService {
 
-    private final ZahnarztRepository zahnarztRepository;
-    private final ZahnarztMapper zahnarztMapper;
-    private final AdresseRepository adresseRepository;
+    @Autowired
+    private ZahnarztRepository zahnarztRepository;
+    @Autowired
+    private ZahnarztMapper zahnarztMapper;
+    @Autowired
+    private AdresseRepository adresseRepository;
 
     public Zahnarzt createZahnarzt(ZahnarztCreateDTO createDTO) {
         // Validate that PraxisAdresseId exists and is of type PRAXIS
