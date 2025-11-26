@@ -1,12 +1,52 @@
 <script>
+    import TerminCard from '$lib/components/TerminCard.svelte';
+    import StatCard from '$lib/components/StatCard.svelte';
+    import NextTerminCard from '$lib/components/NextTerminCard.svelte';
+    
     let { data } = $props();
-    let { isAuthenticated } = data;
+    let { isAuthenticated, termine = [], nextTermin = null, stats = {} } = data;
 </script>
 
 {#if isAuthenticated}
     <div class="dashboard-container">
-        <h1>Willkommen bei SwissDentalLine</h1>
-        <p>Ihre Terminübersicht wird hier angezeigt.</p>
+        <h1 class="dashboard-title">Meine Termine</h1>
+        
+        <!-- Stats Section -->
+        <div class="stats-grid">
+            <StatCard 
+                icon="bi-calendar-check" 
+                title="Geplante Termine" 
+                value={stats.geplanteTermine || 0} 
+            />
+            <StatCard 
+                icon="bi-clock-history" 
+                title="Offene Wartelisten" 
+                value={stats.offeneWartelisten || 0} 
+            />
+        </div>
+        
+        <!-- Next Appointment Section -->
+        {#if nextTermin}
+            <NextTerminCard termin={nextTermin} />
+        {/if}
+        
+        <!-- Appointments List -->
+        <div class="termine-section">
+            <h2 class="section-title">Alle Termine</h2>
+            
+            {#if termine.length > 0}
+                <div class="termine-list">
+                    {#each termine as termin (termin.id)}
+                        <TerminCard {termin} />
+                    {/each}
+                </div>
+            {:else}
+                <div class="empty-state">
+                    <i class="bi bi-calendar-x"></i>
+                    <p>Sie haben noch keine Termine gebucht.</p>
+                </div>
+            {/if}
+        </div>
     </div>
 {:else}
     <div class="home-container">
@@ -54,6 +94,56 @@
 <style>
     .dashboard-container {
         padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .dashboard-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 2rem;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .termine-section {
+        margin-top: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+    
+    .termine-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-muted);
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .empty-state p {
+        font-size: 1.25rem;
+        margin: 0;
     }
 
     .home-container {
