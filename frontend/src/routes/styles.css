@@ -98,11 +98,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .card-header {
-    background-color: var(--white);
     border-bottom: none;
     font-weight: 700;
     font-size: 1.5rem;
-    padding: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
 }
 
 /* Custom Form Styles */
