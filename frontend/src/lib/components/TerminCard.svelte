@@ -1,5 +1,11 @@
 <script>
+    import { goto } from '$app/navigation';
+    
     let { termin } = $props();
+    
+    const handleClick = () => {
+        goto(`/termine/${termin.id}`);
+    };
     
     // Format date and time
     const formatDate = (dateString) => {
@@ -50,7 +56,7 @@
     };
 </script>
 
-<div class="termin-card">
+<div class="termin-card" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
     <div class="card-accent" style="background: {getStatusColor(termin.status)}"></div>
     
     <div class="card-content">
@@ -115,11 +121,17 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         border: 1px solid rgba(0, 0, 0, 0.05);
+        cursor: pointer;
     }
     
     .termin-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    .termin-card:focus {
+        outline: 2px solid #009688;
+        outline-offset: 2px;
     }
     
     .card-accent {

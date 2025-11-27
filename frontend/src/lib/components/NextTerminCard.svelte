@@ -1,5 +1,11 @@
 <script>
+    import { goto } from '$app/navigation';
+    
     let { termin } = $props();
+    
+    const handleClick = () => {
+        goto(`/termine/${termin.id}`);
+    };
     
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -32,7 +38,7 @@
 <div class="next-termin-wrapper">
     <h3 class="next-termin-title">Nächster Termin</h3>
     
-    <div class="next-termin-card">
+    <div class="next-termin-card" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
         <div class="card-accent"></div>
         
         <div class="card-content">
@@ -99,11 +105,17 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 8px 24px rgba(0, 150, 136, 0.2);
         border: 2px solid #009688;
+        cursor: pointer;
     }
     
     .next-termin-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 12px 32px rgba(0, 150, 136, 0.3);
+    }
+    
+    .next-termin-card:focus {
+        outline: 2px solid #009688;
+        outline-offset: 2px;
     }
     
     .card-accent {
