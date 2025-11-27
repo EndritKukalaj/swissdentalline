@@ -1,6 +1,21 @@
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
 
+// Helper function to decode JWT token
+function decodeJWT(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Failed to decode JWT:', error);
+        return null;
+    }
+}
+
 export async function handle({ event, resolve }) {
     // Get JWT token and user info from cookies
     const jwt_token = event.cookies.get('jwt_token');
@@ -14,6 +29,17 @@ export async function handle({ event, resolve }) {
     if (userInfoCookie) {
         try {
             event.locals.user = JSON.parse(decodeURIComponent(userInfoCookie));
+            
+            // Decode JWT to extract roles
+            if (jwt_token) {
+                const decodedToken = decodeJWT(jwt_token);
+                if (decodedToken) {
+                    // Extract roles from JWT token
+                    const roles = decodedToken['https://swissdentalline.ch/roles'] || [];
+                    event.locals.user.userRole = roles.length > 0 ? roles[0] : 'Patient';
+                    console.log('Extracted role from JWT:', event.locals.user.userRole);
+                }
+            }
         } catch (error) {
             console.error('Failed to parse user info cookie:', error);
             event.locals.user = {};
