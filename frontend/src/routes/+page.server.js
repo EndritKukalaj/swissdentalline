@@ -115,8 +115,43 @@ export const load = async ({ locals }) => {
             new Date(t.datum) >= now && t.status === 'GEBUCHT'
         );
         
-        // Get next termin
-        const nextTermin = upcomingTermine.length > 0 ? upcomingTermine[0] : null;
+        // Get next termin and enrich with zahnarzt and praxis data
+        let nextTermin = upcomingTermine.length > 0 ? upcomingTermine[0] : null;
+        
+        if (nextTermin) {
+            try {
+                // Fetch zahnarzt data
+                const zahnarztId = nextTermin.zahnarztId || nextTermin.zahnarzt_id;
+                if (zahnarztId) {
+                    const zahnarztResponse = await fetch(`${API_BASE_URL}/zahnaerzte/${zahnarztId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${jwt_token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (zahnarztResponse.ok) {
+                        nextTermin.zahnarzt = await zahnarztResponse.json();
+                    }
+                }
+                
+                // Fetch praxis adresse data
+                const adresseId = nextTermin.praxisAdresseId;
+                if (adresseId && nextTermin.zahnarzt) {
+                    const adresseResponse = await fetch(`${API_BASE_URL}/adressen/${adresseId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${jwt_token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    if (adresseResponse.ok) {
+                        nextTermin.adresse = await adresseResponse.json();
+                    }
+                }
+            } catch (error) {
+                console.error('Error enriching next termin:', error);
+                // Continue without enriched data
+            }
+        }
         
         // Calculate stats
         const geplanteTermine = upcomingTermine.length;

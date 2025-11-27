@@ -80,6 +80,36 @@
                     <span class="detail-text price">{termin.preis} CHF</span>
                 </div>
             </div>
+
+            <!-- Third Row: Zahnarzt & Praxis Info -->
+            {#if termin.zahnarzt || termin.adresse}
+            <div class="additional-info">
+                {#if termin.zahnarzt}
+                <div class="info-row">
+                    <div class="info-icon-wrapper">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </div>
+                    <span class="info-text">{termin.zahnarzt.name || 'Zahnarzt'}</span>
+                </div>
+                {/if}
+                
+                {#if termin.adresse}
+                <div class="info-row">
+                    <div class="info-icon-wrapper">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div class="info-text-wrapper">
+                        {#if termin.adresse.bezeichnung}
+                        <span class="info-text praxis-name">{termin.adresse.bezeichnung}</span>
+                        {/if}
+                        <span class="info-text address">
+                            {termin.adresse.strasse}, {termin.adresse.plz} {termin.adresse.ort}
+                        </span>
+                    </div>
+                </div>
+                {/if}
+            </div>
+            {/if}
         </div>
     </div>
 </div>
@@ -230,6 +260,62 @@
         color: #2d3748;
         font-size: 1.125rem;
     }
+
+    /* Additional Info Styles */
+    .additional-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+        border-top: 2px solid rgba(0, 150, 136, 0.1);
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+
+    .info-icon-wrapper {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .info-icon-wrapper i {
+        font-size: 0.9375rem;
+        color: #009688;
+    }
+
+    .info-text-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .info-text {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: #4a5568;
+        line-height: 1.5;
+    }
+
+    .info-text.praxis-name {
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .info-text.address {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #718096;
+    }
     
     @media (max-width: 640px) {
         .card-content {
@@ -281,6 +367,29 @@
         
         .detail-text.price {
             font-size: 0.9375rem;
+        }
+
+        .additional-info {
+            gap: 0.625rem;
+            margin-top: 0.375rem;
+            padding-top: 0.875rem;
+        }
+
+        .info-icon-wrapper {
+            width: 28px;
+            height: 28px;
+        }
+
+        .info-icon-wrapper i {
+            font-size: 0.8125rem;
+        }
+
+        .info-text {
+            font-size: 0.8125rem;
+        }
+
+        .info-text.address {
+            font-size: 0.75rem;
         }
     }
 </style>
