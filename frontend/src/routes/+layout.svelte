@@ -2,7 +2,10 @@
   import icon from "$lib/assets/Logo.webp";
   import "./styles.css";
   let { data, children } = $props();
-  let { user, isAuthenticated } = data;
+  let { user, isAuthenticated, userRole } = data;
+  
+  // Determine variant based on role
+  const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
 </script>
 
 <svelte:head>
@@ -13,7 +16,7 @@
   />
 </svelte:head>
 
-<nav class="custom-navbar">
+<nav class="custom-navbar {variant}-variant">
   <div class="nav-container">
     <!-- Logo & Brand -->
     <div class="nav-brand">
@@ -105,6 +108,18 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    --nav-primary: var(--primary-turquoise);
+    --nav-accent: var(--accent-blue);
+    --nav-hover-bg: rgba(0, 150, 136, 0.05);
+    --nav-hover-border: rgba(0, 150, 136, 0.1);
+  }
+  
+  .custom-navbar.purple-variant {
+    --nav-primary: #8E24AA;
+    --nav-accent: #AB47BC;
+    --nav-hover-bg: rgba(142, 36, 170, 0.05);
+    --nav-hover-border: rgba(142, 36, 170, 0.1);
+    background: linear-gradient(135deg, var(--white) 0%, #F9F5FC 100%);
   }
 
   .nav-container {
@@ -145,8 +160,8 @@
   .brand-text {
     background: linear-gradient(
       135deg,
-      var(--primary-turquoise),
-      var(--accent-blue)
+      var(--nav-primary),
+      var(--nav-accent)
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -156,7 +171,7 @@
   .mobile-toggle {
     display: none;
     background: none;
-    border: 2px solid var(--primary-turquoise);
+    border: 2px solid var(--nav-primary);
     border-radius: var(--radius-sm);
     padding: 0.5rem;
     cursor: pointer;
@@ -164,7 +179,7 @@
   }
 
   .mobile-toggle:hover {
-    background-color: rgba(0, 150, 136, 0.1);
+    background-color: var(--nav-hover-bg);
   }
 
   .nav-content {
@@ -202,14 +217,14 @@
     transform: translateX(-50%);
     width: 0;
     height: 3px;
-    background: var(--primary-turquoise);
+    background: var(--nav-primary);
     border-radius: 2px;
     transition: width 0.3s ease;
   }
 
   .nav-link-item:hover {
-    color: var(--primary-turquoise);
-    background-color: rgba(0, 150, 136, 0.05);
+    color: var(--nav-primary);
+    background-color: var(--nav-hover-bg);
   }
 
   .nav-link-item:hover::before {
@@ -229,14 +244,19 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.5rem 1rem;
-    background-color: rgba(0, 150, 136, 0.1);
+    background-color: var(--nav-hover-bg);
     border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+  }
+  
+  .user-info:hover {
+    background-color: var(--nav-hover-border);
   }
 
   .user-avatar {
     width: 36px;
     height: 36px;
-    background: var(--primary-turquoise);
+    background: var(--nav-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;

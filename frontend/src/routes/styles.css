@@ -61,6 +61,19 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
 }
 
+/* Purple variant buttons */
+.purple-variant .btn-primary,
+.btn-primary.purple {
+    background: linear-gradient(135deg, #B388FF 0%, #8E24AA 100%) !important;
+    border-color: #8E24AA !important;
+}
+
+.purple-variant .btn-primary:hover,
+.btn-primary.purple:hover {
+    background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%) !important;
+    box-shadow: 0 4px 12px rgba(142, 36, 170, 0.3);
+}
+
 .btn-secondary {
     background-color: var(--primary-yellow) !important;
     border-color: var(--primary-yellow) !important;
@@ -77,6 +90,19 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
 }
 
+.purple-variant .btn-secondary,
+.btn-secondary.purple {
+    background: linear-gradient(135deg, #CE93D8 0%, #BA68C8 100%) !important;
+    border-color: #BA68C8 !important;
+    color: var(--white) !important;
+}
+
+.purple-variant .btn-secondary:hover,
+.btn-secondary.purple:hover {
+    background: linear-gradient(135deg, #BA68C8 0%, #AB47BC 100%) !important;
+    box-shadow: 0 4px 12px rgba(186, 104, 200, 0.3);
+}
+
 .btn-outline-primary {
     border-color: var(--primary-turquoise) !important;
     color: var(--primary-turquoise) !important;
@@ -87,6 +113,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-outline-primary:hover {
     background-color: var(--primary-turquoise) !important;
+    color: var(--white) !important;
+}
+
+.purple-variant .btn-outline-primary,
+.btn-outline-primary.purple {
+    border-color: #8E24AA !important;
+    color: #8E24AA !important;
+}
+
+.purple-variant .btn-outline-primary:hover,
+.btn-outline-primary.purple:hover {
+    background-color: #8E24AA !important;
     color: var(--white) !important;
 }
 

@@ -5,7 +5,7 @@
     const getIconColor = (iconClass, colorVariant) => {
         if (colorVariant === 'purple') {
             if (iconClass.includes('calendar')) return '#9C27B0';
-            if (iconClass.includes('clock')) return '#7B1FA2';
+            if (iconClass.includes('clock')) return '#FFC107';
             if (iconClass.includes('cash')) return '#6A1B9A';
             return '#8E24AA';
         }
@@ -17,7 +17,7 @@
     const getGradientColor = (iconClass, colorVariant) => {
         if (colorVariant === 'purple') {
             if (iconClass.includes('calendar')) return 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)';
-            if (iconClass.includes('clock')) return 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)';
+            if (iconClass.includes('clock')) return 'linear-gradient(135deg, #fff4d6 0%, #ffe699 100%)';
             if (iconClass.includes('cash')) return 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)';
             return 'linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)';
         }

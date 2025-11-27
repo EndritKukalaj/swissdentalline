@@ -4,6 +4,9 @@
     let { data } = $props();
     let { termin, behandlungsart, zahnarzt, adresse, patient, userRole } = data;
     
+    // Determine variant based on role
+    const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
+    
     // Format date
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -53,7 +56,7 @@
     const dateInfo = formatShortDate(termin.datum);
 </script>
 
-<div class="details-container">
+<div class="details-container {variant}-variant">
     <!-- Back Button -->
     <button class="back-btn" onclick={() => goto('/')}>
         <i class="bi bi-arrow-left"></i>
@@ -308,6 +311,23 @@
         padding: 2rem;
         max-width: 1200px;
         margin: 0 auto;
+        --detail-primary: #009688;
+        --detail-accent: #00bfa5;
+        --detail-bg-light: #f0fffe;
+        --detail-hover-bg: rgba(0, 150, 136, 0.05);
+        --detail-border: rgba(0, 150, 136, 0.1);
+        --detail-shadow: rgba(0, 150, 136, 0.15);
+        --detail-focus: rgba(0, 150, 136, 0.1);
+    }
+    
+    .details-container.purple-variant {
+        --detail-primary: #8E24AA;
+        --detail-accent: #AB47BC;
+        --detail-bg-light: #F5EFFC;
+        --detail-hover-bg: rgba(142, 36, 170, 0.05);
+        --detail-border: rgba(171, 71, 188, 0.1);
+        --detail-shadow: rgba(171, 71, 188, 0.15);
+        --detail-focus: rgba(142, 36, 170, 0.1);
     }
     
     .back-btn {
@@ -327,20 +347,20 @@
     }
     
     .back-btn:hover {
-        border-color: #009688;
-        color: #009688;
-        background: #f0fffe;
+        border-color: var(--detail-primary);
+        color: var(--detail-primary);
+        background: var(--detail-bg-light);
     }
     
     .header-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f0fffe 100%);
+        background: linear-gradient(135deg, #ffffff 0%, var(--detail-bg-light) 100%);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
-        box-shadow: 0 8px 24px rgba(0, 150, 136, 0.15);
-        border: 2px solid rgba(0, 150, 136, 0.1);
+        box-shadow: 0 8px 24px var(--detail-shadow);
+        border: 2px solid var(--detail-border);
         border-top: 6px solid;
-        border-image: linear-gradient(90deg, #009688 0%, #00bfa5 100%) 1;
+        border-image: linear-gradient(90deg, var(--detail-primary) 0%, var(--detail-accent) 100%) 1;
     }
     
     .header-content {
@@ -350,12 +370,12 @@
     }
     
     .date-badge-large {
-        background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+        background: linear-gradient(135deg, var(--detail-primary) 0%, var(--detail-accent) 100%);
         border-radius: 16px;
         padding: 1.5rem;
         text-align: center;
         color: white;
-        box-shadow: 0 8px 16px rgba(0, 150, 136, 0.3);
+        box-shadow: 0 8px 16px var(--detail-shadow);
         min-width: 120px;
         flex-shrink: 0;
     }
@@ -437,7 +457,7 @@
     }
     
     .detail-card:hover {
-        box-shadow: 0 8px 24px rgba(0, 150, 136, 0.12);
+        box-shadow: 0 8px 24px var(--detail-shadow);
         transform: translateY(-2px);
     }
     
@@ -447,12 +467,12 @@
         gap: 0.75rem;
         margin-bottom: 1.25rem;
         padding-bottom: 0.75rem;
-        border-bottom: 2px solid #f0fffe;
+        border-bottom: 2px solid var(--detail-bg-light);
     }
     
     .card-header i {
         font-size: 1.5rem;
-        color: #009688;
+        color: var(--detail-primary);
     }
     
     .card-header h2 {
@@ -470,7 +490,7 @@
     
     .section-divider {
         height: 2px;
-        background: linear-gradient(90deg, #f0fffe 0%, #009688 50%, #f0fffe 100%);
+        background: linear-gradient(90deg, var(--detail-bg-light) 0%, var(--detail-primary) 50%, var(--detail-bg-light) 100%);
         margin: 0.5rem 0;
         border-radius: 2px;
     }
@@ -494,7 +514,7 @@
     
     .detail-label i {
         font-size: 1rem;
-        color: #009688;
+        color: var(--detail-primary);
     }
     
     .detail-value {
@@ -505,19 +525,19 @@
     }
     
     .detail-value.highlight {
-        color: #009688;
+        color: var(--detail-primary);
         font-weight: 700;
         font-size: 1.125rem;
     }
     
     .detail-value a {
-        color: #009688;
+        color: var(--detail-primary);
         text-decoration: none;
         transition: color 0.2s ease;
     }
     
     .detail-value a:hover {
-        color: #00bfa5;
+        color: var(--detail-accent);
         text-decoration: underline;
     }
     
@@ -528,7 +548,7 @@
         justify-content: center;
         margin-top: 2rem;
         padding-top: 2rem;
-        border-top: 2px solid #f0fffe;
+        border-top: 2px solid var(--detail-bg-light);
     }
     
     .action-btn {

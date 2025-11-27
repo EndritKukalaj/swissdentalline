@@ -73,18 +73,20 @@
             <StatCard 
                 icon="bi-calendar-check" 
                 title="Geplante Termine" 
-                value={stats.geplanteTermine || 0} 
+                value={stats.geplanteTermine || 0}
+                variant="turquoise"
             />
             <StatCard 
                 icon="bi-clock-history" 
                 title="Offene Wartelisten" 
-                value={stats.offeneWartelisten || 0} 
+                value={stats.offeneWartelisten || 0}
+                variant="turquoise"
             />
         </div>
         
         <!-- Next Appointment Section -->
         {#if nextTermin}
-            <NextTerminCard termin={nextTermin} />
+            <NextTerminCard termin={nextTermin} variant="turquoise" />
         {/if}
         
         <!-- Appointments List -->
@@ -161,7 +163,7 @@
             {#if filteredTermine().length > 0}
                 <div class="termine-list">
                     {#each filteredTermine() as termin (termin.id)}
-                        <TerminCard {termin} />
+                        <TerminCard {termin} variant="turquoise" />
                     {/each}
                 </div>
             {:else if searchQuery || activeStatusFilter !== 'ALLE' || showOnlyWarteliste}
@@ -296,14 +298,14 @@
     }
     
     .filter-btn:hover {
-        border-color: #009688;
-        color: #009688;
+        border-color: var(--primary-turquoise);
+        color: var(--primary-turquoise);
         background: #f0fffe;
     }
     
     .filter-btn.active {
-        border-color: #009688;
-        background: #009688;
+        border-color: var(--primary-turquoise);
+        background: var(--primary-turquoise);
         color: white;
     }
     
@@ -334,7 +336,7 @@
     .search-icon {
         position: absolute;
         left: 1rem;
-        color: #009688;
+        color: var(--primary-turquoise);
         font-size: 1.25rem;
         pointer-events: none;
     }
@@ -351,7 +353,7 @@
     }
     
     .search-input:focus {
-        border-color: #009688;
+        border-color: var(--primary-turquoise);
         box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
     }
     
@@ -375,7 +377,7 @@
     }
     
     .clear-search:hover {
-        color: #009688;
+        color: var(--primary-turquoise);
     }
     
     .search-results-info {
