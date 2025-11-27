@@ -2,9 +2,10 @@
     import TerminCard from '$lib/components/TerminCard.svelte';
     import StatCard from '$lib/components/StatCard.svelte';
     import NextTerminCard from '$lib/components/NextTerminCard.svelte';
+    import ZahnarztOverview from '$lib/components/ZahnarztOverview.svelte';
     
     let { data } = $props();
-    let { isAuthenticated, termine = [], nextTermin = null, stats = {} } = data;
+    let { isAuthenticated, termine = [], nextTermin = null, stats = {}, userRole = null } = data;
     
     // Search functionality
     let searchQuery = $state('');
@@ -61,7 +62,10 @@
 </script>
 
 {#if isAuthenticated}
-    <div class="dashboard-container">
+    {#if userRole === 'Zahnarzt'}
+        <ZahnarztOverview {termine} {nextTermin} {stats} />
+    {:else}
+        <div class="dashboard-container">
         <h1 class="dashboard-title">Meine Termine</h1>
         
         <!-- Stats Section -->
@@ -179,7 +183,8 @@
                 </div>
             {/if}
         </div>
-    </div>
+        </div>
+    {/if}
 {:else}
     <div class="home-container">
         <div class="home-wrapper">

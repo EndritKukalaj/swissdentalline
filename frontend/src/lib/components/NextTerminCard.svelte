@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
     
-    let { termin } = $props();
+    let { termin, variant = 'turquoise' } = $props();
     
     const handleClick = () => {
         goto(`/termine/${termin.id}`);
@@ -38,7 +38,7 @@
 <div class="next-termin-wrapper">
     <h3 class="next-termin-title">Nächster Termin</h3>
     
-    <div class="next-termin-card" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
+    <div class="next-termin-card {variant === 'purple' ? 'purple-variant' : ''}" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
         <div class="card-accent"></div>
         
         <div class="card-content">
@@ -81,8 +81,8 @@
                 </div>
             </div>
 
-            <!-- Third Row: Zahnarzt & Praxis Info -->
-            {#if termin.zahnarzt || termin.adresse}
+            <!-- Third Row: Zahnarzt/Patient & Praxis Info -->
+            {#if termin.zahnarzt || termin.patient || termin.adresse}
             <div class="additional-info">
                 {#if termin.zahnarzt}
                 <div class="info-row">
@@ -90,6 +90,15 @@
                         <i class="bi bi-person-badge-fill"></i>
                     </div>
                     <span class="info-text">{termin.zahnarzt.name || 'Zahnarzt'}</span>
+                </div>
+                {/if}
+                
+                {#if termin.patient}
+                <div class="info-row">
+                    <div class="info-icon-wrapper">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <span class="info-text">{termin.patient.name || 'Patient'}</span>
                 </div>
                 {/if}
                 
@@ -124,28 +133,42 @@
         font-weight: 700;
         color: #1a202c;
         margin: 0 0 1.25rem 0;
-        text-align: center;
+        text-align: left;
     }
     
     .next-termin-card {
         position: relative;
-        background: linear-gradient(135deg, #ffffff 0%, #f0fffe 100%);
+        background: linear-gradient(135deg, #ffffff 0%, var(--card-bg-end, #f0fffe) 100%);
         border-radius: 20px;
         overflow: hidden;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 24px rgba(0, 150, 136, 0.2);
-        border: 2px solid #009688;
+        box-shadow: 0 8px 24px var(--card-shadow, rgba(0, 150, 136, 0.2));
+        border: 2px solid var(--card-border, #009688);
         cursor: pointer;
     }
     
     .next-termin-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 32px rgba(0, 150, 136, 0.3);
+        box-shadow: 0 12px 32px var(--card-shadow-hover, rgba(0, 150, 136, 0.3));
     }
     
     .next-termin-card:focus {
-        outline: 2px solid #009688;
+        outline: 2px solid var(--card-border, #009688);
         outline-offset: 2px;
+    }
+    
+    .next-termin-card.purple-variant {
+        /* Pleasant lilac-only palette */
+        --card-bg-end: #F5EFFC; /* very light lilac tint */
+        --card-shadow: rgba(171, 71, 188, 0.22);
+        --card-shadow-hover: rgba(171, 71, 188, 0.3);
+        --card-border: #8E24AA;
+        --accent-gradient: linear-gradient(90deg, #B388FF 0%, #AB47BC 100%);
+        --date-badge-bg: linear-gradient(135deg, #B388FF 0%, #AB47BC 100%);
+        --date-badge-shadow: 0 6px 16px rgba(171, 71, 188, 0.35);
+        --icon-color: #8E24AA;
+        --detail-icon-bg: linear-gradient(135deg, #E9DDF6 0%, #DCCEF6 100%);
+        --border-color: rgba(171, 71, 188, 0.18);
     }
     
     .card-accent {
@@ -154,7 +177,7 @@
         left: 0;
         right: 0;
         height: 6px;
-        background: linear-gradient(90deg, #009688 0%, #00bfa5 100%);
+        background: var(--accent-gradient, linear-gradient(90deg, #009688 0%, #00bfa5 100%));
     }
     
     .card-content {
@@ -175,14 +198,14 @@
         flex-shrink: 0;
         width: 80px;
         height: 80px;
-        background: linear-gradient(135deg, #009688 0%, #00968796 100%);
+        background: var(--date-badge-bg, linear-gradient(135deg, #009688 0%, #00968796 100%));
         border-radius: 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         color: white;
-        box-shadow: 0 6px 16px rgba(0,150,136,0.4);
+        box-shadow: var(--date-badge-shadow, 0 6px 16px rgba(0,150,136,0.4));
     }
     
     .date-badge .day {
@@ -218,7 +241,7 @@
     }
     
     .treatment-name i {
-        color: #009688;
+        color: var(--icon-color, #009688);
         font-size: 1.75rem;
     }
     
@@ -237,7 +260,7 @@
     .detail-icon-wrapper {
         width: 36px;
         height: 36px;
-        background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+        background: var(--detail-icon-bg, linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%));
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -246,7 +269,7 @@
     
     .detail-icon-wrapper i {
         font-size: 1rem;
-        color: #009688;
+        color: var(--icon-color, #009688);
     }
     
     .detail-text {
@@ -268,7 +291,7 @@
         gap: 0.75rem;
         margin-top: 0.5rem;
         padding-top: 1rem;
-        border-top: 2px solid rgba(0, 150, 136, 0.1);
+        border-top: 2px solid var(--border-color, rgba(0, 150, 136, 0.1));
     }
 
     .info-row {
@@ -281,7 +304,7 @@
         flex-shrink: 0;
         width: 32px;
         height: 32px;
-        background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+        background: var(--detail-icon-bg, linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%));
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -290,7 +313,7 @@
 
     .info-icon-wrapper i {
         font-size: 0.9375rem;
-        color: #009688;
+        color: var(--icon-color, #009688);
     }
 
     .info-text-wrapper {

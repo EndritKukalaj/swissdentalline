@@ -12,7 +12,8 @@ export const load = async ({ params, locals }) => {
         const jwt_token = locals.jwt_token;
         const terminId = params.id;
         const auth0UserId = locals.user.sub;
-        const patientId = auth0UserId.replace('auth0|', '');
+        const userId = auth0UserId.replace('auth0|', '');
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
 
         // 1. Fetch termin details
         const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
@@ -28,9 +29,15 @@ export const load = async ({ params, locals }) => {
 
         const termin = await terminResponse.json();
 
-        // Verify that this termin belongs to the current patient
+        // Verify access rights based on role
         const terminPatientId = termin.patientId || termin.patient_id;
-        if (terminPatientId !== patientId) {
+        const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+        
+        if (userRole === 'Patient' && terminPatientId !== userId) {
+            throw error(403, 'Zugriff verweigert');
+        }
+        
+        if (userRole === 'Zahnarzt' && terminZahnarztId !== userId) {
             throw error(403, 'Zugriff verweigert');
         }
 
@@ -100,11 +107,34 @@ export const load = async ({ params, locals }) => {
             }
         }
 
+        // 5. Fetch patient details if user is Zahnarzt
+        let patient = null;
+        if (userRole === 'Zahnarzt' && terminPatientId) {
+            try {
+                const patientResponse = await fetch(
+                    `${API_BASE_URL}/patienten/${terminPatientId}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${jwt_token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                if (patientResponse.ok) {
+                    patient = await patientResponse.json();
+                }
+            } catch (err) {
+                console.error('Error fetching patient:', err);
+            }
+        }
+
         return {
             termin,
             behandlungsart,
             zahnarzt,
-            adresse
+            adresse,
+            patient,
+            userRole
         };
     } catch (err) {
         if (err.status) throw err;

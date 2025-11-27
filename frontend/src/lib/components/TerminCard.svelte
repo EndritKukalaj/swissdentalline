@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
     
-    let { termin } = $props();
+    let { termin, variant = 'turquoise' } = $props();
     
     const handleClick = () => {
         goto(`/termine/${termin.id}`);
@@ -56,7 +56,7 @@
     };
 </script>
 
-<div class="termin-card" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
+<div class="termin-card {variant === 'purple' ? 'purple-variant' : ''}" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
     <div class="card-accent" style="background: {getStatusColor(termin.status)}"></div>
     
     <div class="card-content">
@@ -130,8 +130,16 @@
     }
     
     .termin-card:focus {
-        outline: 2px solid #009688;
+        outline: 2px solid var(--icon-color, #009688);
         outline-offset: 2px;
+    }
+    
+    .termin-card.purple-variant {
+        /* Pleasant lilac-only palette */
+        --date-badge-bg: linear-gradient(135deg, #B388FF 0%, #AB47BC 100%);
+        --date-badge-shadow: 0 4px 12px rgba(171, 71, 188, 0.26);
+        --icon-color: #8E24AA; /* gentle purple for icons */
+        --detail-icon-bg: linear-gradient(135deg, #E9DDF6 0%, #DCCEF6 100%);
     }
     
     .card-accent {
@@ -160,14 +168,14 @@
         flex-shrink: 0;
         width: 70px;
         height: 70px;
-        background: linear-gradient(135deg, #009688 0%, #00968796 100%);
+        background: var(--date-badge-bg, linear-gradient(135deg, #009688 0%, #00968796 100%));
         border-radius: 16px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         color: white;
-        box-shadow: 0 4px 12px rgba(0,150,136,0.3);
+        box-shadow: var(--date-badge-shadow, 0 4px 12px rgba(0,150,136,0.3));
     }
     
     .date-badge .day {
@@ -207,7 +215,7 @@
     }
     
     .treatment-name i {
-        color: #009688;
+        color: var(--icon-color, #009688);
         font-size: 1.375rem;
     }
     
@@ -237,7 +245,7 @@
     .detail-icon-wrapper {
         width: 32px;
         height: 32px;
-        background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+        background: var(--detail-icon-bg, linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%));
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -246,7 +254,7 @@
     
     .detail-icon-wrapper i {
         font-size: 0.875rem;
-        color: #009688;
+        color: var(--icon-color, #009688);
     }
     
     .detail-text {

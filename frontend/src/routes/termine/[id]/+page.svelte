@@ -2,7 +2,7 @@
     import { goto } from '$app/navigation';
     
     let { data } = $props();
-    let { termin, behandlungsart, zahnarzt, adresse } = data;
+    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole } = data;
     
     // Format date
     const formatDate = (dateString) => {
@@ -147,8 +147,8 @@
             </div>
         {/if}
         
-        <!-- Zahnarzt & Praxis Card -->
-        {#if zahnarzt}
+        <!-- Zahnarzt & Praxis Card (Patient View) -->
+        {#if zahnarzt && userRole === 'Patient'}
             <div class="detail-card">
                 <div class="card-header">
                     <i class="bi bi-person-badge"></i>
@@ -219,6 +219,64 @@
                                 </div>
                             </div>
                         {/if}
+                    {/if}
+                </div>
+            </div>
+        {/if}
+        
+        <!-- Patient Card (Zahnarzt View) -->
+        {#if patient && userRole === 'Zahnarzt'}
+            <div class="detail-card">
+                <div class="card-header">
+                    <i class="bi bi-person-fill"></i>
+                    <h2>Patient</h2>
+                </div>
+                <div class="card-content">
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <i class="bi bi-person"></i>
+                            Name
+                        </div>
+                        <div class="detail-value">
+                            {patient.name || `${patient.vorname || ''} ${patient.nachname || ''}`.trim()}
+                        </div>
+                    </div>
+                    {#if patient.email}
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="bi bi-envelope"></i>
+                                E-Mail
+                            </div>
+                            <div class="detail-value">
+                                <a href="mailto:{patient.email}">{patient.email}</a>
+                            </div>
+                        </div>
+                    {/if}
+                    {#if patient.telefonnummer}
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="bi bi-telephone"></i>
+                                Telefon
+                            </div>
+                            <div class="detail-value">
+                                <a href="tel:{patient.telefonnummer}">{patient.telefonnummer}</a>
+                            </div>
+                        </div>
+                    {/if}
+                    {#if patient.geburtsdatum}
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="bi bi-calendar"></i>
+                                Geburtsdatum
+                            </div>
+                            <div class="detail-value">
+                                {new Date(patient.geburtsdatum).toLocaleDateString('de-CH', { 
+                                    day: '2-digit', 
+                                    month: 'long', 
+                                    year: 'numeric' 
+                                })}
+                            </div>
+                        </div>
                     {/if}
                 </div>
             </div>
