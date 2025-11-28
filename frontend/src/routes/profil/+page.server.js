@@ -16,6 +16,7 @@ export async function load({ locals }) {
 	const roles = user.user_roles || [];
 	const isPatient = roles.includes('Patient');
 	const isZahnarzt = roles.includes('Zahnarzt');
+	const userRole = isPatient ? 'Patient' : 'Zahnarzt';
 
 	if (!isPatient && !isZahnarzt) {
 		throw error(403, 'Keine gültige Rolle gefunden');
@@ -30,7 +31,7 @@ export async function load({ locals }) {
 	const params = new URLSearchParams({
 		name: user.name || '',
 		email: user.email || '',
-		role: isPatient ? 'Patient' : 'Zahnarzt'
+		role: userRole
 	});
 
 	try {
@@ -41,9 +42,8 @@ export async function load({ locals }) {
 		});
 
 		return {
-			profil: response.data,
-			isPatient,
-			isZahnarzt
+			profile: response.data,
+			userRole: userRole
 		};
 	} catch (e) {
 		console.error('Profil-API Fehler:', e.response?.status, e.response?.data || e.message);
