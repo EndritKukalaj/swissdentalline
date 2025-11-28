@@ -140,12 +140,11 @@
 
     <!-- Action Button -->
     <div class="profile-actions">
-      <button class="edit-profile-btn" disabled>
+      <button class="edit-profile-btn" onclick={() => goto('/profil/bearbeiten')}>
         <span class="btn-content">
           <i class="bi bi-pencil-square"></i>
           <span>Profil bearbeiten</span>
         </span>
-        <span class="soon-badge">Bald verfügbar</span>
       </button>
     </div>
   </div>
@@ -460,12 +459,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
 
-  .edit-profile-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-
-  .edit-profile-btn:hover:not(:disabled) {
+  .edit-profile-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2);
   }
@@ -478,21 +472,6 @@
 
   .btn-content i {
     font-size: 1.125rem;
-  }
-
-  .soon-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #64748b;
-    color: white;
-    font-size: 0.625rem;
-    padding: 0.375rem 0.625rem;
-    border-radius: 20px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 768px) {
