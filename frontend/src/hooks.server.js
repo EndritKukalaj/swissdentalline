@@ -33,11 +33,11 @@ export async function handle({ event, resolve }) {
             // Decode JWT to extract roles
             if (jwt_token) {
                 const decodedToken = decodeJWT(jwt_token);
-                if (decodedToken) {
-                    // Extract roles from JWT token
-                    const roles = decodedToken['https://swissdentalline.ch/roles'] || [];
-                    event.locals.user.userRole = roles.length > 0 ? roles[0] : 'Patient';
-                    console.log('Extracted role from JWT:', event.locals.user.userRole);
+                if (decodedToken && decodedToken.user_roles) {
+                    const roles = decodedToken.user_roles;
+                    event.locals.user.user_Role = roles.length > 0 ? roles[0] : 'Undefined';
+                } else {
+                    event.locals.user.user_Role = 'Undefined';
                 }
             }
         } catch (error) {

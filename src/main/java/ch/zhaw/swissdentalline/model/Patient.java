@@ -24,12 +24,10 @@ public class Patient {
     @NonNull
     private String name;
 
-    @NonNull
     private Instant geburtsdatum;
 
     private String krankenkasse;
 
-    @NonNull
     @Field("adresse_id")
     private String adresseId;
 }
