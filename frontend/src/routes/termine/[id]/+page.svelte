@@ -1,4 +1,5 @@
 <script>
+    import './styles.css';
     import { goto } from '$app/navigation';
     
     let { data } = $props();
