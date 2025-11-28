@@ -13,6 +13,9 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PatientCreateDTO {
+    
+    private String id;
+    
     @NotBlank
     private String name;
 

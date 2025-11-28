@@ -27,18 +27,26 @@ public class PatientService {
     private AdresseRepository adresseRepository;
 
     public Patient createPatient(PatientCreateDTO createDTO) {
-        // Validate foreign key: AdresseId must exist
-        if (!adresseRepository.existsById(createDTO.getAdresseId())) {
+        // Validate foreign key: AdresseId must exist (only if provided)
+        if (createDTO.getAdresseId() != null && !adresseRepository.existsById(createDTO.getAdresseId())) {
             throw new IllegalArgumentException("Adresse mit id: " + createDTO.getAdresseId() + " nicht gefunden");
         }
 
         // Check for duplicate patient (same name, geburtsdatum, and adresse)
-        if (patientRepository.findByNameAndGeburtsdatumAndAdresseId(
+        // Only check if adresseId is provided
+        if (createDTO.getAdresseId() != null && 
+            patientRepository.findByNameAndGeburtsdatumAndAdresseId(
                 createDTO.getName(), createDTO.getGeburtsdatum(), createDTO.getAdresseId()).isPresent()) {
                 throw new IllegalArgumentException("Patient mit gleichem Namen, Geburtsdatum und Adresse existiert bereits");
         }
 
         Patient patient = patientMapper.toEntity(createDTO);
+        
+        // If ID is provided in DTO (e.g., from Auth0 during signup), use it
+        if (createDTO.getId() != null && !createDTO.getId().isEmpty()) {
+            patient.setId(createDTO.getId());
+        }
+        
         return patientRepository.save(patient);
     }
 

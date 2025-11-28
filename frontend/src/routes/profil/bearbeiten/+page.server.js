@@ -126,10 +126,10 @@ export const actions = {
 
     const formData = await request.formData();
     const patientId = formData.get('id');
-    const adresseId = formData.get('adresseId');
+    let adresseId = formData.get('adresseId');
     
     try {
-      // Adresse aktualisieren
+      // Adresse aktualisieren oder erstellen
       const adresseDTO = {
         strasse: formData.get('strasse'),
         plz: formData.get('plz'),
@@ -138,12 +138,24 @@ export const actions = {
         bezeichnung: null
       };
 
-      await axios.put(`${API_BASE_URL}/api/adressen/${adresseId}`, adresseDTO, {
-        headers: {
-          Authorization: `Bearer ${locals.jwt_token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      if (adresseId && adresseId !== '' && adresseId !== 'null') {
+        // Adresse existiert bereits - aktualisieren
+        await axios.put(`${API_BASE_URL}/api/adressen/${adresseId}`, adresseDTO, {
+          headers: {
+            Authorization: `Bearer ${locals.jwt_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      } else {
+        // Keine Adresse vorhanden - neue erstellen
+        const createResponse = await axios.post(`${API_BASE_URL}/api/adressen`, adresseDTO, {
+          headers: {
+            Authorization: `Bearer ${locals.jwt_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        adresseId = createResponse.data.id;
+      }
 
       // Patient aktualisieren
       const geburtsdatumString = formData.get('geburtsdatum');

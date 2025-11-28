@@ -30,7 +30,7 @@ export const actions = {
       const patientData = {
         id: patientId,
         name: `${firstName} ${lastName}`,
-        geburtsdatum: new Date().toISOString(),
+        geburtsdatum: null,
         krankenkasse: null,
         adresseId: null
       };
