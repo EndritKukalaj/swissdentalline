@@ -60,14 +60,14 @@
             <a href="mailto:{data.profile.email}" class="info-value">{data.profile.email}</a>
           </div>
         </div>
-        {#if data.userRole === 'Patient' && data.profile.geburtsdatum}
+        {#if data.userRole === 'Patient'}
           <div class="info-item">
             <div class="info-icon">
               <i class="bi bi-calendar-event-fill"></i>
             </div>
             <div class="info-content">
               <span class="info-label">Geburtsdatum</span>
-              <span class="info-value">{formatDate(data.profile.geburtsdatum)}</span>
+              <span class="info-value">{data.profile.geburtsdatum ? formatDate(data.profile.geburtsdatum) : 'Nicht vorhanden'}</span>
             </div>
           </div>
         {/if}
@@ -75,7 +75,7 @@
     </div>
 
     <!-- Adresse Section für Patient -->
-    {#if data.userRole === 'Patient' && data.profile.adresse}
+    {#if data.userRole === 'Patient'}
       <div class="info-section">
         <div class="section-title">
           <i class="bi bi-geo-alt-fill"></i>
@@ -84,57 +84,65 @@
         <div class="address-display">
           <div class="address-line">
             <i class="bi bi-geo-alt-fill"></i>
-            <span>{data.profile.adresse}</span>
+            <span>{data.profile.adresse || 'Nicht vorhanden'}</span>
           </div>
         </div>
       </div>
     {/if}
 
     <!-- Praxisinformationen für Zahnarzt -->
-    {#if data.userRole === 'Zahnarzt' && (data.profile.praxisname || data.profile.praxisadresse)}
+    {#if data.userRole === 'Zahnarzt'}
       <div class="info-section">
         <div class="section-title">
           <i class="bi bi-building-fill"></i>
           <h2>Praxisinformationen</h2>
         </div>
         <div class="info-grid">
-          {#if data.profile.praxisname}
-            <div class="info-item">
-              <div class="info-icon">
-                <i class="bi bi-star-fill"></i>
-              </div>
-              <div class="info-content">
-                <span class="info-label">Praxisname</span>
-                <span class="info-value">{data.profile.praxisname}</span>
-              </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-star-fill"></i>
             </div>
-          {/if}
-          {#if data.profile.praxisadresse}
-            <div class="info-item">
-              <div class="info-icon">
-                <i class="bi bi-geo-alt-fill"></i>
-              </div>
-              <div class="info-content">
-                <span class="info-label">Praxisadresse</span>
-                <span class="info-value">{data.profile.praxisadresse}</span>
-              </div>
+            <div class="info-content">
+              <span class="info-label">Praxisname</span>
+              <span class="info-value">{data.profile.praxisname || 'Nicht vorhanden'}</span>
             </div>
-          {/if}
+          </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Praxisadresse</span>
+              <span class="info-value">{data.profile.praxisadresse || 'Nicht vorhanden'}</span>
+            </div>
+          </div>
         </div>
       </div>
     {/if}
 
     <!-- Patient Insurance -->
-    {#if data.userRole === 'Patient' && data.profile.krankenkasse}
+    {#if data.userRole === 'Patient'}
       <div class="info-section">
         <div class="section-title">
           <i class="bi bi-shield-fill-check"></i>
           <h2>Versicherungsinformationen</h2>
         </div>
-        <div class="insurance-badge">
-          <i class="bi bi-hospital-fill"></i>
-          <span>{data.profile.krankenkasse}</span>
-        </div>
+        {#if data.profile.krankenkasse}
+          <div class="insurance-badge">
+            <i class="bi bi-hospital-fill"></i>
+            <span>{data.profile.krankenkasse}</span>
+          </div>
+        {:else}
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-hospital"></i>
+            </div>
+            <div class="info-content">
+              <span class="info-label">Krankenkasse</span>
+              <span class="info-value">Nicht vorhanden</span>
+            </div>
+          </div>
+        {/if}
       </div>
     {/if}
 
