@@ -1,5 +1,6 @@
 <script>
-    let { title, value, icon = 'bi-info-circle', variant = 'turquoise' } = $props();
+    import './StatCard.css';
+    let { title, value, icon = 'bi-info-circle', variant = 'turquoise', onclick = null, clickable = false } = $props();
     
     // Icon color mapping based on variant and icon type
     const getIconColor = (iconClass, colorVariant) => {
@@ -31,9 +32,15 @@
             ? 'linear-gradient(90deg, #9C27B0 0%, #7B1FA2 100%)'
             : 'linear-gradient(90deg, #009688 0%, #30B0C7 100%)';
     };
+
+    const handleClick = () => {
+        if (clickable && onclick) {
+            onclick();
+        }
+    };
 </script>
 
-<div class="stat-card">
+<div class="stat-card {clickable ? 'clickable' : ''}" onclick={handleClick} role={clickable ? 'button' : undefined} tabindex={clickable ? 0 : undefined}>
     <div class="card-accent" style="background: {getAccentGradient(variant)}"></div>
     
     <div class="card-content">
@@ -50,91 +57,3 @@
     </div>
 </div>
 
-<style>
-    .stat-card {
-        position: relative;
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        height: 100%;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
-    
-    .card-accent {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #009688 0%, #30B0C7 100%);
-    }
-    
-    .card-content {
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-        padding: 1.5rem;
-        padding-top: 1.75rem;
-    }
-    
-    .icon-badge {
-        flex-shrink: 0;
-        width: 70px;
-        height: 70px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    .icon-badge i {
-        font-size: 2rem;
-        font-weight: 600;
-    }
-    
-    .card-main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-    }
-    
-    .stat-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #4a5568;
-        margin: 0;
-        line-height: 1.3;
-    }
-    
-    .stat-value {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #1a202c;
-        line-height: 1;
-    }
-    
-    @media (max-width: 640px) {
-        .card-content {
-            flex-direction: column;
-            text-align: center;
-        }
-        
-        .icon-badge {
-            align-self: center;
-        }
-        
-        .card-main {
-            align-items: center;
-        }
-    }
-</style>

@@ -1,0 +1,198 @@
+/* Page layout */
+.termine-page {
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.page-header {
+    background: linear-gradient(135deg, var(--hdr-start, #009688) 0%, var(--hdr-end, #00bfa5) 100%);
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.purple-variant .page-header {
+    --hdr-start: #8E24AA;
+    --hdr-end: #AB47BC;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 .5rem 0;
+    color: #ffffff;
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    opacity: .95;
+    margin: 0;
+    color: #ffffff;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1.25rem;
+    font-size: .875rem;
+    font-weight: 500;
+    color: white;
+    background: rgba(255, 255, 255, .2);
+    border: 2px solid rgba(255, 255, 255, .3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s ease;
+    margin-bottom: 1.5rem;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, .3);
+    border-color: rgba(255, 255, 255, .5);
+}
+
+.termine-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.termine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Filters */
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.filter-btn {
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+}
+
+/* Active states by role */
+/* Turquoise (Patient) */
+.termine-page:not(.purple-variant) .filter-btn.active {
+    background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+    border-color: #009688;
+    color: #00695c;
+    box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.18);
+}
+
+/* Purple (Zahnarzt) */
+.purple-variant .filter-btn.active {
+    background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%);
+    border-color: #8E24AA;
+    color: #6A1B9A;
+    box-shadow: 0 0 0 3px rgba(179, 136, 255, 0.18);
+}
+
+.warteliste-btn {
+    background: linear-gradient(135deg, #ffffff 0%, #fff9e6 100%);
+}
+
+.warteliste-btn.active {
+    background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
+    border-color: #FFC107;
+    color: #6A1B9A;
+}
+
+.freie-slots-btn {
+    background: linear-gradient(135deg, #ffffff 0%, #F5EFFC 100%);
+}
+
+.freie-slots-btn.active {
+    background: linear-gradient(135deg, #DCCEF6 0%, #C7B7E6 100%);
+    border-color: #8E24AA;
+    color: #6A1B9A;
+}
+
+/* Search */
+.search-container {
+    margin-top: 1rem;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: .5rem .75rem;
+    width: 100%;
+    max-width: 560px;
+}
+
+.search-icon {
+    color: #009688;
+}
+
+.purple-variant .search-icon {
+    color: #8E24AA;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: .95rem;
+}
+
+.search-input.purple-theme:focus {
+    border-color: #B388FF;
+    box-shadow: 0 0 0 3px rgba(179, 136, 255, 0.18);
+}
+
+.clear-search {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+}
+
+/* Empty state */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    color: #6b7280;
+    padding: 2rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .page-subtitle {
+        font-size: .9375rem;
+    }
+
+    .termine-content {
+        padding: 1.5rem 1rem;
+    }
+}

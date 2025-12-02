@@ -49,6 +49,10 @@
               <i class="bi bi-house-door"></i>
               Übersicht
             </a>
+            <a href="/termine" class="nav-link-item">
+              <i class="bi bi-calendar2-check"></i>
+              Termine
+            </a>
             {#if user.user_roles.includes("Patient")}
               <a href="/" class="nav-link-item">
                 <i class="bi bi-calendar-plus"></i>
