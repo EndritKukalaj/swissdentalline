@@ -9,7 +9,8 @@ export const load = async ({ locals }) => {
             stats: {
                 geplanteTermine: 0,
                 offeneWartelisten: 0,
-                freieSlots: 0
+                freieSlots: 0,
+                abgeschlosseneTermine: 0
             },
             userRole: null
         };
@@ -39,7 +40,8 @@ export const load = async ({ locals }) => {
             stats: {
                 geplanteTermine: 0,
                 offeneWartelisten: 0,
-                freieSlots: 0
+                freieSlots: 0,
+                abgeschlosseneTermine: 0
             },
             userRole: null
         };
@@ -135,12 +137,16 @@ async function loadPatientTermine(patientId, jwt_token) {
     const offeneWartelisten = sortedTermine.filter(t => 
         t.wartelisteAktiv && t.status === 'GEBUCHT'
     ).length;
+    const abgeschlosseneTermine = sortedTermine.filter(t => 
+        t.status === 'ABGESCHLOSSEN'
+    ).length;
     
     return {
         termine: sortedTermine,
         stats: {
             geplanteTermine,
-            offeneWartelisten
+            offeneWartelisten,
+            abgeschlosseneTermine
         },
         userRole: 'Patient'
     };
@@ -239,12 +245,16 @@ async function loadZahnarztTermine(zahnarztId, jwt_token) {
         const freieSlots = sortedTermine.filter(t => 
             t.status === 'FREI' && !t.patientId && new Date(t.datum) >= now
         ).length;
+        const abgeschlosseneTermine = sortedTermine.filter(t => 
+            t.status === 'ABGESCHLOSSEN'
+        ).length;
         
         return {
             termine: sortedTermine,
             stats: {
                 geplanteTermine,
-                freieSlots
+                freieSlots,
+                abgeschlosseneTermine
             },
             userRole: 'Zahnarzt'
         };
@@ -254,7 +264,8 @@ async function loadZahnarztTermine(zahnarztId, jwt_token) {
             termine: [],
             stats: {
                 geplanteTermine: 0,
-                freieSlots: 0
+                freieSlots: 0,
+                abgeschlosseneTermine: 0
             },
             userRole: 'Zahnarzt'
         };

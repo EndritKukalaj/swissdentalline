@@ -1,5 +1,4 @@
 ﻿<script>
-    import "./PatientOverview.css";
     import { goto } from '$app/navigation';
     import StatCard from "$lib/components/StatCard.svelte";
     import NextTerminCard from "$lib/components/NextTerminCard.svelte";
@@ -33,3 +32,26 @@
         <NextTerminCard termin={nextTermin} variant="turquoise" />
     {/if}
 </div>
+
+<style>
+/* PatientOverview Component Styles */
+.dashboard-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+</style>

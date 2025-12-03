@@ -1,5 +1,4 @@
 ﻿<script>
-    import './ZahnarztOverview.css';
     import { goto } from '$app/navigation';
     import StatCard from "./StatCard.svelte";
     import NextTerminCard from "./NextTerminCard.svelte";
@@ -58,3 +57,51 @@
         />
     </div>
 </div>
+
+<style>
+/* ZahnarztOverview Component Styles */
+.zahnarzt-dashboard {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.secondary-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.details-summary-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 1rem 0;
+}
+
+.next-termin-section {
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .secondary-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+</style>
