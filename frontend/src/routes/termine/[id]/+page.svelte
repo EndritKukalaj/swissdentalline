@@ -59,9 +59,9 @@
 
 <div class="details-container {variant}-variant">
     <!-- Back Button -->
-    <button class="back-btn" onclick={() => goto('/')}>
+    <button class="back-btn" onclick={() => goto('/termine')}>
         <i class="bi bi-arrow-left"></i>
-        Zurück zur Übersicht
+        Zurück
     </button>
     
     <!-- Header Card -->
@@ -609,51 +609,124 @@
     
     @media (max-width: 768px) {
         .details-container {
-            padding: 1.5rem;
+            padding: 1rem;
         }
-        
+
+        .header-card {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 14px;
+        }
+
         .header-content {
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1rem;
         }
-        
+
         .date-badge-large {
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
-            padding: 1rem 1.5rem;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            min-width: unset;
         }
-        
+
         .date-badge-large .day {
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
-        
+
+        .date-badge-large .month {
+            font-size: 0.875rem;
+        }
+
         .termin-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
         }
-        
+
+        .header-meta {
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge,
+        .warteliste-badge {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 6px;
+        }
+
+        .termin-date {
+            font-size: 1rem;
+        }
+
         .details-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
-        
+
+        .detail-card {
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .card-header {
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .card-header i {
+            font-size: 1.25rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.125rem;
+        }
+
+        .card-content {
+            gap: 0.75rem;
+        }
+
         .detail-row {
-            flex-direction: column;
+            display: flex;
+            flex-direction: row;
             align-items: flex-start;
+            gap: 0.75rem;
         }
-        
+
+        .detail-label {
+            font-size: 0.8125rem;
+        }
+
+        .detail-label i {
+            font-size: 0.875rem;
+        }
+
         .detail-value {
+            font-size: 0.9375rem;
             text-align: left;
         }
-        
+
+        .detail-value.highlight {
+            font-size: 1rem;
+        }
+
         .action-section {
             flex-direction: column;
+            margin-top: 1rem;
+            padding-top: 1rem;
         }
-        
+
         .action-btn {
             width: 100%;
             justify-content: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.9375rem;
+            border-radius: 10px;
         }
     }
 </style>
