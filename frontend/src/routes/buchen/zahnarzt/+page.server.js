@@ -1,0 +1,89 @@
+import { redirect } from '@sveltejs/kit';
+
+const API_BASE_URL = 'http://localhost:8080/api';
+
+export async function load({ url, locals }) {
+    // Check if user is authenticated
+    if (!locals.user) {
+        throw redirect(302, '/login');
+    }
+    
+    // Check if user is a patient
+    const userRole = locals.user.user_roles?.[0];
+    if (userRole !== 'Patient') {
+        throw redirect(302, '/');
+    }
+    
+    const terminId = url.searchParams.get('terminId');
+    
+    if (!terminId) {
+        throw redirect(302, '/buchen/behandlung');
+    }
+    
+    try {
+        // Fetch termin details
+        const terminRes = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+            headers: {
+                'Authorization': `Bearer ${locals.jwt_token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!terminRes.ok) {
+            throw redirect(302, '/buchen/behandlung');
+        }
+        
+        const termin = await terminRes.json();
+        console.log('Loaded termin:', termin);
+        
+        // Fetch zahnarzt details
+        const zahnarztRes = await fetch(`${API_BASE_URL}/zahnaerzte/${termin.zahnarztId}`, {
+            headers: {
+                'Authorization': `Bearer ${locals.jwt_token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!zahnarztRes.ok) {
+            throw redirect(302, '/buchen/behandlung');
+        }
+        
+        const zahnarzt = await zahnarztRes.json();
+        console.log('Loaded zahnarzt:', zahnarzt);
+        
+        // Fetch behandlungsart details
+        const behandlungRes = await fetch(`${API_BASE_URL}/behandlungsarten/${termin.behandlungsartId}`, {
+            headers: {
+                'Authorization': `Bearer ${locals.jwt_token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const behandlungsart = behandlungRes.ok ? await behandlungRes.json() : null;
+        
+        // Fetch praxis details if zahnarzt has praxisAdresseId
+        let praxis = null;
+        if (zahnarzt.praxisAdresseId) {
+            const praxisRes = await fetch(`${API_BASE_URL}/adressen/${zahnarzt.praxisAdresseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${locals.jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (praxisRes.ok) {
+                praxis = await praxisRes.json();
+            }
+        }
+        
+        return {
+            termin,
+            zahnarzt,
+            behandlungsart,
+            praxis
+        };
+    } catch (error) {
+        console.error('Error loading zahnarzt details:', error);
+        throw redirect(302, '/buchen/behandlung');
+    }
+}
