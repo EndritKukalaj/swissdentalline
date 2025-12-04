@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { error } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.BACKEND_URL || 'http://localhost:8080/api';
 
@@ -140,5 +140,66 @@ export const load = async ({ params, locals }) => {
         if (err.status) throw err;
         console.error('Error loading termin details:', err);
         throw error(500, 'Fehler beim Laden der Termindetails');
+    }
+};
+
+export const actions = {
+    cancelTermin: async ({ params, locals }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            return fail(401, { error: 'Nicht autorisiert' });
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Patient') {
+            return fail(403, { error: 'Nur Patienten können Termine stornieren' });
+        }
+
+        const terminId = params.id;
+        const jwt_token = locals.jwt_token;
+        const auth0UserId = locals.user.sub;
+        const userId = auth0UserId.replace('auth0|', '');
+
+        try {
+            // Verify ownership before canceling
+            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!terminResponse.ok) {
+                return fail(404, { error: 'Termin nicht gefunden' });
+            }
+
+            const termin = await terminResponse.json();
+            const terminPatientId = termin.patientId || termin.patient_id;
+            
+            // Normalize both IDs for comparison (remove auth0| prefix if present)
+            const normalizedTerminPatientId = terminPatientId?.replace('auth0|', '');
+            const normalizedUserId = userId;
+
+            if (normalizedTerminPatientId !== normalizedUserId) {
+                return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+            }
+
+            // Cancel the appointment
+            const cancelResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/abbrechen`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!cancelResponse.ok) {
+                return fail(cancelResponse.status, { error: 'Termin konnte nicht storniert werden' });
+            }
+
+            return { success: true };
+        } catch (err) {
+            console.error('Error canceling termin:', err);
+            return fail(500, { error: 'Ein Fehler ist aufgetreten' });
+        }
     }
 };

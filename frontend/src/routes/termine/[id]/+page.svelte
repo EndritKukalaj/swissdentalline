@@ -1,9 +1,24 @@
 <script>
     import './styles.css';
     import { goto } from '$app/navigation';
+    import { enhance } from '$app/forms';
     
-    let { data } = $props();
+    let { data, form } = $props();
     let { termin, behandlungsart, zahnarzt, adresse, patient, userRole } = data;
+    
+    let isCanceling = $state(false);
+    let showCancelDialog = $state(false);
+    let cancelError = $state(null);
+    
+    // Redirect to termine list after successful cancellation
+    $effect(() => {
+        if (form?.success) {
+            goto('/termine');
+        } else if (form?.error) {
+            cancelError = form.error;
+            isCanceling = false;
+        }
+    });
     
     // Determine variant based on role
     const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
@@ -289,11 +304,14 @@
     
     <!-- Action Buttons -->
     <div class="action-section">
-        {#if termin.status === 'GEBUCHT'}
-            <button class="action-btn cancel-btn" disabled>
+        {#if termin.status === 'GEBUCHT' && userRole === 'Patient'}
+            <button 
+                class="action-btn cancel-btn" 
+                onclick={() => showCancelDialog = true}
+                disabled={isCanceling}
+            >
                 <i class="bi bi-x-circle"></i>
                 Termin stornieren
-                <span class="coming-soon">Bald verfügbar</span>
             </button>
         {/if}
         
@@ -307,426 +325,73 @@
     </div>
 </div>
 
-<style>
-    .details-container {
-        padding: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-        --detail-primary: #009688;
-        --detail-accent: #00bfa5;
-        --detail-bg-light: #f0fffe;
-        --detail-hover-bg: rgba(0, 150, 136, 0.05);
-        --detail-border: rgba(0, 150, 136, 0.1);
-        --detail-shadow: rgba(0, 150, 136, 0.15);
-        --detail-focus: rgba(0, 150, 136, 0.1);
-    }
-    
-    .details-container.purple-variant {
-        --detail-primary: #8E24AA;
-        --detail-accent: #AB47BC;
-        --detail-bg-light: #F5EFFC;
-        --detail-hover-bg: rgba(142, 36, 170, 0.05);
-        --detail-border: rgba(171, 71, 188, 0.1);
-        --detail-shadow: rgba(171, 71, 188, 0.15);
-        --detail-focus: rgba(142, 36, 170, 0.1);
-    }
-    
-    .back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #4a5568;
-        background: white;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        margin-bottom: 1.5rem;
-    }
-    
-    .back-btn:hover {
-        border-color: var(--detail-primary);
-        color: var(--detail-primary);
-        background: var(--detail-bg-light);
-    }
-    
-    .header-card {
-        background: linear-gradient(135deg, #ffffff 0%, var(--detail-bg-light) 100%);
-        border-radius: 20px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 8px 24px var(--detail-shadow);
-        border: 2px solid var(--detail-border);
-        border-top: 6px solid;
-        border-image: linear-gradient(90deg, var(--detail-primary) 0%, var(--detail-accent) 100%) 1;
-    }
-    
-    .header-content {
-        display: flex;
-        gap: 2rem;
-        align-items: flex-start;
-    }
-    
-    .date-badge-large {
-        background: linear-gradient(135deg, var(--detail-primary) 0%, var(--detail-accent) 100%);
-        border-radius: 16px;
-        padding: 1.5rem;
-        text-align: center;
-        color: white;
-        box-shadow: 0 8px 16px var(--detail-shadow);
-        min-width: 120px;
-        flex-shrink: 0;
-    }
-    
-    .date-badge-large .day {
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: 1;
-        margin-bottom: 0.25rem;
-    }
-    
-    .date-badge-large .month {
-        font-size: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        opacity: 0.95;
-    }
-    
-    .header-info {
-        flex: 1;
-    }
-    
-    .termin-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #1a202c;
-        margin: 0 0 0.75rem 0;
-    }
-    
-    .header-meta {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 0.75rem;
-        flex-wrap: wrap;
-    }
-    
-    .status-badge {
-        padding: 0.375rem 0.875rem;
-        border-radius: 6px;
-        color: white;
-        font-size: 0.875rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .warteliste-badge {
-        padding: 0.375rem 0.875rem;
-        border-radius: 6px;
-        background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
-        color: white;
-        font-size: 0.875rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.375rem;
-    }
-    
-    .termin-date {
-        font-size: 1.125rem;
-        color: #4a5568;
-        margin: 0;
-    }
-    
-    .details-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    
-    .detail-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e2e8f0;
-        transition: all 0.3s ease;
-    }
-    
-    .detail-card:hover {
-        box-shadow: 0 8px 24px var(--detail-shadow);
-        transform: translateY(-2px);
-    }
-    
-    .card-header {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 2px solid var(--detail-bg-light);
-    }
-    
-    .card-header i {
-        font-size: 1.5rem;
-        color: var(--detail-primary);
-    }
-    
-    .card-header h2 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1a202c;
-        margin: 0;
-    }
-    
-    .card-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .section-divider {
-        height: 2px;
-        background: linear-gradient(90deg, var(--detail-bg-light) 0%, var(--detail-primary) 50%, var(--detail-bg-light) 100%);
-        margin: 0.5rem 0;
-        border-radius: 2px;
-    }
-    
-    .detail-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-    
-    .detail-label {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #64748b;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        flex-shrink: 0;
-    }
-    
-    .detail-label i {
-        font-size: 1rem;
-        color: var(--detail-primary);
-    }
-    
-    .detail-value {
-        font-size: 1rem;
-        color: #1a202c;
-        font-weight: 500;
-        text-align: right;
-    }
-    
-    .detail-value.highlight {
-        color: var(--detail-primary);
-        font-weight: 700;
-        font-size: 1.125rem;
-    }
-    
-    .detail-value a {
-        color: var(--detail-primary);
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-    
-    .detail-value a:hover {
-        color: var(--detail-accent);
-        text-decoration: underline;
-    }
-    
-    .action-section {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 2px solid var(--detail-bg-light);
-    }
-    
-    .action-btn {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        position: relative;
-    }
-    
-    .action-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-    
-    .cancel-btn {
-        background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
-        color: white;
-        box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
-    }
-    
-    .cancel-btn:hover:not(:disabled) {
-        box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
-        transform: translateY(-2px);
-    }
-    
-    .review-btn {
-        background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
-        color: white;
-        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-    }
-    
-    .review-btn:hover:not(:disabled) {
-        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
-        transform: translateY(-2px);
-    }
-    
-    .coming-soon {
-        position: absolute;
-        top: -0.5rem;
-        right: -0.5rem;
-        background: #64748b;
-        color: white;
-        font-size: 0.625rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    @media (max-width: 768px) {
-        .details-container {
-            padding: 1rem;
-        }
-
-        .header-card {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 14px;
-        }
-
-        .header-content {
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .date-badge-large {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            min-width: unset;
-        }
-
-        .date-badge-large .day {
-            font-size: 2rem;
-        }
-
-        .date-badge-large .month {
-            font-size: 0.875rem;
-        }
-
-        .termin-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .header-meta {
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .status-badge,
-        .warteliste-badge {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            border-radius: 6px;
-        }
-
-        .termin-date {
-            font-size: 1rem;
-        }
-
-        .details-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .detail-card {
-            padding: 1rem;
-            border-radius: 12px;
-        }
-
-        .card-header {
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .card-header i {
-            font-size: 1.25rem;
-        }
-
-        .card-header h2 {
-            font-size: 1.125rem;
-        }
-
-        .card-content {
-            gap: 0.75rem;
-        }
-
-        .detail-row {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
-
-        .detail-label {
-            font-size: 0.8125rem;
-        }
-
-        .detail-label i {
-            font-size: 0.875rem;
-        }
-
-        .detail-value {
-            font-size: 0.9375rem;
-            text-align: left;
-        }
-
-        .detail-value.highlight {
-            font-size: 1rem;
-        }
-
-        .action-section {
-            flex-direction: column;
-            margin-top: 1rem;
-            padding-top: 1rem;
-        }
-
-        .action-btn {
-            width: 100%;
-            justify-content: center;
-            padding: 0.75rem 1rem;
-            font-size: 0.9375rem;
-            border-radius: 10px;
-        }
-    }
-</style>
+<!-- Cancel Confirmation Dialog -->
+{#if showCancelDialog}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="dialog-overlay" onclick={() => showCancelDialog = false}>
+        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
+            <div class="dialog-header">
+                <i class="bi bi-exclamation-triangle"></i>
+                <h3>Termin stornieren</h3>
+            </div>
+            <div class="dialog-body">
+                <p>Möchten Sie diesen Termin wirklich stornieren?</p>
+                <div class="dialog-info">
+                    <div class="info-row">
+                        <strong>Behandlung:</strong>
+                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Datum:</strong>
+                        <span>{formatDate(termin.datum)}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Uhrzeit:</strong>
+                        <span>{formatTime(termin.datum)} Uhr</span>
+                    </div>
+                </div>
+                <p class="warning-text">
+                    <i class="bi bi-info-circle"></i>
+                    Diese Aktion kann nicht rückgängig gemacht werden.
+                </p>
+                {#if cancelError}
+                    <div class="error-message">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {cancelError}
+                    </div>
+                {/if}
+            </div>
+            <div class="dialog-actions">
+                <button 
+                    class="dialog-btn cancel-dialog-btn" 
+                    onclick={() => { showCancelDialog = false; cancelError = null; }}
+                    disabled={isCanceling}
+                >
+                    Abbrechen
+                </button>
+                <form method="POST" action="?/cancelTermin" use:enhance={() => {
+                    isCanceling = true;
+                    cancelError = null;
+                    return async ({ result, update }) => {
+                        await update();
+                    };
+                }}>
+                    <button 
+                        type="submit" 
+                        class="dialog-btn confirm-btn"
+                        disabled={isCanceling}
+                    >
+                        {#if isCanceling}
+                            <i class="bi bi-hourglass-split"></i>
+                            Wird storniert...
+                        {:else}
+                            <i class="bi bi-check-circle"></i>
+                            Termin stornieren
+                        {/if}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/if}

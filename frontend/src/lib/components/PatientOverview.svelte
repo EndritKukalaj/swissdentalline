@@ -7,7 +7,13 @@
 </script>
 
 <div class="dashboard-container">
-    <h1 class="dashboard-title">Meine Termine</h1>
+    <div class="header-section">
+        <h1 class="dashboard-title">Meine Termine</h1>
+        <button class="btn-book-appointment" onclick={() => goto('/buchen')}>
+            <i class="bi bi-calendar-plus"></i>
+            Termin buchen
+        </button>
+    </div>
 
     <!-- Stats Section -->
     <div class="stats-grid">
@@ -41,11 +47,45 @@
     margin: 0 auto;
 }
 
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
 .dashboard-title {
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 2rem;
+    margin: 0;
+}
+
+.btn-book-appointment {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+}
+
+.btn-book-appointment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 150, 136, 0.4);
+}
+
+.btn-book-appointment i {
+    font-size: 1.25rem;
 }
 
 .stats-grid {

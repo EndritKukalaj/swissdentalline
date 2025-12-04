@@ -1,0 +1,274 @@
+.buchen-container {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2rem;
+}
+
+/* Header */
+.page-header {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4a5568;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+    border-color: #009688;
+    color: #009688;
+    background: #f0fffe;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 1rem 0;
+}
+
+.selected-behandlung {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+    border-radius: 12px;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.selected-behandlung i {
+    font-size: 1.5rem;
+    color: #009688;
+}
+
+/* Termine Container */
+.termine-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.date-group {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.date-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.date-badge {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.date-day {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.date-info h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.25rem 0;
+}
+
+.date-info p {
+    font-size: 0.9375rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.time-slot-card {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.time-slot-card:hover {
+    border-color: #009688;
+    background: #f0fffe;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 150, 136, 0.15);
+}
+
+.card-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.time-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.time-info i {
+    font-size: 1.5rem;
+    color: #009688;
+}
+
+.time {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.weekday {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.zahnarzt-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    color: #4a5568;
+}
+
+.zahnarzt-info i {
+    color: #009688;
+    font-size: 1rem;
+}
+
+.slot-action {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.slot-action i {
+    font-size: 1.5rem;
+    color: #009688;
+}
+
+/* Empty State */
+.empty-state {
+    max-width: 500px;
+    margin: 4rem auto;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #9ca3af;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.5rem 0;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0 0 2rem 0;
+}
+
+.btn-primary {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 150, 136, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .buchen-container {
+        padding: 1rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .selected-behandlung {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    
+    .time-slots {
+        grid-template-columns: 1fr;
+    }
+    
+    .date-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

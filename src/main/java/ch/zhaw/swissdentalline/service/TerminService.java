@@ -182,8 +182,23 @@ public class TerminService {
         Termin termin = terminRepository.findById(terminId)
                 .orElseThrow(() -> new IllegalArgumentException("Termin mit id: " + terminId + " nicht gefunden"));
 
-        termin.setPatientId(null);
         termin.setStatus(TerminStatus.ABGESAGT);
+
+        return terminRepository.save(termin);
+    }
+
+    public Termin releaseFlexTermin(String terminId) {
+        Termin termin = terminRepository.findById(terminId)
+                .orElseThrow(() -> new IllegalArgumentException("Termin mit id: " + terminId + " nicht gefunden"));
+
+        if (termin.getStatus() != TerminStatus.ABGESAGT) {
+            throw new IllegalStateException("Nur abgesagte Termine können als Flex-Termin freigegeben werden");
+        }
+
+        // Release appointment as flex appointment - remove patient and make available
+        termin.setPatientId(null);
+        termin.setStatus(TerminStatus.FLEX);
+        termin.setWartelisteAktiv(false);
 
         return terminRepository.save(termin);
     }
