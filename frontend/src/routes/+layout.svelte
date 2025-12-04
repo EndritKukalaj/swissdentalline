@@ -54,9 +54,9 @@
               Termine
             </a>
             {#if user.user_roles.includes("Patient")}
-              <a href="/" class="nav-link-item">
+              <a href="/buchen" class="nav-link-item">
                 <i class="bi bi-calendar-plus"></i>
-                Termin erfassen
+                Termin buchen
               </a>
               <a href="/" class="nav-link-item">
                 <i class="bi bi-calendar2-range"></i>
