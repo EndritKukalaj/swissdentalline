@@ -1,9 +1,24 @@
 <script>
     import './styles.css';
     import { goto } from '$app/navigation';
+    import { enhance } from '$app/forms';
     
-    let { data } = $props();
+    let { data, form } = $props();
     let { termin, behandlungsart, zahnarzt, adresse, patient, userRole } = data;
+    
+    let isCanceling = $state(false);
+    let showCancelDialog = $state(false);
+    let cancelError = $state(null);
+    
+    // Redirect to termine list after successful cancellation
+    $effect(() => {
+        if (form?.success) {
+            goto('/termine');
+        } else if (form?.error) {
+            cancelError = form.error;
+            isCanceling = false;
+        }
+    });
     
     // Determine variant based on role
     const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
@@ -289,11 +304,14 @@
     
     <!-- Action Buttons -->
     <div class="action-section">
-        {#if termin.status === 'GEBUCHT'}
-            <button class="action-btn cancel-btn" disabled>
+        {#if termin.status === 'GEBUCHT' && userRole === 'Patient'}
+            <button 
+                class="action-btn cancel-btn" 
+                onclick={() => showCancelDialog = true}
+                disabled={isCanceling}
+            >
                 <i class="bi bi-x-circle"></i>
                 Termin stornieren
-                <span class="coming-soon">Bald verfügbar</span>
             </button>
         {/if}
         
@@ -306,3 +324,74 @@
         {/if}
     </div>
 </div>
+
+<!-- Cancel Confirmation Dialog -->
+{#if showCancelDialog}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="dialog-overlay" onclick={() => showCancelDialog = false}>
+        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
+            <div class="dialog-header">
+                <i class="bi bi-exclamation-triangle"></i>
+                <h3>Termin stornieren</h3>
+            </div>
+            <div class="dialog-body">
+                <p>Möchten Sie diesen Termin wirklich stornieren?</p>
+                <div class="dialog-info">
+                    <div class="info-row">
+                        <strong>Behandlung:</strong>
+                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Datum:</strong>
+                        <span>{formatDate(termin.datum)}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Uhrzeit:</strong>
+                        <span>{formatTime(termin.datum)} Uhr</span>
+                    </div>
+                </div>
+                <p class="warning-text">
+                    <i class="bi bi-info-circle"></i>
+                    Diese Aktion kann nicht rückgängig gemacht werden.
+                </p>
+                {#if cancelError}
+                    <div class="error-message">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {cancelError}
+                    </div>
+                {/if}
+            </div>
+            <div class="dialog-actions">
+                <button 
+                    class="dialog-btn cancel-dialog-btn" 
+                    onclick={() => { showCancelDialog = false; cancelError = null; }}
+                    disabled={isCanceling}
+                >
+                    Abbrechen
+                </button>
+                <form method="POST" action="?/cancelTermin" use:enhance={() => {
+                    isCanceling = true;
+                    cancelError = null;
+                    return async ({ result, update }) => {
+                        await update();
+                    };
+                }}>
+                    <button 
+                        type="submit" 
+                        class="dialog-btn confirm-btn"
+                        disabled={isCanceling}
+                    >
+                        {#if isCanceling}
+                            <i class="bi bi-hourglass-split"></i>
+                            Wird storniert...
+                        {:else}
+                            <i class="bi bi-check-circle"></i>
+                            Termin stornieren
+                        {/if}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/if}
