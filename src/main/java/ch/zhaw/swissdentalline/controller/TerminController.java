@@ -166,6 +166,21 @@ public class TerminController {
         }
     }
 
+    @PutMapping("/termine/{id}/freigeben")
+    public ResponseEntity<Termin> releaseTermin(@PathVariable String id) {
+        if (!userService.userHasRole("Zahnarzt")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        try {
+            Termin released = terminService.releaseFlexTermin(id);
+            return new ResponseEntity<>(released, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PutMapping("/termine/{id}/abschliessen")
     public ResponseEntity<Termin> completeTermin(@PathVariable String id) {
         if (!userService.userHasRole("Zahnarzt")) {
