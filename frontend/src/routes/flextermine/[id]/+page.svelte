@@ -204,7 +204,8 @@
     <!-- Action Buttons -->
     <form method="POST" action="?/confirmRebooking" use:enhance={() => {
         isSubmitting = true;
-        return async ({ result }) => {
+        return async ({ update }) => {
+            await update();
             isSubmitting = false;
         };
     }}>

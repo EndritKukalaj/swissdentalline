@@ -460,7 +460,111 @@
     cursor: not-allowed;
 }
 
+/* Success Banner Styles */
+.success-banner {
+    position: relative;
+    background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.success-content > i {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.success-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.success-text strong {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.success-text span {
+    font-size: 0.875rem;
+    opacity: 0.95;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.close-btn i {
+    font-size: 1.25rem;
+}
+
 @media (max-width: 640px) {
+    .success-banner {
+        padding: 0.875rem 1rem;
+        border-radius: 10px;
+    }
+
+    .success-content > i {
+        font-size: 1.25rem;
+    }
+
+    .success-text strong {
+        font-size: 0.875rem;
+    }
+
+    .success-text span {
+        font-size: 0.75rem;
+    }
+
+    .close-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .close-btn i {
+        font-size: 1rem;
+    }
+
     .dialog-overlay {
         padding: 0;
         align-items: flex-end;

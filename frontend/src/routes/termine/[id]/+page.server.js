@@ -3,7 +3,9 @@ import { error, fail, redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.BACKEND_URL || 'http://localhost:8080/api';
 
-export const load = async ({ params, locals }) => {
+export const load = async ({ params, locals, url }) => {
+    const rebookSuccess = url.searchParams.get('rebookSuccess') === 'true';
+    
     if (!locals.isAuthenticated || !locals.user) {
         throw error(401, 'Nicht autorisiert');
     }
@@ -134,7 +136,8 @@ export const load = async ({ params, locals }) => {
             zahnarzt,
             adresse,
             patient,
-            userRole
+            userRole,
+            rebookSuccess
         };
     } catch (err) {
         if (err.status) throw err;

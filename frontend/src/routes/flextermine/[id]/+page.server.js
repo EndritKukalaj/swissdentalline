@@ -131,8 +131,10 @@ export const actions = {
                 return fail(response.status, { error: 'Umbuchung fehlgeschlagen' });
             }
             
-            // Success - redirect to termine page
-            throw redirect(303, '/termine');
+            const rebookedTermin = await response.json();
+            
+            // Success - redirect to termin detail page with success message
+            throw redirect(303, `/termine/${rebookedTermin.id}?rebookSuccess=true`);
         } catch (error) {
             if (error?.status === 303) {
                 throw error;

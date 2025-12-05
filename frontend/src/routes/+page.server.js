@@ -184,14 +184,37 @@ async function loadPatientDashboard(patientId, jwt_token) {
         const offeneWartelisten = sortedTermine.filter(t => 
             t.wartelisteAktiv && t.status === 'GEBUCHT'
         ).length;
-        console.log('Dashboard stats - Geplante Termine:', geplanteTermine, 'Offene Wartelisten:', offeneWartelisten);
+        
+        // Fetch flex termine count for this patient
+        let verfuegbareFlexTermine = 0;
+        try {
+            const flexTermineResponse = await fetch(
+                `${API_BASE_URL}/termine/patient/${patientId}/flex`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${jwt_token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            if (flexTermineResponse.ok) {
+                const flexTermine = await flexTermineResponse.json();
+                verfuegbareFlexTermine = flexTermine.length;
+            }
+        } catch (error) {
+            console.error('Error loading flex termine count:', error);
+        }
+        
+        console.log('Dashboard stats - Geplante Termine:', geplanteTermine, 'Offene Wartelisten:', offeneWartelisten, 'Flex-Termine:', verfuegbareFlexTermine);
         
         return {
             termine: sortedTermine,
             nextTermin,
             stats: {
                 geplanteTermine,
-                offeneWartelisten
+                offeneWartelisten,
+                verfuegbareFlexTermine
             },
             userRole: 'Patient'
         };

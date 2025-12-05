@@ -31,6 +31,14 @@
             value={stats.offeneWartelisten || 0}
             variant="turquoise"
         />
+        <StatCard
+            icon="bi-lightning-charge-fill"
+            title="Verfügbare Flex-Termine"
+            value={stats.verfuegbareFlexTermine || 0}
+            variant="yellow"
+            onclick={() => goto('/flextermine')}
+            clickable={true}
+        />
     </div>
 
     <!-- Next Appointment Section -->
