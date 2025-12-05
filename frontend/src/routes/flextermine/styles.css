@@ -1,0 +1,398 @@
+.flex-termine-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    color: #009688;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+    color: #00796B;
+    transform: translateX(-4px);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, #B2DFDB 0%, #80CBC4 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    border: 2px solid #009688;
+}
+
+.header-icon {
+    font-size: 3rem;
+        color: #FFB84D;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #004D40;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #00695C;
+}
+
+.info-banner {
+    display: flex;
+    gap: 1rem;
+    background: #E0F2F1;
+    border: 2px solid #009688;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.banner-icon {
+    font-size: 2rem;
+    color: #009688;
+}
+
+.banner-content h4 {
+    margin: 0 0 0.5rem 0;
+    color: #004D40;
+    font-size: 1.1rem;
+}
+
+.banner-content p {
+    margin: 0;
+    color: #00695C;
+}
+
+.flex-termine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.flex-termin-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.flex-termin-card:hover {
+    border-color: #009688;
+    box-shadow: 0 4px 12px rgba(0, 150, 136, 0.15);
+    transform: translateY(-2px);
+}
+
+.date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #009688 0%, #00796B 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1rem;
+    min-width: 80px;
+    text-align: center;
+}
+
+.date-month {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.date-day {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 0.25rem;
+}
+
+.termin-info {
+    flex: 1;
+}
+
+.termin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.behandlung-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.discount-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #FFB84D;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.termin-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.detail-item i {
+    color: #009688;
+}
+
+.replacement-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.replacement-info i {
+    color: #FFB84D;
+}
+
+.arrow-icon {
+    font-size: 1.5rem;
+    color: #009688;
+    transition: transform 0.3s ease;
+}
+
+.flex-termin-card:hover .arrow-icon {
+    transform: translateX(4px);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 16px;
+    border: 2px dashed #e0e0e0;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.info-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #E0F2F1;
+    color: #00695C;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.info-text i {
+    color: #009688;
+}
+
+@media (max-width: 768px) {
+    .flex-termine-container {
+        padding: 1rem 0.75rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .back-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .header-content {
+        flex-direction: row;
+        text-align: left;
+        padding: 1.25rem;
+        gap: 1rem;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.25rem;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .page-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .info-banner {
+        padding: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .banner-icon {
+        font-size: 1.5rem;
+    }
+
+    .banner-content h4 {
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .banner-content p {
+        font-size: 0.85rem;
+    }
+
+    .flex-termine-list {
+        gap: 0.75rem;
+    }
+
+    .flex-termin-card {
+        flex-direction: row;
+        align-items: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .date-badge {
+        min-width: 60px;
+        padding: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .date-month {
+        font-size: 0.75rem;
+    }
+
+    .date-day {
+        font-size: 1.5rem;
+    }
+
+    .termin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .behandlung-name {
+        font-size: 1rem;
+    }
+
+    .discount-badge {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .termin-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .detail-item {
+        font-size: 0.85rem;
+    }
+
+    .replacement-info {
+        font-size: 0.8rem;
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .arrow-icon {
+        display: block;
+        font-size: 1.25rem;
+    }
+
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .empty-state h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .info-text {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;
+    }
+}

@@ -58,7 +58,7 @@
                 <i class="bi bi-calendar-plus"></i>
                 Termin buchen
               </a>
-              <a href="/" class="nav-link-item">
+              <a href="/flextermine" class="nav-link-item">
                 <i class="bi bi-calendar2-range"></i>
                 Flex-Termine
               </a>
