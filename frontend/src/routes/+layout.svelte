@@ -2,7 +2,7 @@
   import icon from "$lib/assets/Logo.webp";
   import "./styles.css";
   let { data, children } = $props();
-  let { user, isAuthenticated, userRole } = data;
+  let { user, isAuthenticated, userRole, flexTermineCount = 0 } = data;
   
   // Determine variant based on role
   const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
@@ -58,9 +58,12 @@
                 <i class="bi bi-calendar-plus"></i>
                 Termin buchen
               </a>
-              <a href="/" class="nav-link-item">
+              <a href="/flextermine" class="nav-link-item">
                 <i class="bi bi-calendar2-range"></i>
                 Flex-Termine
+                {#if flexTermineCount > 0}
+                  <span class="nav-badge">{flexTermineCount}</span>
+                {/if}
               </a>
             {/if}
             {#if user.user_roles.includes("Zahnarzt")}
@@ -233,6 +236,34 @@
 
   .nav-link-item:hover::before {
     width: 80%;
+  }
+  
+  .nav-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    padding: 0 0.4rem;
+    background: linear-gradient(135deg, #FFB84D 0%, #FF9800 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 10px;
+    margin-left: 0.25rem;
+    box-shadow: 0 2px 4px rgba(255, 184, 77, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 2px 4px rgba(255, 184, 77, 0.3);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(255, 184, 77, 0.5);
+    }
   }
 
   .nav-actions {

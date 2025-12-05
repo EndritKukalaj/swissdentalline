@@ -208,4 +208,31 @@ public class TerminController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/termine/patient/{patientId}/flex")
+    public ResponseEntity<List<Termin>> getRelevantFlexTermineForPatient(@PathVariable String patientId) {
+        if (!userService.userHasRole("Patient")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        List<Termin> flexTermine = terminService.findRelevantFlexTermineForPatient(patientId);
+        return new ResponseEntity<>(flexTermine, HttpStatus.OK);
+    }
+
+    @PutMapping("/termine/{oldTerminId}/umbuchen/{flexTerminId}")
+    public ResponseEntity<Termin> rebookToFlexTermin(
+            @PathVariable String oldTerminId,
+            @PathVariable String flexTerminId,
+            @RequestParam String patientId) {
+        if (!userService.userHasRole("Patient")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        try {
+            Termin rebooked = terminService.rebookToFlexTermin(oldTerminId, flexTerminId, patientId);
+            return new ResponseEntity<>(rebooked, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -1,28 +1,3 @@
-<script module>
-    function getBehandlungIcon(name) {
-        const iconMap = {
-            Prophylaxe: "shield-check",
-            Kontrolle: "clipboard2-check",
-            Zahnreinigung: "droplet",
-            Bleaching: "brightness-high",
-            Füllungen: "bandaid",
-            Wurzelbehandlung: "heart-pulse",
-            Zahnersatz: "tooth",
-            Kieferorthopädie: "arrows-angle-contract",
-            Notfall: "exclamation-triangle",
-        };
-
-        const lowerName = name.toLowerCase();
-        for (const [key, icon] of Object.entries(iconMap)) {
-            if (lowerName.includes(key.toLowerCase())) {
-                return icon;
-            }
-        }
-
-        return "clipboard2-pulse";
-    }
-</script>
-
 <script>
     import './styles.css';
     import { goto } from "$app/navigation";
@@ -59,7 +34,7 @@
                 onclick={() => handleBehandlungSelect(behandlung)}
             >
                 <div class="card-icon">
-                    <i class="bi bi-{getBehandlungIcon(behandlung.name)}"></i>
+                    <i class="bi bi-clipboard2-pulse"></i>
                 </div>
                 <div class="card-content">
                     <h3 class="behandlung-name">{behandlung.name}</h3>

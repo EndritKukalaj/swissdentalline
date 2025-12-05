@@ -105,7 +105,7 @@ public class TerminService {
     }
 
     public Page<Termin> findFlexTermine(Pageable pageable) {
-        return terminRepository.findByStatus(TerminStatus.ABGESAGT, pageable);
+        return terminRepository.findByStatus(TerminStatus.FLEX, pageable);
     }
 
     public List<TerminStatusAggregationDTO> getTerminStateAggregation(String zahnarztId) {
@@ -214,5 +214,91 @@ public class TerminService {
         termin.setStatus(TerminStatus.ABGESCHLOSSEN);
 
         return terminRepository.save(termin);
+    }
+
+    public List<Termin> findRelevantFlexTermineForPatient(String patientId) {
+        // Find all booked appointments with waitlist active for this patient
+        List<Termin> patientTermine = terminRepository.findByPatientIdAndStatusAndWartelisteAktiv(
+                patientId, TerminStatus.GEBUCHT, true);
+
+        if (patientTermine.isEmpty()) {
+            return List.of();
+        }
+
+        // Collect all behandlungsart IDs from patient's appointments
+        List<String> behandlungsartIds = patientTermine.stream()
+                .map(Termin::getBehandlungsartId)
+                .distinct()
+                .toList();
+
+        // Find all FLEX termine matching these behandlungsart IDs
+        List<Termin> relevantFlexTermine = new java.util.ArrayList<>();
+        for (String behandlungsartId : behandlungsartIds) {
+            List<Termin> flexTermine = terminRepository.findByStatusAndBehandlungsartId(
+                    TerminStatus.FLEX, behandlungsartId);
+            relevantFlexTermine.addAll(flexTermine);
+        }
+
+        // Filter only future flex termine and sort by date
+        Instant now = Instant.now();
+        return relevantFlexTermine.stream()
+                .filter(t -> t.getDatum().isAfter(now))
+                .sorted((t1, t2) -> t1.getDatum().compareTo(t2.getDatum()))
+                .toList();
+    }
+
+    public Termin rebookToFlexTermin(String oldTerminId, String flexTerminId, String patientId) {
+        // Validate old termin
+        Termin oldTermin = terminRepository.findById(oldTerminId)
+                .orElseThrow(() -> new IllegalArgumentException("Alter Termin mit id: " + oldTerminId + " nicht gefunden"));
+
+        if (!oldTermin.getPatientId().equals(patientId)) {
+            throw new IllegalStateException("Termin gehört nicht zu diesem Patient");
+        }
+
+        if (oldTermin.getStatus() != TerminStatus.GEBUCHT) {
+            throw new IllegalStateException("Nur gebuchte Termine können umgebucht werden");
+        }
+
+        // Validate flex termin
+        Termin flexTermin = terminRepository.findById(flexTerminId)
+                .orElseThrow(() -> new IllegalArgumentException("Flex-Termin mit id: " + flexTerminId + " nicht gefunden"));
+
+        if (flexTermin.getStatus() != TerminStatus.FLEX) {
+            throw new IllegalStateException("Termin ist kein verfügbarer Flex-Termin");
+        }
+
+        // Check if behandlungsart matches
+        if (!oldTermin.getBehandlungsartId().equals(flexTermin.getBehandlungsartId())) {
+            throw new IllegalStateException("Behandlungsart des Flex-Termins stimmt nicht überein");
+        }
+
+        // Calculate discount based on days until appointment
+        Instant now = Instant.now();
+        long daysUntil = java.time.Duration.between(now, flexTermin.getDatum()).toDays();
+        
+        double discount = 0.0;
+        if (daysUntil <= 7) {
+            discount = 0.10; // 10% Rabatt
+        } else if (daysUntil <= 14) {
+            discount = 0.07; // 7% Rabatt
+        } else {
+            discount = 0.05; // 5% Rabatt
+        }
+        
+        double discountedPrice = flexTermin.getPreis() * (1 - discount);
+
+        // Cancel old termin
+        oldTermin.setStatus(TerminStatus.ABGESAGT);
+        oldTermin.setWartelisteAktiv(false);
+        terminRepository.save(oldTermin);
+
+        // Book flex termin with discounted price
+        flexTermin.setPatientId(patientId);
+        flexTermin.setStatus(TerminStatus.GEBUCHT);
+        flexTermin.setWartelisteAktiv(oldTermin.isWartelisteAktiv());
+        flexTermin.setPreis(discountedPrice);
+
+        return terminRepository.save(flexTermin);
     }
 }

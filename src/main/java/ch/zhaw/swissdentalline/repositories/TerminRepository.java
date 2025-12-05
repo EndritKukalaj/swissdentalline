@@ -37,4 +37,10 @@ public interface TerminRepository extends MongoRepository<Termin, String> {
     // Find overlapping appointments for a patient
     List<Termin> findByPatientIdAndDatumBetween(String patientId, Instant start, Instant end);
 
+    // Find all appointments for a patient with specific status and waitlist active
+    List<Termin> findByPatientIdAndStatusAndWartelisteAktiv(String patientId, TerminStatus status, boolean wartelisteAktiv);
+
+    // Find flex termine by behandlungsart
+    List<Termin> findByStatusAndBehandlungsartId(TerminStatus status, String behandlungsartId);
+
 }

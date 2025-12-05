@@ -2,13 +2,30 @@
     import './styles.css';
     import { goto } from '$app/navigation';
     import { enhance } from '$app/forms';
+    import { onMount } from 'svelte';
     
     let { data, form } = $props();
-    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole } = data;
+    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole, rebookSuccess } = data;
     
     let isCanceling = $state(false);
     let showCancelDialog = $state(false);
     let cancelError = $state(null);
+    let showSuccessBanner = $state(false);
+    
+    // Show success banner on mount if rebookSuccess is true
+    onMount(() => {
+        if (rebookSuccess) {
+            showSuccessBanner = true;
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                showSuccessBanner = false;
+                // Remove query parameter from URL
+                const url = new URL(window.location.href);
+                url.searchParams.delete('rebookSuccess');
+                window.history.replaceState({}, '', url);
+            }, 5000);
+        }
+    });
     
     // Redirect to termine list after successful cancellation
     $effect(() => {
@@ -73,6 +90,22 @@
 </script>
 
 <div class="details-container {variant}-variant">
+    <!-- Success Banner for Rebooking -->
+    {#if showSuccessBanner}
+        <div class="success-banner">
+            <div class="success-content">
+                <i class="bi bi-check-circle-fill"></i>
+                <div class="success-text">
+                    <strong>Erfolgreich umgebucht!</strong>
+                    <span>Ihr Flex-Termin wurde erfolgreich gebucht.</span>
+                </div>
+            </div>
+            <button class="close-btn" aria-label="Schliesse Erfolgsmeldung" onclick={() => showSuccessBanner = false}>
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    {/if}
+    
     <!-- Back Button -->
     <button class="back-btn" onclick={() => goto('/termine')}>
         <i class="bi bi-arrow-left"></i>
