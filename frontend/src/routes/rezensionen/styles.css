@@ -24,6 +24,10 @@
         color: white;
         font-size: 2rem;
     }
+    
+    .header-icon.purple {
+        background: linear-gradient(135deg, #9333ea 0%, #a855f7 100%);
+    }
 
     .page-title {
         font-size: 2rem;
@@ -82,12 +86,21 @@
         margin-bottom: 2rem;
         align-items: flex-start;
     }
+    
+    .info-banner.purple {
+        background: #faf5ff;
+        border-left-color: #9333ea;
+    }
 
     .info-banner i {
         font-size: 1.25rem;
         color: #009688;
         flex-shrink: 0;
         margin-top: 0.125rem;
+    }
+    
+    .info-banner.purple i {
+        color: #9333ea;
     }
 
     .info-banner strong {
@@ -271,6 +284,16 @@
     .btn-secondary:hover:not(:disabled) {
         background: #f7fafc;
         border-color: #a0aec0;
+    }
+    
+    .btn-secondary.purple {
+        color: #9333ea;
+        border-color: #9333ea;
+    }
+    
+    .btn-secondary.purple:hover:not(:disabled) {
+        background: #faf5ff;
+        border-color: #a855f7;
     }
 
     .btn-sm {

@@ -163,6 +163,14 @@
           </span>
         </button>
       {/if}
+      {#if data.userRole === 'Zahnarzt'}
+        <button class="reviews-btn zahnarzt" onclick={() => goto('/rezensionen')}>
+          <span class="btn-content">
+            <i class="bi bi-star-fill"></i>
+            <span>Erhaltene Bewertungen</span>
+          </span>
+        </button>
+      {/if}
     </div>
   </div>
 </div>

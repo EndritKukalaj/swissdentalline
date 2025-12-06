@@ -9,61 +9,113 @@ export const load = async ({ locals, url }) => {
     }
 
     const userRole = locals.user.user_roles?.[0] || 'Patient';
-    if (userRole !== 'Patient') {
-        throw error(403, 'Nur Patienten haben Zugriff auf diese Seite');
+    
+    // Both Patient and Zahnarzt can access this page
+    if (userRole !== 'Patient' && userRole !== 'Zahnarzt') {
+        throw error(403, 'Zugriff verweigert');
     }
 
     try {
         const jwt_token = locals.jwt_token;
         const auth0UserId = locals.user.sub;
-        const patientId = auth0UserId.replace('auth0|', '');
+        const userId = auth0UserId.replace('auth0|', '');
         
         const page = parseInt(url.searchParams.get('page') || '0');
         const size = parseInt(url.searchParams.get('size') || '10');
 
-        // Fetch patient's reviews
-        const rezensionenResponse = await fetch(
-            `${API_BASE_URL}/rezensionen/patient/${patientId}?page=${page}&size=${size}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${jwt_token}`,
-                    'Content-Type': 'application/json'
+        let rezensionenData;
+        let rezensionenWithDetails;
+
+        if (userRole === 'Patient') {
+            // Fetch patient's reviews
+            const rezensionenResponse = await fetch(
+                `${API_BASE_URL}/rezensionen/patient/${userId}?page=${page}&size=${size}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${jwt_token}`,
+                        'Content-Type': 'application/json'
+                    }
                 }
+            );
+
+            if (!rezensionenResponse.ok) {
+                throw error(rezensionenResponse.status, 'Fehler beim Laden der Rezensionen');
             }
-        );
 
-        if (!rezensionenResponse.ok) {
-            throw error(rezensionenResponse.status, 'Fehler beim Laden der Rezensionen');
-        }
-
-        const rezensionenData = await rezensionenResponse.json();
-        
-        // Fetch zahnarzt names for each review
-        const rezensionenWithDetails = await Promise.all(
-            rezensionenData.content.map(async (rezension) => {
-                try {
-                    const zahnarztResponse = await fetch(
-                        `${API_BASE_URL}/zahnaerzte/${rezension.zahnarztId || rezension.zahnarzt_id}`,
-                        {
-                            headers: {
-                                'Authorization': `Bearer ${jwt_token}`,
-                                'Content-Type': 'application/json'
+            rezensionenData = await rezensionenResponse.json();
+            
+            // Fetch zahnarzt names for each review
+            rezensionenWithDetails = await Promise.all(
+                rezensionenData.content.map(async (rezension) => {
+                    try {
+                        const zahnarztResponse = await fetch(
+                            `${API_BASE_URL}/zahnaerzte/${rezension.zahnarztId || rezension.zahnarzt_id}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${jwt_token}`,
+                                    'Content-Type': 'application/json'
+                                }
                             }
-                        }
-                    );
-                    
-                    const zahnarzt = zahnarztResponse.ok ? await zahnarztResponse.json() : null;
-                    
-                    return {
-                        ...rezension,
-                        zahnarzt
-                    };
-                } catch (err) {
-                    console.error('Error fetching zahnarzt:', err);
-                    return { ...rezension, zahnarzt: null };
+                        );
+                        
+                        const zahnarzt = zahnarztResponse.ok ? await zahnarztResponse.json() : null;
+                        
+                        return {
+                            ...rezension,
+                            zahnarzt
+                        };
+                    } catch (err) {
+                        console.error('Error fetching zahnarzt:', err);
+                        return { ...rezension, zahnarzt: null };
+                    }
+                })
+            );
+        } else {
+            // Zahnarzt: Fetch reviews for this dentist
+            const rezensionenResponse = await fetch(
+                `${API_BASE_URL}/rezensionen/zahnarzt/${userId}?page=${page}&size=${size}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${jwt_token}`,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            })
-        );
+            );
+
+            if (!rezensionenResponse.ok) {
+                throw error(rezensionenResponse.status, 'Fehler beim Laden der Rezensionen');
+            }
+
+            rezensionenData = await rezensionenResponse.json();
+            
+            // Fetch patient names for each review
+            rezensionenWithDetails = await Promise.all(
+                rezensionenData.content.map(async (rezension) => {
+                    try {
+                        const patientResponse = await fetch(
+                            `${API_BASE_URL}/patienten/${rezension.patientId || rezension.patient_id}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${jwt_token}`,
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        );
+                        
+                        const patient = patientResponse.ok ? await patientResponse.json() : null;
+                        
+                        return {
+                            ...rezension,
+                            patient,
+                            patientName: patient ? `${patient.name}` : 'Unbekannt'
+                        };
+                    } catch (err) {
+                        console.error('Error fetching patient:', err);
+                        return { ...rezension, patient: null, patientName: 'Unbekannt' };
+                    }
+                })
+            );
+        }
 
         return {
             rezensionen: rezensionenWithDetails,
@@ -73,7 +125,8 @@ export const load = async ({ locals, url }) => {
                 totalElements: rezensionenData.totalElements,
                 pageSize: rezensionenData.size
             },
-            patientId
+            userRole,
+            userId
         };
     } catch (err) {
         if (err.status) throw err;
