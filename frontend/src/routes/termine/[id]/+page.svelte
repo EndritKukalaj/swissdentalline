@@ -5,27 +5,38 @@
     import { onMount } from 'svelte';
     
     let { data, form } = $props();
-    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole, rebookSuccess } = data;
+    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole, rebookSuccess, reviewSuccess } = data;
     
     let isCanceling = $state(false);
     let showCancelDialog = $state(false);
     let cancelError = $state(null);
     let showSuccessBanner = $state(false);
+    let successMessage = $state('');
     
-    // Show success banner on mount if rebookSuccess is true
+    // Show success banner on mount if rebookSuccess or reviewSuccess is true
     onMount(() => {
         if (rebookSuccess) {
             showSuccessBanner = true;
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                showSuccessBanner = false;
-                // Remove query parameter from URL
-                const url = new URL(window.location.href);
-                url.searchParams.delete('rebookSuccess');
-                window.history.replaceState({}, '', url);
-            }, 5000);
+            successMessage = 'Ihr Flex-Termin wurde erfolgreich gebucht.';
+            autoHideSuccessBanner();
+        } else if (reviewSuccess) {
+            showSuccessBanner = true;
+            successMessage = 'Ihre Bewertung wurde erfolgreich gespeichert und wird geprüft.';
+            autoHideSuccessBanner();
         }
     });
+    
+    const autoHideSuccessBanner = () => {
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            showSuccessBanner = false;
+            // Remove query parameter from URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('rebookSuccess');
+            url.searchParams.delete('reviewSuccess');
+            window.history.replaceState({}, '', url);
+        }, 5000);
+    };
     
     // Redirect to termine list after successful cancellation
     $effect(() => {
@@ -96,11 +107,11 @@
             <div class="success-content">
                 <i class="bi bi-check-circle-fill"></i>
                 <div class="success-text">
-                    <strong>Erfolgreich umgebucht!</strong>
-                    <span>Ihr Flex-Termin wurde erfolgreich gebucht.</span>
+                    <strong>Erfolgreich!</strong>
+                    <span>{successMessage}</span>
                 </div>
             </div>
-            <button class="close-btn" aria-label="Schliesse Erfolgsmeldung" onclick={() => showSuccessBanner = false}>
+            <button class="close-btn" onclick={() => showSuccessBanner = false}>
                 <i class="bi bi-x"></i>
             </button>
         </div>
@@ -348,11 +359,10 @@
             </button>
         {/if}
         
-        {#if termin.status === 'ABGESCHLOSSEN'}
-            <button class="action-btn review-btn" disabled>
-                <i class="bi bi-star"></i>
+        {#if termin.status === 'ABGESCHLOSSEN' && userRole === 'Patient'}
+            <button class="action-btn review-btn" onclick={() => goto(`/termine/${termin.id}/bewerten`)}>
+                <i class="bi bi-star-fill"></i>
                 Zahnarzt bewerten
-                <span class="coming-soon">Bald verfügbar</span>
             </button>
         {/if}
     </div>
