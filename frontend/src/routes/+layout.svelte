@@ -5,7 +5,7 @@
   let { user, isAuthenticated, userRole, flexTermineCount = 0 } = data;
   
   // Determine variant based on role
-  const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
+  const variant = userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
 </script>
 
 <svelte:head>
@@ -121,9 +121,9 @@
     --nav-hover-border: rgba(0, 150, 136, 0.1);
   }
   
-  .custom-navbar.purple-variant {
-    --nav-primary: #8E24AA;
-    --nav-accent: #AB47BC;
+  .custom-navbar.blue-variant {
+    --nav-primary: #30B0C7;
+    --nav-accent: #268a9c;
     --nav-hover-bg: rgba(142, 36, 170, 0.05);
     --nav-hover-border: rgba(142, 36, 170, 0.1);
     background: linear-gradient(135deg, var(--white) 0%, #F9F5FC 100%);

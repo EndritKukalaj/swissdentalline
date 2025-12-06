@@ -45,7 +45,7 @@
     };
 </script>
 
-<div class="termin-card {variant === 'purple' ? 'purple-variant' : ''}" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
+<div class="termin-card {variant === 'blue' ? 'blue-variant' : ''}" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
     <div class="card-accent" style="background: {getStatusColor(termin.status)}"></div>
     
     <div class="card-content">
@@ -124,11 +124,11 @@
     outline-offset: 2px;
 }
 
-.termin-card.purple-variant {
-    --date-badge-bg: linear-gradient(135deg, #B388FF 0%, #AB47BC 100%);
-    --date-badge-shadow: 0 4px 12px rgba(171, 71, 188, 0.26);
-    --icon-color: #8E24AA;
-    --detail-icon-bg: linear-gradient(135deg, #E9DDF6 0%, #DCCEF6 100%);
+.termin-card.blue-variant {
+    --date-badge-bg: linear-gradient(135deg, #30B0C7 0%, #268a9c 100%);
+    --date-badge-shadow: 0 4px 12px rgba(48, 176, 199, 0.3);
+    --icon-color: #30B0C7;
+    --detail-icon-bg: linear-gradient(135deg, #D0F0F5 0%, #b9e7fa 100%);
 }
 
 .card-accent {

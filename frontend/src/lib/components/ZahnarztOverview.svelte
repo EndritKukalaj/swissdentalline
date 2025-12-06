@@ -15,7 +15,7 @@
             icon="bi-calendar-check"
             title="Geplante Termine"
             value={stats.geplanteTermine || 0}
-            variant="purple"
+            variant="blue"
             onclick={() => goto('/termine')}
             clickable={true}
         />
@@ -23,14 +23,14 @@
             icon="bi-calendar-plus"
             title="Freie Slots"
             value={stats.freieSlots || 0}
-            variant="purple"
+            variant="blue"
         />
     </div>
 
     <!-- Next Appointment Section -->
     {#if nextTermin}
         <div class="next-termin-section">
-            <NextTerminCard termin={nextTermin} variant="purple" />
+            <NextTerminCard termin={nextTermin} variant="blue" />
         </div>
     {/if}
 
@@ -41,19 +41,19 @@
             icon="bi-x-circle"
             title="Abgesagte Termine"
             value={stats.abgesagteTermine || 0}
-            variant="purple"
+            variant="blue"
         />
         <StatCard
             icon="bi-clock-history"
             title="Warteliste verfügbar"
             value={stats.wartelisteVerfuegbar || 0}
-            variant="purple"
+            variant="blue"
         />
         <StatCard
             icon="bi-cash-coin"
             title="Monatliche Einnahmen"
             value={`${stats.monatlicheEinnahmen || 0} CHF`}
-            variant="purple"
+            variant="blue"
         />
     </div>
 </div>

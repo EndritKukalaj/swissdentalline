@@ -49,7 +49,7 @@
     });
     
     // Determine variant based on role
-    const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
+    const variant = userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
     
     // Format date
     const formatDate = (dateString) => {

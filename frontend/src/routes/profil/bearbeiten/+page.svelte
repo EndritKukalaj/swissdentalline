@@ -15,8 +15,8 @@
     return date.toISOString().split('T')[0];
   };
 
-  // Variant ableiten (Patient = turquoise, Zahnarzt = purple)
-  const variant = data.userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
+  // Variant ableiten (Patient = turquoise, Zahnarzt = blue)
+  const variant = data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
 
   // Patient Form State
   let patientForm = $state({

@@ -14,8 +14,8 @@
     });
   };
 
-  // Variant ableiten (Patient = turquoise, Zahnarzt = purple)
-  const variant = data.userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
+  // Variant ableiten (Patient = turquoise, Zahnarzt = blue)
+  const variant = data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
 </script>
 
 <div class="profile-wrapper {variant}-variant">

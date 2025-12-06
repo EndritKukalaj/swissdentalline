@@ -29,7 +29,7 @@
 <div class="next-termin-wrapper">
     <h3 class="next-termin-title">Nächster Termin</h3>
     
-    <div class="next-termin-card {variant === 'purple' ? 'purple-variant' : ''}" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
+    <div class="next-termin-card {variant === 'blue' ? 'blue-variant' : ''}" role="button" tabindex="0" onclick={handleClick} onkeydown={(e) => e.key === 'Enter' && handleClick()}>
         <div class="card-accent"></div>
         
         <div class="card-content">
@@ -149,17 +149,17 @@
     outline-offset: 2px;
 }
 
-.next-termin-card.purple-variant {
-    --card-bg-end: #F5EFFC;
-    --card-shadow: rgba(171, 71, 188, 0.22);
-    --card-shadow-hover: rgba(171, 71, 188, 0.3);
-    --card-border: #8E24AA;
-    --accent-gradient: linear-gradient(90deg, #B388FF 0%, #AB47BC 100%);
-    --date-badge-bg: linear-gradient(135deg, #B388FF 0%, #AB47BC 100%);
-    --date-badge-shadow: 0 6px 16px rgba(171, 71, 188, 0.35);
-    --icon-color: #8E24AA;
-    --detail-icon-bg: linear-gradient(135deg, #E9DDF6 0%, #DCCEF6 100%);
-    --border-color: rgba(171, 71, 188, 0.18);
+.next-termin-card.blue-variant {
+    --card-bg-end: #E8F8FA;
+    --card-shadow: rgba(48, 176, 199, 0.22);
+    --card-shadow-hover: rgba(48, 176, 199, 0.3);
+    --card-border: #30B0C7;
+    --accent-gradient: linear-gradient(90deg, #30B0C7 0%, #268a9c 100%);
+    --date-badge-bg: linear-gradient(135deg, #30B0C7 0%, #268a9c 100%);
+    --date-badge-shadow: 0 6px 16px rgba(48, 176, 199, 0.35);
+    --icon-color: #30B0C7;
+    --detail-icon-bg: linear-gradient(135deg, #D0F0F5 0%, #b9e7fa 100%);
+    --border-color: rgba(48, 176, 199, 0.18);
 }
 
 .card-accent {

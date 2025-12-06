@@ -40,7 +40,7 @@
     <!-- Header -->
     <div class="page-header">
         <div class="header-content-rezension">
-            <div class="header-icon {isZahnarzt ? 'purple' : ''}">
+            <div class="header-icon {isZahnarzt ? 'blue' : ''}">
                 <i class="bi bi-star-fill"></i>
             </div>
             <h1 class="page-title">
@@ -88,7 +88,7 @@
             {/if}
         </div>
     {:else}
-        <div class="info-banner {isZahnarzt ? 'purple' : ''}">
+        <div class="info-banner {isZahnarzt ? 'blue' : ''}">
             <i class="bi bi-info-circle"></i>
             <div>
                 {#if isZahnarzt}
@@ -164,7 +164,7 @@
         {#if pagination.totalPages > 1}
             <div class="pagination">
                 <button 
-                    class="btn btn-secondary {isZahnarzt ? 'purple' : ''}"
+                    class="btn btn-secondary {isZahnarzt ? 'blue' : ''}"
                     disabled={pagination.currentPage === 0}
                     onclick={() => goToPage(pagination.currentPage - 1)}
                 >
@@ -177,7 +177,7 @@
                 </span>
                 
                 <button 
-                    class="btn btn-secondary {isZahnarzt ? 'purple' : ''}"
+                    class="btn btn-secondary {isZahnarzt ? 'blue' : ''}"
                     disabled={pagination.currentPage >= pagination.totalPages - 1}
                     onclick={() => goToPage(pagination.currentPage + 1)}
                 >
