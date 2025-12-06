@@ -76,11 +76,82 @@ export async function load({ url, locals }) {
             }
         }
         
+        // Fetch rezensionen for this zahnarzt (only approved)
+        let rezensionen = [];
+        let gesamtBewertung = null;
+        try {
+            const rezensionenRes = await fetch(
+                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=0&size=5`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${locals.jwt_token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            if (rezensionenRes.ok) {
+                const rezensionenData = await rezensionenRes.json();
+                const approvedRezensionen = rezensionenData.content.filter(r => r.approved);
+                
+                // Fetch patient names for each review
+                rezensionen = await Promise.all(
+                    approvedRezensionen.map(async (review) => {
+                        try {
+                            const patientRes = await fetch(
+                                `${API_BASE_URL}/patienten/${review.patientId}`,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${locals.jwt_token}`,
+                                        'Content-Type': 'application/json'
+                                    }
+                                }
+                            );
+                            
+                            if (patientRes.ok) {
+                                const patient = await patientRes.json();
+                                return {
+                                    ...review,
+                                    patientName: `${patient.name}`
+                                };
+                            }
+                        } catch (err) {
+                            console.error('Error fetching patient:', err);
+                        }
+                        
+                        return {
+                            ...review,
+                            patientName: 'Patient'
+                        };
+                    })
+                );
+            }
+            
+            // Fetch gesamtbewertung
+            const bewertungRes = await fetch(
+                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}/bewertung`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${locals.jwt_token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            if (bewertungRes.ok) {
+                gesamtBewertung = await bewertungRes.json();
+            }
+        } catch (err) {
+            console.error('Error fetching reviews:', err);
+        }
+        
         return {
             termin,
             zahnarzt,
             behandlungsart,
-            praxis
+            praxis,
+            rezensionen,
+            gesamtBewertung
         };
     } catch (error) {
         console.error('Error loading zahnarzt details:', error);
