@@ -27,14 +27,11 @@
     transform: translateX(-4px);
 }
 
-.header-content {
+.header-content-flex {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    background: linear-gradient(135deg, #B2DFDB 0%, #80CBC4 100%);
-    padding: 2rem;
-    border-radius: 16px;
-    border: 2px solid #009688;
+    padding: 1rem 0;
 }
 
 .header-icon {
@@ -272,10 +269,9 @@
         margin-bottom: 0.75rem;
     }
 
-    .header-content {
+    .header-content-flex {
         flex-direction: row;
         text-align: left;
-        padding: 1.25rem;
         gap: 1rem;
     }
 

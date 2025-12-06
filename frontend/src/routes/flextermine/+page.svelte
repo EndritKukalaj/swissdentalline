@@ -56,7 +56,7 @@
             <i class="bi bi-arrow-left"></i>
             Zurück
         </button>
-        <div class="header-content">
+        <div class="header-content-flex">
             <div class="header-icon">
                 <i class="bi bi-lightning-charge-fill"></i>
             </div>

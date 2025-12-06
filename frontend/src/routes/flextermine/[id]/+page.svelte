@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     
-                    <div class="termin-details">
+                    <div class="termin-details-flex">
                         <h3 class="behandlung-title">{behandlungsart?.name || 'Behandlung'}</h3>
                         
                         <div class="detail-row">
@@ -145,7 +145,7 @@
                         </div>
                     </div>
                     
-                    <div class="termin-details">
+                    <div class="termin-details-flex">
                         <h3 class="behandlung-title">{behandlungsart?.name || 'Behandlung'}</h3>
                         
                         <div class="detail-row">

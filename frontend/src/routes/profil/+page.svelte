@@ -155,6 +155,22 @@
           <span>Profil bearbeiten</span>
         </span>
       </button>
+      {#if data.userRole === 'Patient'}
+        <button class="reviews-btn" onclick={() => goto('/rezensionen')}>
+          <span class="btn-content">
+            <i class="bi bi-star-fill"></i>
+            <span>Meine Rezensionen</span>
+          </span>
+        </button>
+      {/if}
+      {#if data.userRole === 'Zahnarzt'}
+        <button class="reviews-btn zahnarzt" onclick={() => goto('/rezensionen')}>
+          <span class="btn-content">
+            <i class="bi bi-star-fill"></i>
+            <span>Erhaltene Bewertungen</span>
+          </span>
+        </button>
+      {/if}
     </div>
   </div>
 </div>

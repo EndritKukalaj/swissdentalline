@@ -4,9 +4,9 @@
     import BookingProgressBar from "$lib/components/BookingProgressBar.svelte";
 
     let { data } = $props();
-    let { termin, zahnarzt, behandlungsart, praxis } = data;
+    let { termin, zahnarzt, behandlungsart, praxis, rezensionen, gesamtBewertung } = data;
 
-    console.log("Page data:", { termin, zahnarzt, behandlungsart, praxis });
+    console.log("Page data:", { termin, zahnarzt, behandlungsart, praxis, rezensionen, gesamtBewertung });
 
     const handleContinue = () => {
         goto(`/buchen/warteliste?terminId=${termin.id}`);
@@ -38,6 +38,15 @@
     const getFullAddress = (praxis) => {
         if (!praxis) return "Adresse nicht verfügbar";
         return `${praxis.strasse || ""}, ${praxis.plz || ""} ${praxis.ort || ""}`.trim();
+    };
+    
+    const formatReviewDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('de-CH', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
     };
 </script>
 
@@ -80,9 +89,8 @@
         </div>
     </div>
 
-    <!-- Main Content Grid -->
-    <div class="content-grid">
-        <!-- Zahnarzt Card -->
+    <!-- Zahnarzt Card -->
+    <div class="zahnarzt-section">
         <div class="detail-card zahnarzt-card">
             <div class="card-icon-header">
                 <div class="icon-circle">
@@ -129,6 +137,55 @@
             {/if}
         </div>
     </div>
+    
+    <!-- Reviews Section -->
+    {#if rezensionen && rezensionen.length > 0}
+        <div class="reviews-section">
+            <div class="reviews-header">
+                <h2>Patientenbewertungen</h2>
+                {#if gesamtBewertung && gesamtBewertung.anzahl > 0}
+                    <p class="reviews-subtitle">
+                        {gesamtBewertung.bewertung.toFixed(1)} ★ aus {gesamtBewertung.anzahl} {gesamtBewertung.anzahl === 1 ? 'Bewertung' : 'Bewertungen'}
+                    </p>
+                {/if}
+            </div>
+            
+            <div class="reviews-grid">
+                {#each rezensionen as review}
+                    <div class="patient-review-card">
+                        <div class="patient-info">
+                            <div class="patient-avatar">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+                            <div class="patient-details">
+                                <h3 class="patient-name">{review.patientName || 'Patient'}</h3>
+                                <span class="verified-badge">
+                                    <i class="bi bi-patch-check-fill"></i>
+                                    Verifiziert
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="review-content">
+                            <div class="review-stars">
+                                {#each [1, 2, 3, 4, 5] as star}
+                                    <i class="bi {review.bewertung >= star ? 'bi-star-fill' : 'bi-star'}"></i>
+                                {/each}
+                            </div>
+                            <p class="review-text">{review.text}</p>
+                        </div>
+                        
+                        <div class="review-footer">
+                            <span class="review-date">
+                                <i class="bi bi-calendar3"></i>
+                                {formatReviewDate(review.datum)}
+                            </span>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        </div>
+    {/if}
 
     <!-- Action Buttons -->
     <div class="action-buttons">
