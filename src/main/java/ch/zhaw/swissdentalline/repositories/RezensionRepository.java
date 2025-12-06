@@ -20,4 +20,6 @@ public interface RezensionRepository extends MongoRepository<Rezension, String> 
     List<GesamtBewertungDTO> getGesamtBewertungById(String id);
 
     Page<Rezension> findByZahnarztId(String zahnarztId, Pageable pageable);
+    
+    Page<Rezension> findByPatientId(String patientId, Pageable pageable);
 }

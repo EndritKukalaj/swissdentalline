@@ -70,6 +70,19 @@ public class RezensionController {
         Page<Rezension> rezensionen = rezensionService.getRezensionenByZahnarzt(zahnarztId, pageable);
         return new ResponseEntity<>(rezensionen, HttpStatus.OK);
     }
+    
+    @GetMapping("/rezensionen/patient/{patientId}")
+    public ResponseEntity<Page<Rezension>> getRezensionenByPatient(
+            @PathVariable String patientId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        if (!userService.userHasRole("Patient")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Rezension> rezensionen = rezensionService.getRezensionenByPatient(patientId, pageable);
+        return new ResponseEntity<>(rezensionen, HttpStatus.OK);
+    }
 
     @GetMapping("/rezensionen/zahnarzt/{zahnarztId}/bewertung")
     public ResponseEntity<GesamtBewertungDTO> getGesamtBewertung(@PathVariable String zahnarztId) {
