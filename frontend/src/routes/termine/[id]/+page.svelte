@@ -111,7 +111,7 @@
                     <span>{successMessage}</span>
                 </div>
             </div>
-            <button class="close-btn" onclick={() => showSuccessBanner = false}>
+            <button class="close-btn" aria-label="Close Banner" onclick={() => showSuccessBanner = false}>
                 <i class="bi bi-x"></i>
             </button>
         </div>
