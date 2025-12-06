@@ -147,9 +147,12 @@
     margin-top: 1.5rem;
     display: flex;
     justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
-.edit-profile-btn {
+.edit-profile-btn,
+.reviews-btn {
     position: relative;
     padding: 1rem 2.5rem;
     background: var(--profile-gradient);
@@ -163,7 +166,12 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.edit-profile-btn:hover {
+.reviews-btn {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.edit-profile-btn:hover,
+.reviews-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2);
 }

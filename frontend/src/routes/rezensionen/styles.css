@@ -1,0 +1,340 @@
+    .rezensionen-container {
+        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .header-content-rezension {
+        text-align: center;
+    }
+
+    .header-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1rem;
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a202c;
+        margin: 0 0 0.5rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+        color: #718096;
+        margin: 0;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #718096;
+        font-size: 2.5rem;
+    }
+
+    .empty-state h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1a202c;
+        margin: 0 0 0.75rem;
+    }
+
+    .empty-state p {
+        color: #718096;
+        margin: 0 0 2rem;
+        line-height: 1.6;
+    }
+
+    .info-banner {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        background: #f0fffe;
+        border-left: 4px solid #009688;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        align-items: flex-start;
+    }
+
+    .info-banner i {
+        font-size: 1.25rem;
+        color: #009688;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    .info-banner strong {
+        color: #1a202c;
+    }
+
+    .info-banner div {
+        font-size: 0.875rem;
+        color: #4a5568;
+        line-height: 1.5;
+    }
+
+    .reviews-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .review-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+    }
+
+    .review-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .review-title-section {
+        flex: 1;
+    }
+
+    .zahnarzt-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .zahnarzt-info i {
+        font-size: 1.5rem;
+        color: #009688;
+    }
+
+    .zahnarzt-info h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a202c;
+        margin: 0;
+    }
+
+    .review-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .review-meta .date {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.875rem;
+        color: #718096;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .status-published {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .rating-display {
+        display: flex;
+        gap: 0.25rem;
+        font-size: 1.25rem;
+        color: #fbbf24;
+    }
+
+    .review-content {
+        margin-bottom: 1rem;
+    }
+
+    .review-text {
+        font-size: 1rem;
+        color: #4a5568;
+        line-height: 1.6;
+        margin: 0 0 1rem;
+    }
+
+    .ai-comment {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+
+    .ai-comment-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 0.5rem;
+    }
+
+    .ai-comment p {
+        font-size: 0.875rem;
+        color: #78350f;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .review-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        box-shadow: 0 6px 16px rgba(0, 150, 136, 0.4);
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: #4a5568;
+        border: 2px solid #cbd5e0;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+        background: #f7fafc;
+        border-color: #a0aec0;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-info {
+        font-size: 0.875rem;
+        color: #4a5568;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .rezensionen-container {
+            padding: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+        }
+
+        .review-header {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .rating-display {
+            align-self: flex-start;
+        }
+
+        .review-actions {
+            flex-direction: column;
+        }
+
+        .review-actions .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .pagination {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pagination .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
