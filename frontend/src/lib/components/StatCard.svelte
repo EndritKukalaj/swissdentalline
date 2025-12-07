@@ -9,9 +9,12 @@
             if (iconClass.includes('cash')) return '#268a9c';
             return '#30B0C7';
         }
-        if (iconClass.includes('calendar')) return '#009688'; // Turquoise
-        if (iconClass.includes('clock')) return '#FFC107'; // Yellow
-        return '#30B0C7'; // Accent Blue
+        // Turquoise variant (Patient)
+        if (iconClass.includes('calendar')) return '#009688';
+        if (iconClass.includes('clock')) return '#FFC107';
+        if (iconClass.includes('star')) return '#FFC107';
+        if (iconClass.includes('lightning')) return '#009688';
+        return '#009688';
     };
     
     const getGradientColor = (iconClass, colorVariant) => {
@@ -21,9 +24,12 @@
             if (iconClass.includes('cash')) return 'linear-gradient(135deg, #D0F0F5 0%, #b6e2f8 100%)';
             return 'linear-gradient(135deg, #D0F0F5 0%, #b9e7fa 100%)';
         }
+        // Turquoise variant (Patient)
         if (iconClass.includes('calendar')) return 'linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%)';
         if (iconClass.includes('clock')) return 'linear-gradient(135deg, #fff4d6 0%, #ffe699 100%)';
-        return 'linear-gradient(135deg, #d1e9f0 0%, #b8dde9 100%)';
+        if (iconClass.includes('star')) return 'linear-gradient(135deg, #fff4d6 0%, #ffe699 100%)';
+        if (iconClass.includes('lightning')) return 'linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%)';
+        return 'linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%)';
     };
     
     const getAccentGradient = (colorVariant) => {
@@ -139,17 +145,44 @@
 }
 
 @media (max-width: 640px) {
+    .stat-card {
+        border-radius: 12px;
+    }
+
+    .card-accent {
+        height: 3px;
+    }
+
     .card-content {
         flex-direction: column;
-        text-align: center;
+        padding: 1rem 0.75rem;
+        padding-top: 1.25rem;
+        gap: 0.75rem;
     }
 
     .icon-badge {
-        align-self: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-badge i {
+        font-size: 1.5rem;
     }
 
     .card-main {
         align-items: center;
+        gap: 0.25rem;
+    }
+
+    .stat-title {
+        font-size: 0.8125rem;
+        line-height: 1.2;
+    }
+
+    .stat-value {
+        font-size: 1.75rem;
     }
 }
 </style>

@@ -1,5 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
+    import { onMount } from 'svelte';
     import TerminCard from '$lib/components/TerminCard.svelte';
 
     let { termine = [], stats = {}, role = 'Patient' } = $props();
@@ -12,6 +14,19 @@
     let activeStatusFilter = $state('ALLE');
     let showOnlyWarteliste = $state(false); // Patient
     let showOnlyFreieSlots = $state(false); // Zahnarzt
+    
+    // Check URL parameters for initial filter state
+    onMount(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const statusParam = urlParams.get('status');
+        if (statusParam) {
+            activeStatusFilter = statusParam;
+        }
+        const wartelisteParam = urlParams.get('warteliste');
+        if (wartelisteParam === 'true') {
+            showOnlyWarteliste = true;
+        }
+    });
 
     let filteredTermine = $derived(() => {
         let result = termine;

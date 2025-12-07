@@ -185,6 +185,9 @@ async function loadPatientDashboard(patientId, jwt_token) {
             t.wartelisteAktiv && t.status === 'GEBUCHT'
         ).length;
         
+        // Count completed termine for reviews
+        const abgeschlosseneTermine = sortedTermine.filter(t => t.status === 'ABGESCHLOSSEN').length;
+        
         // Fetch flex termine count for this patient
         let verfuegbareFlexTermine = 0;
         try {
@@ -206,7 +209,7 @@ async function loadPatientDashboard(patientId, jwt_token) {
             console.error('Error loading flex termine count:', error);
         }
         
-        console.log('Dashboard stats - Geplante Termine:', geplanteTermine, 'Offene Wartelisten:', offeneWartelisten, 'Flex-Termine:', verfuegbareFlexTermine);
+        console.log('Dashboard stats - Geplante Termine:', geplanteTermine, 'Offene Wartelisten:', offeneWartelisten, 'Flex-Termine:', verfuegbareFlexTermine, 'Abgeschlossene Termine:', abgeschlosseneTermine);
         
         return {
             termine: sortedTermine,
@@ -214,7 +217,8 @@ async function loadPatientDashboard(patientId, jwt_token) {
             stats: {
                 geplanteTermine,
                 offeneWartelisten,
-                verfuegbareFlexTermine
+                verfuegbareFlexTermine,
+                abgeschlosseneTermine
             },
             userRole: 'Patient'
         };
