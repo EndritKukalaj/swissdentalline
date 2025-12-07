@@ -6,6 +6,7 @@ const API_BASE_URL = env.BACKEND_URL || 'http://localhost:8080/api';
 export const load = async ({ params, locals, url }) => {
     const rebookSuccess = url.searchParams.get('rebookSuccess') === 'true';
     const reviewSuccess = url.searchParams.get('reviewSuccess') === 'true';
+    const bookingSuccess = url.searchParams.get('bookingSuccess') === 'true';
     
     if (!locals.isAuthenticated || !locals.user) {
         throw error(401, 'Nicht autorisiert');
@@ -139,7 +140,8 @@ export const load = async ({ params, locals, url }) => {
             patient,
             userRole,
             rebookSuccess,
-            reviewSuccess
+            reviewSuccess,
+            bookingSuccess
         };
     } catch (err) {
         if (err.status) throw err;
