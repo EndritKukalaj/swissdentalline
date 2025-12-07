@@ -16,7 +16,7 @@
             title="Geplante Termine"
             value={stats.geplanteTermine || 0}
             variant="blue"
-            onclick={() => goto('/termine')}
+            onclick={() => goto('/termine?status=GEPLANT')}
             clickable={true}
         />
         <StatCard
@@ -24,6 +24,8 @@
             title="Freie Slots"
             value={stats.freieSlots || 0}
             variant="blue"
+            onclick={() => goto('/termine?freieSlots=true')}
+            clickable={true}
         />
     </div>
 
@@ -33,12 +35,16 @@
             title="Abgesagte Termine"
             value={stats.abgesagteTermine || 0}
             variant="blue"
+            onclick={() => goto('/termine?status=ABGESAGT')}
+            clickable={true}
         />
         <StatCard
-            icon="bi-clock-history"
-            title="Warteliste verfügbar"
+            icon="bi-lightning"
+            title="Flex-Termine freigegeben"
             value={stats.wartelisteVerfuegbar || 0}
             variant="blue"
+            onclick={() => goto('/termine?status=FLEX')}
+            clickable={true}
         />
         <StatCard
             icon="bi-cash-coin"

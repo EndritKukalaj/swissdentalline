@@ -26,6 +26,10 @@
         if (wartelisteParam === 'true') {
             showOnlyWarteliste = true;
         }
+        const freieSlotsParam = urlParams.get('freieSlots');
+        if (freieSlotsParam === 'true') {
+            showOnlyFreieSlots = true;
+        }
     });
 
     let filteredTermine = $derived(() => {
@@ -146,6 +150,10 @@
                     <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'FREI' ? 'active' : ''}"
                         onclick={() => (activeStatusFilter = 'FREI')}>
                         <i class="bi bi-calendar-plus"></i> Frei
+                    </button>
+                    <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'FLEX' ? 'active' : ''}"
+                        onclick={() => (activeStatusFilter = 'FLEX')}>
+                        <i class="bi bi-lightning"></i> Flex-Termine
                     </button>
                 {/if}
                 <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'ABGESCHLOSSEN' ? 'active' : ''}"
