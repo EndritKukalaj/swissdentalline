@@ -6,6 +6,10 @@
     let { data } = $props();
     let { behandlungsart, termine } = data;
     
+    // Pagination state
+    let currentPage = $state(1); // 1-indexed like rezensionen
+    const datesPerPage = 5; // Show 5 dates per page
+    
     const handleTerminSelect = (termin) => {
         goto(`/buchen/zahnarzt?terminId=${termin.id}`);
     };
@@ -49,14 +53,30 @@
     const groupedTermine = $derived(() => {
         const groups = {};
         termine.forEach(termin => {
-            const date = termin.datum;
-            if (!groups[date]) {
-                groups[date] = [];
+            // Extract only the date part (YYYY-MM-DD) without time
+            const dateOnly = termin.datum.split('T')[0];
+            if (!groups[dateOnly]) {
+                groups[dateOnly] = [];
             }
-            groups[date].push(termin);
+            groups[dateOnly].push(termin);
         });
         return groups;
     });
+    
+    // Pagination logic (1-indexed)
+    const allDates = $derived(Object.keys(groupedTermine()));
+    const totalPages = $derived(Math.ceil(allDates.length / datesPerPage));
+    const paginatedDates = $derived(() => {
+        const start = (currentPage - 1) * datesPerPage;
+        const end = start + datesPerPage;
+        return allDates.slice(start, end);
+    });
+    
+    const goToPage = (page) => {
+        currentPage = page;
+        // Scroll to top of termine container
+        document.querySelector('.termine-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 </script>
 
 <div class="buchen-container">
@@ -78,7 +98,8 @@
     <!-- Termine List -->
     {#if termine.length > 0}
         <div class="termine-container">
-            {#each Object.entries(groupedTermine()) as [datum, dateTermine] (datum)}
+            {#each paginatedDates() as datum (datum)}
+                {@const dateTermine = groupedTermine()[datum]}
                 <div class="date-group">
                     <div class="date-header">
                         <div class="date-badge">
@@ -122,6 +143,33 @@
                     </div>
                 </div>
             {/each}
+            
+            <!-- Pagination Controls (always visible) -->
+            <div class="termin-pagination">
+                <button 
+                    class="btn btn-secondary-pagination"
+                    class:disabled={currentPage === 1}
+                    disabled={currentPage === 1}
+                    onclick={() => goToPage(currentPage - 1)}
+                >
+                    <i class="bi bi-chevron-left"></i>
+                    <span>Zurück</span>
+                </button>
+                
+                <span class="page-info">
+                    Seite {currentPage} von {totalPages}
+                </span>
+                
+                <button 
+                    class="btn btn-secondary-pagination"
+                    class:disabled={currentPage >= totalPages}
+                    disabled={currentPage >= totalPages}
+                    onclick={() => goToPage(currentPage + 1)}
+                >
+                    <span>Weiter</span>
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
         </div>
     {:else}
         <div class="empty-state">

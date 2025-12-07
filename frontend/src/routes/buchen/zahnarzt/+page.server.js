@@ -79,9 +79,14 @@ export async function load({ url, locals }) {
         // Fetch rezensionen for this zahnarzt (only approved)
         let rezensionen = [];
         let gesamtBewertung = null;
+        let reviewPagination = null;
+        
+        const reviewPage = parseInt(url.searchParams.get('reviewPage') || '0');
+        const reviewSize = 3;
+        
         try {
             const rezensionenRes = await fetch(
-                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=0&size=5`,
+                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=${reviewPage}&size=${reviewSize}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${locals.jwt_token}`,
@@ -93,6 +98,13 @@ export async function load({ url, locals }) {
             if (rezensionenRes.ok) {
                 const rezensionenData = await rezensionenRes.json();
                 const approvedRezensionen = rezensionenData.content.filter(r => r.approved);
+                
+                reviewPagination = {
+                    currentPage: rezensionenData.number,
+                    totalPages: rezensionenData.totalPages,
+                    totalElements: rezensionenData.totalElements,
+                    size: rezensionenData.size
+                };
                 
                 // Fetch patient names for each review
                 rezensionen = await Promise.all(
@@ -151,7 +163,8 @@ export async function load({ url, locals }) {
             behandlungsart,
             praxis,
             rezensionen,
-            gesamtBewertung
+            gesamtBewertung,
+            reviewPagination
         };
     } catch (error) {
         console.error('Error loading zahnarzt details:', error);

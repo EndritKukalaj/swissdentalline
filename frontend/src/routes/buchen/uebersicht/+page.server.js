@@ -118,7 +118,7 @@ export const actions = {
                 return fail(500, { error: 'Termin konnte nicht gebucht werden' });
             }
             
-            return { success: true };
+            return { success: true, terminId };
         } catch (error) {
             console.error('Error booking appointment:', error);
             return fail(500, { error: 'Ein Fehler ist aufgetreten' });

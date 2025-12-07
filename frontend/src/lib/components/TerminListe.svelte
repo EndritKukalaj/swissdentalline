@@ -1,17 +1,36 @@
 <script>
     import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
+    import { onMount } from 'svelte';
     import TerminCard from '$lib/components/TerminCard.svelte';
 
     let { termine = [], stats = {}, role = 'Patient' } = $props();
 
     const isZahnarzt = role === 'Zahnarzt';
-    const variant = isZahnarzt ? 'purple' : 'turquoise';
+    const variant = isZahnarzt ? 'blue' : 'turquoise';
 
     // Search and Filters
     let searchQuery = $state('');
     let activeStatusFilter = $state('ALLE');
     let showOnlyWarteliste = $state(false); // Patient
     let showOnlyFreieSlots = $state(false); // Zahnarzt
+    
+    // Check URL parameters for initial filter state
+    onMount(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const statusParam = urlParams.get('status');
+        if (statusParam) {
+            activeStatusFilter = statusParam;
+        }
+        const wartelisteParam = urlParams.get('warteliste');
+        if (wartelisteParam === 'true') {
+            showOnlyWarteliste = true;
+        }
+        const freieSlotsParam = urlParams.get('freieSlots');
+        if (freieSlotsParam === 'true') {
+            showOnlyFreieSlots = true;
+        }
+    });
 
     let filteredTermine = $derived(() => {
         let result = termine;
@@ -53,7 +72,7 @@
     });
 </script>
 
-<div class="termine-page {isZahnarzt ? 'purple-variant' : ''}">
+<div class="termine-page {isZahnarzt ? 'blue-variant' : ''}">
     <div class="page-header">
         <button class="back-btn" onclick={() => goto('/')}>
             <i class="bi bi-arrow-left"></i>
@@ -121,23 +140,27 @@
         <!-- Filters -->
         <div class="filter-section">
             <div class="filter-group">
-                <button class="filter-btn {isZahnarzt ? 'purple-theme' : ''} {activeStatusFilter === 'ALLE' ? 'active' : ''}"
+                <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'ALLE' ? 'active' : ''}"
                     onclick={() => (activeStatusFilter = 'ALLE')}>Alle</button>
-                <button class="filter-btn {isZahnarzt ? 'purple-theme' : ''} {activeStatusFilter === 'GEBUCHT' ? 'active' : ''}"
+                <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'GEBUCHT' ? 'active' : ''}"
                     onclick={() => (activeStatusFilter = 'GEBUCHT')}>
                     <i class="bi bi-calendar-check"></i> Gebucht
                 </button>
                 {#if isZahnarzt}
-                    <button class="filter-btn {isZahnarzt ? 'purple-theme' : ''} {activeStatusFilter === 'FREI' ? 'active' : ''}"
+                    <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'FREI' ? 'active' : ''}"
                         onclick={() => (activeStatusFilter = 'FREI')}>
                         <i class="bi bi-calendar-plus"></i> Frei
                     </button>
+                    <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'FLEX' ? 'active' : ''}"
+                        onclick={() => (activeStatusFilter = 'FLEX')}>
+                        <i class="bi bi-lightning"></i> Flex-Termine
+                    </button>
                 {/if}
-                <button class="filter-btn {isZahnarzt ? 'purple-theme' : ''} {activeStatusFilter === 'ABGESCHLOSSEN' ? 'active' : ''}"
+                <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'ABGESCHLOSSEN' ? 'active' : ''}"
                     onclick={() => (activeStatusFilter = 'ABGESCHLOSSEN')}>
                     <i class="bi bi-check-circle"></i> Abgeschlossen
                 </button>
-                <button class="filter-btn {isZahnarzt ? 'purple-theme' : ''} {activeStatusFilter === 'ABGESAGT' ? 'active' : ''}"
+                <button class="filter-btn {isZahnarzt ? 'blue-theme' : ''} {activeStatusFilter === 'ABGESAGT' ? 'active' : ''}"
                     onclick={() => (activeStatusFilter = 'ABGESAGT')}>
                     <i class="bi bi-x-circle"></i> Abgesagt
                 </button>
@@ -163,7 +186,7 @@
         <div class="search-container">
             <div class="search-input-wrapper">
                 <i class="bi bi-search search-icon"></i>
-                <input type="text" class="search-input {isZahnarzt ? 'purple-theme' : ''}"
+                <input type="text" class="search-input {isZahnarzt ? 'blue-theme' : ''}"
                     placeholder="Suche nach Name, Datum, Uhrzeit, Dauer oder Preis..." bind:value={searchQuery} />
                 {#if searchQuery}
                     <button class="clear-search" onclick={() => (searchQuery = '')} aria-label="Suche löschen">
@@ -212,9 +235,9 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.purple-variant .page-header {
-    --hdr-start: #8E24AA;
-    --hdr-end: #AB47BC;
+.blue-variant .page-header {
+    --hdr-start: #30B0C7;
+    --hdr-end: #268a9c;
 }
 
 .header-content-wrapper {
@@ -370,19 +393,19 @@
 
 /* Active states by role */
 /* Turquoise (Patient) */
-.termine-page:not(.purple-variant) .filter-btn.active {
+.termine-page:not(.blue-variant) .filter-btn.active {
     background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
     border-color: #009688;
     color: #00695c;
     box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.18);
 }
 
-/* Purple (Zahnarzt) */
-.purple-variant .filter-btn.active {
-    background: linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%);
-    border-color: #8E24AA;
-    color: #6A1B9A;
-    box-shadow: 0 0 0 3px rgba(179, 136, 255, 0.18);
+/* Blue (Zahnarzt) */
+.blue-variant .filter-btn.active {
+    background: linear-gradient(135deg, #D0F0F5 0%, #b9e7fa 100%);
+    border-color: #30B0C7;
+    color: #1a5f6f;
+    box-shadow: 0 0 0 3px rgba(48, 176, 199, 0.18);
 }
 
 .warteliste-btn {
@@ -396,13 +419,13 @@
 }
 
 .freie-slots-btn {
-    background: linear-gradient(135deg, #ffffff 0%, #F5EFFC 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #E8F8FA 100%);
 }
 
 .freie-slots-btn.active {
-    background: linear-gradient(135deg, #DCCEF6 0%, #C7B7E6 100%);
-    border-color: #8E24AA;
-    color: #6A1B9A;
+    background: linear-gradient(135deg, #b9e7fa 0%, #b6e2f8 100%);
+    border-color: #30B0C7;
+    color: #1a5f6f;
 }
 
 /* Search */
@@ -426,8 +449,8 @@
     color: #009688;
 }
 
-.purple-variant .search-icon {
-    color: #8E24AA;
+.blue-variant .search-icon {
+    color: #30B0C7;
 }
 
 .search-input {
@@ -437,9 +460,9 @@
     font-size: .95rem;
 }
 
-.search-input.purple-theme:focus {
-    border-color: #B388FF;
-    box-shadow: 0 0 0 3px rgba(179, 136, 255, 0.18);
+.search-input.blue-theme:focus {
+    border-color: #30B0C7;
+    box-shadow: 0 0 0 3px rgba(48, 176, 199, 0.18);
 }
 
 .clear-search {

@@ -5,7 +5,7 @@
     import { onMount } from 'svelte';
     
     let { data, form } = $props();
-    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole, rebookSuccess, reviewSuccess } = data;
+    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole, rebookSuccess, reviewSuccess, bookingSuccess } = data;
     
     let isCanceling = $state(false);
     let showCancelDialog = $state(false);
@@ -23,6 +23,10 @@
             showSuccessBanner = true;
             successMessage = 'Ihre Bewertung wurde erfolgreich gespeichert und wird geprüft.';
             autoHideSuccessBanner();
+        } else if (bookingSuccess) {
+            showSuccessBanner = true;
+            successMessage = 'Ihr Termin wurde erfolgreich gebucht!';
+            autoHideSuccessBanner();
         }
     });
     
@@ -34,6 +38,7 @@
             const url = new URL(window.location.href);
             url.searchParams.delete('rebookSuccess');
             url.searchParams.delete('reviewSuccess');
+            url.searchParams.delete('bookingSuccess');
             window.history.replaceState({}, '', url);
         }, 5000);
     };
@@ -49,7 +54,7 @@
     });
     
     // Determine variant based on role
-    const variant = userRole === 'Zahnarzt' ? 'purple' : 'turquoise';
+    const variant = userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
     
     // Format date
     const formatDate = (dateString) => {

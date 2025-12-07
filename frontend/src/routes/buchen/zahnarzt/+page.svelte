@@ -4,9 +4,31 @@
     import BookingProgressBar from "$lib/components/BookingProgressBar.svelte";
 
     let { data } = $props();
-    let { termin, zahnarzt, behandlungsart, praxis, rezensionen, gesamtBewertung } = data;
-
-    console.log("Page data:", { termin, zahnarzt, behandlungsart, praxis, rezensionen, gesamtBewertung });
+    
+    // Reactive state
+    let termin = $state(data.termin);
+    let zahnarzt = $state(data.zahnarzt);
+    let behandlungsart = $state(data.behandlungsart);
+    let praxis = $state(data.praxis);
+    let rezensionen = $state(data.rezensionen);
+    let gesamtBewertung = $state(data.gesamtBewertung);
+    let currentPage = $state(data.reviewPagination ? data.reviewPagination.currentPage + 1 : 1);
+    let nrOfPages = $state(data.reviewPagination ? data.reviewPagination.totalPages : 1);
+    const pageSize = 6;
+    
+    // Update when server data changes
+    $effect(() => {
+        termin = data.termin;
+        zahnarzt = data.zahnarzt;
+        behandlungsart = data.behandlungsart;
+        praxis = data.praxis;
+        rezensionen = data.rezensionen;
+        gesamtBewertung = data.gesamtBewertung;
+        if (data.reviewPagination) {
+            currentPage = data.reviewPagination.currentPage + 1;
+            nrOfPages = data.reviewPagination.totalPages;
+        }
+    });
 
     const handleContinue = () => {
         goto(`/buchen/warteliste?terminId=${termin.id}`);
@@ -138,6 +160,20 @@
         </div>
     </div>
     
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn-back" onclick={handleBack}>
+            <i class="bi bi-arrow-left"></i>
+            Anderen Termin wählen
+        </button>
+        <button class="btn-primary" onclick={handleContinue}>
+            Termin bestätigen
+            <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+    </div>
+    <br />
+    <br />
+
     <!-- Reviews Section -->
     {#if rezensionen && rezensionen.length > 0}
         <div class="reviews-section">
@@ -184,18 +220,33 @@
                     </div>
                 {/each}
             </div>
+            
+            <!-- Review Pagination (always visible) -->
+            <div class="review-pagination">
+                <a 
+                    class="btn btn-secondary-pagination"
+                    class:disabled={currentPage === 1}
+                    href="/buchen/zahnarzt?terminId={termin.id}&reviewPage={currentPage - 2}"
+                    aria-disabled={currentPage === 1}
+                >
+                    <i class="bi bi-chevron-left"></i>
+                    <span>Zurück</span>
+                </a>
+                
+                <span class="page-info">
+                    Seite {currentPage} von {nrOfPages}
+                </span>
+                
+                <a 
+                    class="btn btn-secondary-pagination"
+                    class:disabled={currentPage >= nrOfPages}
+                    href="/buchen/zahnarzt?terminId={termin.id}&reviewPage={currentPage}"
+                    aria-disabled={currentPage >= nrOfPages}
+                >
+                    <span>Weiter</span>
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
         </div>
     {/if}
-
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        <button class="btn-secondary" onclick={handleBack}>
-            <i class="bi bi-arrow-left"></i>
-            Anderen Termin wählen
-        </button>
-        <button class="btn-primary" onclick={handleContinue}>
-            Termin bestätigen
-            <i class="bi bi-arrow-right-circle-fill"></i>
-        </button>
-    </div>
 </div>

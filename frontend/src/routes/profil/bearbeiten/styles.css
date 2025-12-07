@@ -8,10 +8,10 @@
     --edit-gradient: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
 }
 
-.edit-wrapper.purple-variant {
-    --edit-primary: #8E24AA;
-    --edit-accent: #AB47BC;
-    --edit-gradient: linear-gradient(135deg, #8E24AA 0%, #AB47BC 100%);
+.edit-wrapper.blue-variant {
+    --edit-primary: #30B0C7;
+    --edit-accent: #268a9c;
+    --edit-gradient: linear-gradient(135deg, #30B0C7 0%, #268a9c 100%);
 }
 
 /* Header */
@@ -98,9 +98,9 @@
     box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
 }
 
-.edit-wrapper.purple-variant .form-group input:focus,
-.edit-wrapper.purple-variant .form-group select:focus {
-    box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.1);
+.edit-wrapper.blue-variant .form-group input:focus,
+.edit-wrapper.blue-variant .form-group select:focus {
+    box-shadow: 0 0 0 3px rgba(48, 176, 199, 0.1);
 }
 
 .edit-wrapper .btn-link {
@@ -112,8 +112,8 @@
     border-color: var(--edit-primary);
 }
 
-.edit-wrapper.purple-variant .btn-link:hover {
-    background: rgba(142, 36, 170, 0.05);
+.edit-wrapper.blue-variant .btn-link:hover {
+    background: rgba(48, 176, 199, 0.05);
 }
 
 .edit-wrapper .btn-primary {

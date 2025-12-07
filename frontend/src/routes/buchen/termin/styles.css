@@ -231,6 +231,54 @@
     margin: 0 0 2rem 0;
 }
 
+/* Termin Pagination */
+.termin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #4a5568;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-secondary-pagination:hover:not(:disabled):not(.disabled) {
+    border-color: #009688;
+    color: #009688;
+    background: #f0fffe;
+}
+
+.btn-secondary-pagination:disabled,
+.btn-secondary-pagination.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.page-info {
+    font-size: 0.875rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
 .btn-primary {
     padding: 0.875rem 2rem;
     font-size: 1rem;
@@ -253,22 +301,145 @@
     .buchen-container {
         padding: 1rem;
     }
+
+    .back-btn {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        margin-bottom: 0.75rem;
+    }
     
     .page-title {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
     }
     
     .selected-behandlung {
-        flex-wrap: wrap;
-        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        border-radius: 10px;
+    }
+    
+    .selected-behandlung i {
+        font-size: 1.25rem;
+    }
+
+    .termine-container {
+        gap: 1rem;
+    }
+    
+    .date-group {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .date-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .date-badge {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+    }
+
+    .date-day {
+        font-size: 1.5rem;
+    }
+
+    .date-month {
+        font-size: 0.75rem;
+    }
+
+    .date-info h3 {
+        font-size: 1rem;
+    }
+
+    .date-info p {
+        font-size: 0.8125rem;
     }
     
     .time-slots {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     
-    .date-header {
-        flex-direction: column;
-        align-items: flex-start;
+    .time-slot-card {
+        padding: 0.875rem;
+        border-radius: 10px;
+    }
+
+    .time-info {
+        font-size: 0.875rem;
+    }
+
+    .time-info i {
+        font-size: 1rem;
+    }
+
+    .time {
+        font-size: 1rem;
+    }
+
+    .weekday {
+        font-size: 0.75rem;
+    }
+
+    .zahnarzt-info {
+        font-size: 0.8125rem;
+    }
+
+    .zahnarzt-info i {
+        font-size: 0.875rem;
+    }
+
+    .slot-action i {
+        font-size: 1.25rem;
+    }
+    
+    .termin-pagination {
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 12px;
+    }
+    
+    .btn-secondary-pagination {
+        flex: 0 0 auto;
+        width: 80px;
+        padding: 0.375rem;
+        font-size: 0.8125rem;
+        border-width: 1px;
+    }
+    
+    .btn-secondary-pagination i {
+        font-size: 1rem;
+        margin: 0;
+    }
+    
+    .btn-secondary-pagination span {
+        display: none;
+    }
+    
+    .page-info {
+        font-size: 0.75rem;
+        white-space: nowrap;
+        flex: 1;
+        text-align: center;
+    }
+
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+
+    .empty-state i {
+        font-size: 2.5rem;
+    }
+
+    .empty-state h3 {
+        font-size: 1.125rem;
+    }
+
+    .empty-state p {
+        font-size: 0.875rem;
     }
 }

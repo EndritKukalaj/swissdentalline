@@ -15,47 +15,53 @@
             icon="bi-calendar-check"
             title="Geplante Termine"
             value={stats.geplanteTermine || 0}
-            variant="purple"
-            onclick={() => goto('/termine')}
+            variant="blue"
+            onclick={() => goto('/termine?status=GEPLANT')}
             clickable={true}
         />
         <StatCard
             icon="bi-calendar-plus"
             title="Freie Slots"
             value={stats.freieSlots || 0}
-            variant="purple"
+            variant="blue"
+            onclick={() => goto('/termine?freieSlots=true')}
+            clickable={true}
+        />
+    </div>
+
+    <div class="stats-grid secondary-stats">
+        <StatCard
+            icon="bi-x-circle"
+            title="Abgesagte Termine"
+            value={stats.abgesagteTermine || 0}
+            variant="blue"
+            onclick={() => goto('/termine?status=ABGESAGT')}
+            clickable={true}
+        />
+        <StatCard
+            icon="bi-lightning"
+            title="Flex-Termine freigegeben"
+            value={stats.wartelisteVerfuegbar || 0}
+            variant="blue"
+            onclick={() => goto('/termine?status=FLEX')}
+            clickable={true}
+        />
+        <StatCard
+            icon="bi-cash-coin"
+            title="Monatliche Einnahmen"
+            value={`${stats.monatlicheEinnahmen || 0} CHF`}
+            variant="blue"
         />
     </div>
 
     <!-- Next Appointment Section -->
     {#if nextTermin}
         <div class="next-termin-section">
-            <NextTerminCard termin={nextTermin} variant="purple" />
+            <NextTerminCard termin={nextTermin} variant="blue" />
         </div>
     {/if}
 
-    <!-- Additional Stats Row -->
-    <h2 class="details-summary-title">Weitere Details</h2>
-    <div class="stats-grid secondary-stats">
-        <StatCard
-            icon="bi-x-circle"
-            title="Abgesagte Termine"
-            value={stats.abgesagteTermine || 0}
-            variant="purple"
-        />
-        <StatCard
-            icon="bi-clock-history"
-            title="Warteliste verfügbar"
-            value={stats.wartelisteVerfuegbar || 0}
-            variant="purple"
-        />
-        <StatCard
-            icon="bi-cash-coin"
-            title="Monatliche Einnahmen"
-            value={`${stats.monatlicheEinnahmen || 0} CHF`}
-            variant="purple"
-        />
-    </div>
+    
 </div>
 
 <style>
@@ -84,15 +90,35 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
-.details-summary-title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #2d3748;
-    margin: 0 0 1rem 0;
-}
-
 .next-termin-section {
     margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .zahnarzt-dashboard {
+        padding: 1rem;
+    }
+
+    .dashboard-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .secondary-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .next-termin-section {
+        margin-bottom: 1.5rem;
+    }
 }
 
 @media (min-width: 1024px) {

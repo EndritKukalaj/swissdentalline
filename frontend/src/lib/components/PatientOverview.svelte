@@ -26,16 +26,26 @@
             clickable={true}
         />
         <StatCard
+            icon="bi-star"
+            title="Termine bewerten"
+            value={stats.abgeschlosseneTermine || 0}
+            variant="turquoise"
+            onclick={() => goto('/termine?status=ABGESCHLOSSEN')}
+            clickable={true}
+        />
+        <StatCard
             icon="bi-clock-history"
             title="Offene Wartelisten"
             value={stats.offeneWartelisten || 0}
             variant="turquoise"
+            onclick={() => goto('/termine?warteliste=true')}
+            clickable={true}
         />
         <StatCard
             icon="bi-lightning-charge-fill"
             title="Verfügbare Flex-Termine"
             value={stats.verfuegbareFlexTermine || 0}
-            variant="yellow"
+            variant="turquoise"
             onclick={() => goto('/flextermine')}
             clickable={true}
         />
@@ -101,5 +111,42 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+
+    .header-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .dashboard-title {
+        font-size: 1.75rem;
+    }
+
+    .btn-book-appointment {
+        width: 100%;
+        justify-content: center;
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9375rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+
+    .stats-grid {
+        gap: 0.5rem;
+    }
 }
 </style>

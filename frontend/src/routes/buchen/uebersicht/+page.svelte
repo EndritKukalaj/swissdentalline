@@ -36,9 +36,9 @@
     // Handle successful booking
     $effect(() => {
         if (form?.success && !isSubmitting) {
-            // Redirect to success page or home
+            // Redirect to termin details with success flag
             setTimeout(() => {
-                goto(`/termine/${termin.id}`);
+                goto(`/termine/${form.terminId}?bookingSuccess=true`);
             }, 500);
         }
     });
