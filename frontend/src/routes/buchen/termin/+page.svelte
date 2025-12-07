@@ -147,7 +147,7 @@
             <!-- Pagination Controls (always visible) -->
             <div class="termin-pagination">
                 <button 
-                    class="btn btn-secondary"
+                    class="btn btn-secondary-pagination"
                     class:disabled={currentPage === 1}
                     disabled={currentPage === 1}
                     onclick={() => goToPage(currentPage - 1)}
@@ -161,7 +161,7 @@
                 </span>
                 
                 <button 
-                    class="btn btn-secondary"
+                    class="btn btn-secondary-pagination"
                     class:disabled={currentPage >= totalPages}
                     disabled={currentPage >= totalPages}
                     onclick={() => goToPage(currentPage + 1)}

@@ -160,6 +160,20 @@
         </div>
     </div>
     
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="btn-back" onclick={handleBack}>
+            <i class="bi bi-arrow-left"></i>
+            Anderen Termin wählen
+        </button>
+        <button class="btn-primary" onclick={handleContinue}>
+            Termin bestätigen
+            <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+    </div>
+    <br />
+    <br />
+
     <!-- Reviews Section -->
     {#if rezensionen && rezensionen.length > 0}
         <div class="reviews-section">
@@ -210,7 +224,7 @@
             <!-- Review Pagination (always visible) -->
             <div class="review-pagination">
                 <a 
-                    class="btn btn-secondary"
+                    class="btn btn-secondary-pagination"
                     class:disabled={currentPage === 1}
                     href="/buchen/zahnarzt?terminId={termin.id}&reviewPage={currentPage - 2}"
                     aria-disabled={currentPage === 1}
@@ -224,7 +238,7 @@
                 </span>
                 
                 <a 
-                    class="btn btn-secondary"
+                    class="btn btn-secondary-pagination"
                     class:disabled={currentPage >= nrOfPages}
                     href="/buchen/zahnarzt?terminId={termin.id}&reviewPage={currentPage}"
                     aria-disabled={currentPage >= nrOfPages}
@@ -235,16 +249,4 @@
             </div>
         </div>
     {/if}
-
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        <button class="btn-back" onclick={handleBack}>
-            <i class="bi bi-arrow-left"></i>
-            Anderen Termin wählen
-        </button>
-        <button class="btn-primary" onclick={handleContinue}>
-            Termin bestätigen
-            <i class="bi bi-arrow-right-circle-fill"></i>
-        </button>
-    </div>
 </div>
