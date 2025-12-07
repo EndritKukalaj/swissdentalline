@@ -236,7 +236,7 @@
 }
 
 .btn-primary,
-.btn-secondary {
+.btn-back {
     flex: 1;
     padding: 1.125rem 2rem;
     border-radius: 12px;
@@ -262,13 +262,13 @@
     box-shadow: 0 6px 16px rgba(0, 150, 136, 0.4);
 }
 
-.btn-secondary {
+.btn-back {
     background: white;
     color: #009688;
     border: 2px solid #009688;
 }
 
-.btn-secondary:hover {
+.btn-back:hover {
     background: #f0fffe;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 150, 136, 0.15);
@@ -414,6 +414,55 @@
     font-size: 0.875rem;
 }
 
+/* Review Pagination */
+.review-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary {
+    width: 125px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #4a5568;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover:not(:disabled):not(.disabled) {
+    border-color: #009688;
+    color: #009688;
+    background: #f0fffe;
+}
+
+.btn-secondary:disabled,
+.btn-secondary.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.page-info {
+    font-size: 0.875rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
 /* Old Review Card Styles (deprecated) */
 .reviews-card {
     max-height: 600px;
@@ -524,14 +573,51 @@
     }
 
     .action-buttons {
-        flex-direction: column;
+        flex-direction: row;
     }
-    
+
     .reviews-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .reviews-header h2 {
         font-size: 1.5rem;
+    }
+
+    .review-pagination {
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+    .review-pagination .btn {
+        flex: 0 0 auto;
+        width: 80px;
+        padding: 0.375rem;
+        font-size: 0.8125rem;
+        border-width: 1px;
+    }
+
+    .review-pagination .btn i {
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .review-pagination .btn span {
+        display: none;
+    }
+
+    .review-pagination .page-info {
+        font-size: 0.75rem;
+        white-space: nowrap;
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-primary,
+    .btn-back {
+        flex: 1;
+        padding: 0 1.5rem;
+        font-size: 0.85rem;
     }
 }

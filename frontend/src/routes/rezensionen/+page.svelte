@@ -3,7 +3,21 @@
     import { goto } from '$app/navigation';
     
     let { data } = $props();
-    let { rezensionen, pagination, userRole } = data;
+    
+    // reactive state
+    let rezensionen = $state(data.rezensionen);
+    let currentPage = $state(data.currentPage);
+    let nrOfPages = $state(data.nrOfPages);
+    let userRole = $state(data.userRole);
+    const pageSize = 5;
+    
+    // Update when server data changes
+    $effect(() => {
+        rezensionen = data.rezensionen;
+        currentPage = data.currentPage;
+        nrOfPages = data.nrOfPages;
+        userRole = data.userRole;
+    });
     
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -24,12 +38,8 @@
         };
     };
     
-    const goToPage = (page) => {
-        goto(`/rezensionen?page=${page}`);
-    };
-    
     // Check if user is Zahnarzt
-    const isZahnarzt = userRole === 'Zahnarzt';
+    const isZahnarzt = $derived(userRole === 'Zahnarzt');
 </script>
 
 <svelte:head>
@@ -161,29 +171,31 @@
         </div>
         
         <!-- Pagination -->
-        {#if pagination.totalPages > 1}
+        {#if nrOfPages > 1}
             <div class="pagination">
-                <button 
+                <a 
                     class="btn btn-secondary {isZahnarzt ? 'blue' : ''}"
-                    disabled={pagination.currentPage === 0}
-                    onclick={() => goToPage(pagination.currentPage - 1)}
+                    class:disabled={currentPage === 1}
+                    href="/rezensionen?pageNumber={currentPage - 1}&pageSize={pageSize}"
+                    aria-disabled={currentPage === 1}
                 >
                     <i class="bi bi-chevron-left"></i>
-                    Zurück
-                </button>
+                    <span>Zurück</span>
+                </a>
                 
                 <span class="page-info">
-                    Seite {pagination.currentPage + 1} von {pagination.totalPages}
+                    Seite {currentPage} von {nrOfPages}
                 </span>
                 
-                <button 
+                <a 
                     class="btn btn-secondary {isZahnarzt ? 'blue' : ''}"
-                    disabled={pagination.currentPage >= pagination.totalPages - 1}
-                    onclick={() => goToPage(pagination.currentPage + 1)}
+                    class:disabled={currentPage >= nrOfPages}
+                    href="/rezensionen?pageNumber={currentPage + 1}&pageSize={pageSize}"
+                    aria-disabled={currentPage >= nrOfPages}
                 >
-                    Weiter
+                    <span>Weiter</span>
                     <i class="bi bi-chevron-right"></i>
-                </button>
+                </a>
             </div>
         {/if}
     {/if}

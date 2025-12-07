@@ -20,16 +20,16 @@ export const load = async ({ locals, url }) => {
         const auth0UserId = locals.user.sub;
         const userId = auth0UserId.replace('auth0|', '');
         
-        const page = parseInt(url.searchParams.get('page') || '0');
-        const size = parseInt(url.searchParams.get('size') || '10');
+        const page = parseInt(url.searchParams.get('pageNumber') || '1');
+        const size = parseInt(url.searchParams.get('pageSize') || '5');
 
         let rezensionenData;
         let rezensionenWithDetails;
 
         if (userRole === 'Patient') {
-            // Fetch patient's reviews
+            // Fetch patient's reviews (page is 1-indexed from URL, API expects 0-indexed)
             const rezensionenResponse = await fetch(
-                `${API_BASE_URL}/rezensionen/patient/${userId}?page=${page}&size=${size}`,
+                `${API_BASE_URL}/rezensionen/patient/${userId}?page=${page - 1}&size=${size}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${jwt_token}`,
@@ -71,9 +71,9 @@ export const load = async ({ locals, url }) => {
                 })
             );
         } else {
-            // Zahnarzt: Fetch reviews for this dentist
+            // Zahnarzt: Fetch reviews for this dentist (page is 1-indexed from URL, API expects 0-indexed)
             const rezensionenResponse = await fetch(
-                `${API_BASE_URL}/rezensionen/zahnarzt/${userId}?page=${page}&size=${size}`,
+                `${API_BASE_URL}/rezensionen/zahnarzt/${userId}?page=${page - 1}&size=${size}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${jwt_token}`,
@@ -119,12 +119,8 @@ export const load = async ({ locals, url }) => {
 
         return {
             rezensionen: rezensionenWithDetails,
-            pagination: {
-                currentPage: rezensionenData.number,
-                totalPages: rezensionenData.totalPages,
-                totalElements: rezensionenData.totalElements,
-                pageSize: rezensionenData.size
-            },
+            currentPage: page,
+            nrOfPages: rezensionenData.totalPages,
             userRole,
             userId
         };
