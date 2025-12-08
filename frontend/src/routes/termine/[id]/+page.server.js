@@ -274,5 +274,71 @@ export const actions = {
             console.error('Error completing termin:', err);
             return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'complete' });
         }
+    },
+
+    releaseToFlex: async ({ params, locals }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            return fail(401, { error: 'Nicht autorisiert', action: 'releaseFlex' });
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nur Zahnärzte können Termine als Flex freigeben', action: 'releaseFlex' });
+        }
+
+        const terminId = params.id;
+        const jwt_token = locals.jwt_token;
+        const auth0UserId = locals.user.sub;
+        const userId = auth0UserId.replace('auth0|', '');
+
+        try {
+            // Verify ownership before releasing
+            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!terminResponse.ok) {
+                return fail(404, { error: 'Termin nicht gefunden', action: 'releaseFlex' });
+            }
+
+            const termin = await terminResponse.json();
+            const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+            
+            // Normalize both IDs for comparison (remove auth0| prefix if present)
+            const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+            const normalizedUserId = userId;
+
+            if (normalizedTerminZahnarztId !== normalizedUserId) {
+                return fail(403, { error: 'Sie können nur Ihre eigenen Termine freigeben', action: 'releaseFlex' });
+            }
+
+            // Only allow releasing ABGESAGT appointments
+            if (termin.status !== 'ABGESAGT') {
+                return fail(400, { error: 'Nur abgesagte Termine können als Flex freigegeben werden', action: 'releaseFlex' });
+            }
+
+            // Release the appointment to FLEX
+            const releaseResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/freigeben`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!releaseResponse.ok) {
+                const errorText = await releaseResponse.text();
+                console.error('Release flex response error:', errorText);
+                return fail(releaseResponse.status, { error: 'Termin konnte nicht als Flex freigegeben werden', action: 'releaseFlex' });
+            }
+
+            return { success: true, action: 'releaseFlex' };
+        } catch (err) {
+            console.error('Error releasing termin to flex:', err);
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'releaseFlex' });
+        }
     }
 };

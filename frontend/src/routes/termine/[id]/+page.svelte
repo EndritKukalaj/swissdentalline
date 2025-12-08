@@ -39,6 +39,10 @@
     let showCompleteDialog = $state(false);
     let completeError = $state(null);
     
+    let isReleasingToFlex = $state(false);
+    let showReleaseFlexDialog = $state(false);
+    let releaseFlexError = $state(null);
+    
     // Show success banner on mount if rebookSuccess or reviewSuccess is true
     onMount(() => {
         if (rebookSuccess) {
@@ -81,6 +85,14 @@
                 showSuccessBanner = true;
                 successMessage = 'Termin wurde erfolgreich als abgeschlossen markiert.';
                 autoHideSuccessBanner();
+            } else if (form?.action === 'releaseFlex') {
+                // Stay on page and close dialog after successful release to flex
+                showReleaseFlexDialog = false;
+                isReleasingToFlex = false;
+                invalidateAll();
+                showSuccessBanner = true;
+                successMessage = 'Termin wurde erfolgreich als Flex-Termin freigegeben.';
+                autoHideSuccessBanner();
             } else {
                 // Redirect to termine list after cancellation
                 goto('/termine');
@@ -89,6 +101,9 @@
             if (form?.action === 'complete') {
                 completeError = form.error;
                 isCompleting = false;
+            } else if (form?.action === 'releaseFlex') {
+                releaseFlexError = form.error;
+                isReleasingToFlex = false;
             } else {
                 cancelError = form.error;
                 isCanceling = false;
@@ -132,6 +147,7 @@
             case 'GEBUCHT': return '#009688';
             case 'ABGESCHLOSSEN': return '#4caf50';
             case 'ABGESAGT': return '#f44336';
+            case 'FLEX': return '#FFC107';
             default: return '#64748b';
         }
     };
@@ -141,6 +157,7 @@
             case 'GEBUCHT': return 'Gebucht';
             case 'ABGESCHLOSSEN': return 'Abgeschlossen';
             case 'ABGESAGT': return 'Abgesagt';
+            case 'FLEX': return 'Flex-Termin';
             default: return status;
         }
     };
@@ -418,6 +435,17 @@
             </button>
         {/if}
         
+        {#if termin.status === 'ABGESAGT' && userRole === 'Zahnarzt'}
+            <button 
+                class="action-btn review-btn" 
+                onclick={() => showReleaseFlexDialog = true}
+                disabled={isReleasingToFlex}
+            >
+                <i class="bi bi-lightning"></i>
+                Als Flex-Termin freigeben
+            </button>
+        {/if}
+        
         {#if termin.status === 'ABGESCHLOSSEN' && userRole === 'Patient'}
             <button class="action-btn review-btn" onclick={() => goto(`/termine/${termin.id}/bewerten`)}>
                 <i class="bi bi-star-fill"></i>
@@ -566,6 +594,78 @@
                         {:else}
                             <i class="bi bi-check-circle"></i>
                             Als abgeschlossen markieren
+                        {/if}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/if}
+
+<!-- Release to Flex Confirmation Dialog -->
+{#if showReleaseFlexDialog}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="dialog-overlay" onclick={() => showReleaseFlexDialog = false}>
+        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
+            <div class="dialog-header">
+                <i class="bi bi-lightning" style="color: #FFC107;"></i>
+                <h3>Flex-Termin freigeben</h3>
+            </div>
+            <div class="dialog-body">
+                <p>Möchten Sie diesen abgesagten Termin als Flex-Termin freigeben?</p>
+                <div class="dialog-info">
+                    <div class="info-row">
+                        <strong>Behandlung:</strong>
+                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Datum:</strong>
+                        <span>{formatDate(termin.datum)}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Uhrzeit:</strong>
+                        <span>{formatTime(termin.datum)} Uhr</span>
+                    </div>
+                </div>
+                <p class="warning-text" style="background: #fff9e6; color: #856404;">
+                    <i class="bi bi-info-circle"></i>
+                    Der Termin wird als Flex-Termin für Patienten auf der Warteliste verfügbar.
+                </p>
+                {#if releaseFlexError}
+                    <div class="error-message">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {releaseFlexError}
+                    </div>
+                {/if}
+            </div>
+            <div class="dialog-actions">
+                <button 
+                    class="dialog-btn cancel-dialog-btn" 
+                    onclick={() => { showReleaseFlexDialog = false; releaseFlexError = null; }}
+                    disabled={isReleasingToFlex}
+                >
+                    Abbrechen
+                </button>
+                <form method="POST" action="?/releaseToFlex" use:enhance={() => {
+                    isReleasingToFlex = true;
+                    releaseFlexError = null;
+                    return async ({ result, update }) => {
+                        await update();
+                    };
+                }}>
+                    <button 
+                        type="submit" 
+                        class="dialog-btn confirm-btn"
+                        style="background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%); box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);"
+                        disabled={isReleasingToFlex}
+                    >
+                        {#if isReleasingToFlex}
+                            <i class="bi bi-hourglass-split"></i>
+                            Wird freigegeben...
+                        {:else}
+                            <i class="bi bi-lightning"></i>
+                            Als Flex-Termin freigeben
                         {/if}
                     </button>
                 </form>
