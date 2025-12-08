@@ -250,14 +250,90 @@ export const actions = {
         }
       });
 
+      const createdAdresse = response.data;
+
+      // Wenn Zahnarzt und Praxis-Adresse, automatisch dem Zahnarzt zuweisen
+      if (!isPatient && adresseDTO.typ === 'PRAXIS') {
+        const userId = user.sub.replace('auth0|', '');
+        
+        try {
+          // Lade Zahnarzt-Daten
+          const zahnarztResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/${userId}`, {
+            headers: { Authorization: `Bearer ${locals.jwt_token}` }
+          });
+          
+          if (zahnarztResponse.data) {
+            const zahnarztId = zahnarztResponse.data.id;
+            
+            // Update Zahnarzt mit neuer Praxis-Adresse
+            await axios.put(`${API_BASE_URL}/api/zahnaerzte/${zahnarztId}`, {
+              name: zahnarztResponse.data.name,
+              praxisAdresseId: createdAdresse.id
+            }, {
+              headers: {
+                Authorization: `Bearer ${locals.jwt_token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+          }
+        } catch (updateError) {
+          console.error('Fehler beim Zuweisen der Praxis zum Zahnarzt:', updateError);
+          // Adresse wurde erstellt, aber Zuweisung fehlgeschlagen - trotzdem als Erfolg werten
+        }
+      }
+
       return {
         success: true,
-        adresse: response.data
+        adresse: createdAdresse
       };
     } catch (e) {
       return {
         success: false,
         error: e.response?.data?.message || 'Fehler beim Erstellen der Adresse'
+      };
+    }
+  },
+
+  updateAdresse: async ({ request, locals }) => {
+    if (!locals.isAuthenticated) {
+      throw error(401, 'Nicht authentifiziert');
+    }
+
+    const formData = await request.formData();
+    const adresseId = formData.get('id');
+    
+    if (!adresseId) {
+      return {
+        success: false,
+        error: 'Adresse ID fehlt'
+      };
+    }
+    
+    const adresseDTO = {
+      strasse: formData.get('strasse'),
+      plz: formData.get('plz'),
+      ort: formData.get('ort'),
+      typ: formData.get('typ'),
+      bezeichnung: formData.get('bezeichnung') || null
+    };
+
+    try {
+      const response = await axios.put(`${API_BASE_URL}/api/adressen/${adresseId}`, adresseDTO, {
+        headers: {
+          Authorization: `Bearer ${locals.jwt_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return {
+        success: true,
+        updated: true,
+        adresse: response.data
+      };
+    } catch (e) {
+      return {
+        success: false,
+        error: e.response?.data?.message || 'Fehler beim Aktualisieren der Adresse'
       };
     }
   }
