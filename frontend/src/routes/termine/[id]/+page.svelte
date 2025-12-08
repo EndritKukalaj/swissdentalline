@@ -73,41 +73,43 @@
         }, 5000);
     };
     
+    const handleActionSuccess = (action, message) => {
+        invalidateAll();
+        showSuccessBanner = true;
+        successMessage = message;
+        autoHideSuccessBanner();
+    };
+    
     // Handle form responses
     $effect(() => {
         if (form?.success) {
-            if (form?.action === 'complete') {
-                // Stay on page and close dialog after successful completion
-                showCompleteDialog = false;
-                isCompleting = false;
-                // Optionally show success message
-                invalidateAll();
-                showSuccessBanner = true;
-                successMessage = 'Termin wurde erfolgreich als abgeschlossen markiert.';
-                autoHideSuccessBanner();
-            } else if (form?.action === 'releaseFlex') {
-                // Stay on page and close dialog after successful release to flex
-                showReleaseFlexDialog = false;
-                isReleasingToFlex = false;
-                invalidateAll();
-                showSuccessBanner = true;
-                successMessage = 'Termin wurde erfolgreich als Flex-Termin freigegeben.';
-                autoHideSuccessBanner();
-            } else {
-                // Redirect to termine list after cancellation
-                goto('/termine');
-            }
+            const actionHandlers = {
+                complete: () => {
+                    showCompleteDialog = false;
+                    isCompleting = false;
+                    handleActionSuccess('complete', 'Termin wurde erfolgreich als abgeschlossen markiert.');
+                },
+                releaseFlex: () => {
+                    showReleaseFlexDialog = false;
+                    isReleasingToFlex = false;
+                    handleActionSuccess('releaseFlex', 'Termin wurde erfolgreich als Flex-Termin freigegeben.');
+                },
+                cancel: () => {
+                    showCancelDialog = false;
+                    isCanceling = false;
+                    handleActionSuccess('cancel', 'Termin wurde erfolgreich storniert.');
+                }
+            };
+            
+            actionHandlers[form.action]?.();
         } else if (form?.error) {
-            if (form?.action === 'complete') {
-                completeError = form.error;
-                isCompleting = false;
-            } else if (form?.action === 'releaseFlex') {
-                releaseFlexError = form.error;
-                isReleasingToFlex = false;
-            } else {
-                cancelError = form.error;
-                isCanceling = false;
-            }
+            const errorHandlers = {
+                complete: () => { completeError = form.error; isCompleting = false; },
+                releaseFlex: () => { releaseFlexError = form.error; isReleasingToFlex = false; },
+                cancel: () => { cancelError = form.error; isCanceling = false; }
+            };
+            
+            errorHandlers[form.action]?.();
         }
     });
     
@@ -413,7 +415,7 @@
     
     <!-- Action Buttons -->
     <div class="action-section">
-        {#if termin.status === 'GEBUCHT' && userRole === 'Patient'}
+        {#if termin.status === 'GEBUCHT'}
             <button 
                 class="action-btn cancel-btn" 
                 onclick={() => showCancelDialog = true}

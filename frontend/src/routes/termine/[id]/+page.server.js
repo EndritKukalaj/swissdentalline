@@ -157,8 +157,8 @@ export const actions = {
         }
 
         const userRole = locals.user.user_roles?.[0] || 'Patient';
-        if (userRole !== 'Patient') {
-            return fail(403, { error: 'Nur Patienten können Termine stornieren' });
+        if (userRole !== 'Patient' && userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nicht autorisiert, Termine zu stornieren' });
         }
 
         const terminId = params.id;
@@ -180,14 +180,24 @@ export const actions = {
             }
 
             const termin = await terminResponse.json();
-            const terminPatientId = termin.patientId || termin.patient_id;
             
-            // Normalize both IDs for comparison (remove auth0| prefix if present)
-            const normalizedTerminPatientId = terminPatientId?.replace('auth0|', '');
-            const normalizedUserId = userId;
+            // Verify ownership based on role
+            if (userRole === 'Patient') {
+                const terminPatientId = termin.patientId || termin.patient_id;
+                const normalizedTerminPatientId = terminPatientId?.replace('auth0|', '');
+                const normalizedUserId = userId;
 
-            if (normalizedTerminPatientId !== normalizedUserId) {
-                return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+                if (normalizedTerminPatientId !== normalizedUserId) {
+                    return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+                }
+            } else if (userRole === 'Zahnarzt') {
+                const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+                const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+                const normalizedUserId = userId;
+
+                if (normalizedTerminZahnarztId !== normalizedUserId) {
+                    return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+                }
             }
 
             // Cancel the appointment
@@ -200,13 +210,13 @@ export const actions = {
             });
             
             if (!cancelResponse.ok) {
-                return fail(cancelResponse.status, { error: 'Termin konnte nicht storniert werden' });
+                return fail(cancelResponse.status, { error: 'Termin konnte nicht storniert werden', action: 'cancel' });
             }
 
-            return { success: true };
+            return { success: true, action: 'cancel' };
         } catch (err) {
             console.error('Error canceling termin:', err);
-            return fail(500, { error: 'Ein Fehler ist aufgetreten' });
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'cancel' });
         }
     },
 
