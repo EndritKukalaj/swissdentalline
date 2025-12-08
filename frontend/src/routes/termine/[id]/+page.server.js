@@ -208,5 +208,71 @@ export const actions = {
             console.error('Error canceling termin:', err);
             return fail(500, { error: 'Ein Fehler ist aufgetreten' });
         }
+    },
+
+    completeTermin: async ({ params, locals }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            return fail(401, { error: 'Nicht autorisiert', action: 'complete' });
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nur Zahnärzte können Termine abschliessen', action: 'complete' });
+        }
+
+        const terminId = params.id;
+        const jwt_token = locals.jwt_token;
+        const auth0UserId = locals.user.sub;
+        const userId = auth0UserId.replace('auth0|', '');
+
+        try {
+            // Verify ownership before completing
+            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!terminResponse.ok) {
+                return fail(404, { error: 'Termin nicht gefunden', action: 'complete' });
+            }
+
+            const termin = await terminResponse.json();
+            const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+            
+            // Normalize both IDs for comparison (remove auth0| prefix if present)
+            const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+            const normalizedUserId = userId;
+
+            if (normalizedTerminZahnarztId !== normalizedUserId) {
+                return fail(403, { error: 'Sie können nur Ihre eigenen Termine abschliessen', action: 'complete' });
+            }
+
+            // Only allow completing GEBUCHT appointments
+            if (termin.status !== 'GEBUCHT') {
+                return fail(400, { error: 'Nur gebuchte Termine können abgeschlossen werden', action: 'complete' });
+            }
+
+            // Complete the appointment
+            const completeResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/abschliessen`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!completeResponse.ok) {
+                const errorText = await completeResponse.text();
+                console.error('Complete response error:', errorText);
+                return fail(completeResponse.status, { error: 'Termin konnte nicht abgeschlossen werden', action: 'complete' });
+            }
+
+            return { success: true, action: 'complete' };
+        } catch (err) {
+            console.error('Error completing termin:', err);
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'complete' });
+        }
     }
 };
