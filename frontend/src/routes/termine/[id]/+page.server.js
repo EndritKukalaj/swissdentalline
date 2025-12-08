@@ -157,8 +157,8 @@ export const actions = {
         }
 
         const userRole = locals.user.user_roles?.[0] || 'Patient';
-        if (userRole !== 'Patient') {
-            return fail(403, { error: 'Nur Patienten können Termine stornieren' });
+        if (userRole !== 'Patient' && userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nicht autorisiert, Termine zu stornieren' });
         }
 
         const terminId = params.id;
@@ -180,14 +180,24 @@ export const actions = {
             }
 
             const termin = await terminResponse.json();
-            const terminPatientId = termin.patientId || termin.patient_id;
             
-            // Normalize both IDs for comparison (remove auth0| prefix if present)
-            const normalizedTerminPatientId = terminPatientId?.replace('auth0|', '');
-            const normalizedUserId = userId;
+            // Verify ownership based on role
+            if (userRole === 'Patient') {
+                const terminPatientId = termin.patientId || termin.patient_id;
+                const normalizedTerminPatientId = terminPatientId?.replace('auth0|', '');
+                const normalizedUserId = userId;
 
-            if (normalizedTerminPatientId !== normalizedUserId) {
-                return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+                if (normalizedTerminPatientId !== normalizedUserId) {
+                    return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+                }
+            } else if (userRole === 'Zahnarzt') {
+                const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+                const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+                const normalizedUserId = userId;
+
+                if (normalizedTerminZahnarztId !== normalizedUserId) {
+                    return fail(403, { error: 'Sie können nur Ihre eigenen Termine stornieren' });
+                }
             }
 
             // Cancel the appointment
@@ -200,13 +210,145 @@ export const actions = {
             });
             
             if (!cancelResponse.ok) {
-                return fail(cancelResponse.status, { error: 'Termin konnte nicht storniert werden' });
+                return fail(cancelResponse.status, { error: 'Termin konnte nicht storniert werden', action: 'cancel' });
             }
 
-            return { success: true };
+            return { success: true, action: 'cancel' };
         } catch (err) {
             console.error('Error canceling termin:', err);
-            return fail(500, { error: 'Ein Fehler ist aufgetreten' });
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'cancel' });
+        }
+    },
+
+    completeTermin: async ({ params, locals }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            return fail(401, { error: 'Nicht autorisiert', action: 'complete' });
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nur Zahnärzte können Termine abschliessen', action: 'complete' });
+        }
+
+        const terminId = params.id;
+        const jwt_token = locals.jwt_token;
+        const auth0UserId = locals.user.sub;
+        const userId = auth0UserId.replace('auth0|', '');
+
+        try {
+            // Verify ownership before completing
+            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!terminResponse.ok) {
+                return fail(404, { error: 'Termin nicht gefunden', action: 'complete' });
+            }
+
+            const termin = await terminResponse.json();
+            const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+            
+            // Normalize both IDs for comparison (remove auth0| prefix if present)
+            const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+            const normalizedUserId = userId;
+
+            if (normalizedTerminZahnarztId !== normalizedUserId) {
+                return fail(403, { error: 'Sie können nur Ihre eigenen Termine abschliessen', action: 'complete' });
+            }
+
+            // Only allow completing GEBUCHT appointments
+            if (termin.status !== 'GEBUCHT') {
+                return fail(400, { error: 'Nur gebuchte Termine können abgeschlossen werden', action: 'complete' });
+            }
+
+            // Complete the appointment
+            const completeResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/abschliessen`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!completeResponse.ok) {
+                const errorText = await completeResponse.text();
+                console.error('Complete response error:', errorText);
+                return fail(completeResponse.status, { error: 'Termin konnte nicht abgeschlossen werden', action: 'complete' });
+            }
+
+            return { success: true, action: 'complete' };
+        } catch (err) {
+            console.error('Error completing termin:', err);
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'complete' });
+        }
+    },
+
+    releaseToFlex: async ({ params, locals }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            return fail(401, { error: 'Nicht autorisiert', action: 'releaseFlex' });
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nur Zahnärzte können Termine als Flex freigeben', action: 'releaseFlex' });
+        }
+
+        const terminId = params.id;
+        const jwt_token = locals.jwt_token;
+        const auth0UserId = locals.user.sub;
+        const userId = auth0UserId.replace('auth0|', '');
+
+        try {
+            // Verify ownership before releasing
+            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!terminResponse.ok) {
+                return fail(404, { error: 'Termin nicht gefunden', action: 'releaseFlex' });
+            }
+
+            const termin = await terminResponse.json();
+            const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+            
+            // Normalize both IDs for comparison (remove auth0| prefix if present)
+            const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+            const normalizedUserId = userId;
+
+            if (normalizedTerminZahnarztId !== normalizedUserId) {
+                return fail(403, { error: 'Sie können nur Ihre eigenen Termine freigeben', action: 'releaseFlex' });
+            }
+
+            // Only allow releasing ABGESAGT appointments
+            if (termin.status !== 'ABGESAGT') {
+                return fail(400, { error: 'Nur abgesagte Termine können als Flex freigegeben werden', action: 'releaseFlex' });
+            }
+
+            // Release the appointment to FLEX
+            const releaseResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/freigeben`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!releaseResponse.ok) {
+                const errorText = await releaseResponse.text();
+                console.error('Release flex response error:', errorText);
+                return fail(releaseResponse.status, { error: 'Termin konnte nicht als Flex freigegeben werden', action: 'releaseFlex' });
+            }
+
+            return { success: true, action: 'releaseFlex' };
+        } catch (err) {
+            console.error('Error releasing termin to flex:', err);
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'releaseFlex' });
         }
     }
 };

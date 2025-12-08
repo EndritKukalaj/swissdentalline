@@ -1,17 +1,47 @@
 <script>
     import './styles.css';
-    import { goto } from '$app/navigation';
+    import { goto, invalidateAll } from '$app/navigation';
     import { enhance } from '$app/forms';
     import { onMount } from 'svelte';
     
     let { data, form } = $props();
-    let { termin, behandlungsart, zahnarzt, adresse, patient, userRole, rebookSuccess, reviewSuccess, bookingSuccess } = data;
+    
+    // Reactive destructuring to update when data changes
+    $effect(() => {
+        termin = data.termin;
+        behandlungsart = data.behandlungsart;
+        zahnarzt = data.zahnarzt;
+        adresse = data.adresse;
+        patient = data.patient;
+        userRole = data.userRole;
+        rebookSuccess = data.rebookSuccess;
+        reviewSuccess = data.reviewSuccess;
+        bookingSuccess = data.bookingSuccess;
+    });
+    
+    let termin = $state(data.termin);
+    let behandlungsart = $state(data.behandlungsart);
+    let zahnarzt = $state(data.zahnarzt);
+    let adresse = $state(data.adresse);
+    let patient = $state(data.patient);
+    let userRole = $state(data.userRole);
+    let rebookSuccess = $state(data.rebookSuccess);
+    let reviewSuccess = $state(data.reviewSuccess);
+    let bookingSuccess = $state(data.bookingSuccess);
     
     let isCanceling = $state(false);
     let showCancelDialog = $state(false);
     let cancelError = $state(null);
     let showSuccessBanner = $state(false);
     let successMessage = $state('');
+    
+    let isCompleting = $state(false);
+    let showCompleteDialog = $state(false);
+    let completeError = $state(null);
+    
+    let isReleasingToFlex = $state(false);
+    let showReleaseFlexDialog = $state(false);
+    let releaseFlexError = $state(null);
     
     // Show success banner on mount if rebookSuccess or reviewSuccess is true
     onMount(() => {
@@ -43,18 +73,48 @@
         }, 5000);
     };
     
-    // Redirect to termine list after successful cancellation
+    const handleActionSuccess = (action, message) => {
+        invalidateAll();
+        showSuccessBanner = true;
+        successMessage = message;
+        autoHideSuccessBanner();
+    };
+    
+    // Handle form responses
     $effect(() => {
         if (form?.success) {
-            goto('/termine');
+            const actionHandlers = {
+                complete: () => {
+                    showCompleteDialog = false;
+                    isCompleting = false;
+                    handleActionSuccess('complete', 'Termin wurde erfolgreich als abgeschlossen markiert.');
+                },
+                releaseFlex: () => {
+                    showReleaseFlexDialog = false;
+                    isReleasingToFlex = false;
+                    handleActionSuccess('releaseFlex', 'Termin wurde erfolgreich als Flex-Termin freigegeben.');
+                },
+                cancel: () => {
+                    showCancelDialog = false;
+                    isCanceling = false;
+                    handleActionSuccess('cancel', 'Termin wurde erfolgreich storniert.');
+                }
+            };
+            
+            actionHandlers[form.action]?.();
         } else if (form?.error) {
-            cancelError = form.error;
-            isCanceling = false;
+            const errorHandlers = {
+                complete: () => { completeError = form.error; isCompleting = false; },
+                releaseFlex: () => { releaseFlexError = form.error; isReleasingToFlex = false; },
+                cancel: () => { cancelError = form.error; isCanceling = false; }
+            };
+            
+            errorHandlers[form.action]?.();
         }
     });
     
     // Determine variant based on role
-    const variant = userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
+    const variant = $derived(userRole === 'Zahnarzt' ? 'blue' : 'turquoise');
     
     // Format date
     const formatDate = (dateString) => {
@@ -89,6 +149,7 @@
             case 'GEBUCHT': return '#009688';
             case 'ABGESCHLOSSEN': return '#4caf50';
             case 'ABGESAGT': return '#f44336';
+            case 'FLEX': return '#FFC107';
             default: return '#64748b';
         }
     };
@@ -98,11 +159,12 @@
             case 'GEBUCHT': return 'Gebucht';
             case 'ABGESCHLOSSEN': return 'Abgeschlossen';
             case 'ABGESAGT': return 'Abgesagt';
+            case 'FLEX': return 'Flex-Termin';
             default: return status;
         }
     };
     
-    const dateInfo = formatShortDate(termin.datum);
+    const dateInfo = $derived(formatShortDate(termin.datum));
 </script>
 
 <div class="details-container {variant}-variant">
@@ -353,7 +415,7 @@
     
     <!-- Action Buttons -->
     <div class="action-section">
-        {#if termin.status === 'GEBUCHT' && userRole === 'Patient'}
+        {#if termin.status === 'GEBUCHT'}
             <button 
                 class="action-btn cancel-btn" 
                 onclick={() => showCancelDialog = true}
@@ -361,6 +423,28 @@
             >
                 <i class="bi bi-x-circle"></i>
                 Termin stornieren
+            </button>
+        {/if}
+        
+        {#if termin.status === 'GEBUCHT' && userRole === 'Zahnarzt'}
+            <button 
+                class="action-btn review-btn" 
+                onclick={() => showCompleteDialog = true}
+                disabled={isCompleting}
+            >
+                <i class="bi bi-check-circle"></i>
+                Als abgeschlossen markieren
+            </button>
+        {/if}
+        
+        {#if termin.status === 'ABGESAGT' && userRole === 'Zahnarzt'}
+            <button 
+                class="action-btn review-btn" 
+                onclick={() => showReleaseFlexDialog = true}
+                disabled={isReleasingToFlex}
+            >
+                <i class="bi bi-lightning"></i>
+                Als Flex-Termin freigeben
             </button>
         {/if}
         
@@ -436,6 +520,154 @@
                         {:else}
                             <i class="bi bi-check-circle"></i>
                             Termin stornieren
+                        {/if}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/if}
+
+<!-- Complete Confirmation Dialog -->
+{#if showCompleteDialog}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="dialog-overlay" onclick={() => showCompleteDialog = false}>
+        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
+            <div class="dialog-header">
+                <i class="bi bi-check-circle" style="color: #4caf50;"></i>
+                <h3>Termin abschliessen</h3>
+            </div>
+            <div class="dialog-body">
+                <p>Möchten Sie diesen Termin als abgeschlossen markieren?</p>
+                <div class="dialog-info">
+                    <div class="info-row">
+                        <strong>Patient:</strong>
+                        <span>{patient?.name || `${patient?.vorname || ''} ${patient?.nachname || ''}`.trim() || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Behandlung:</strong>
+                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Datum:</strong>
+                        <span>{formatDate(termin.datum)}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Uhrzeit:</strong>
+                        <span>{formatTime(termin.datum)} Uhr</span>
+                    </div>
+                </div>
+                <p class="warning-text" style="background: #e8f5e9; color: #2e7d32;">
+                    <i class="bi bi-info-circle"></i>
+                    Nach dem Abschliessen kann der Patient Ihnen eine Bewertung hinterlassen.
+                </p>
+                {#if completeError}
+                    <div class="error-message">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {completeError}
+                    </div>
+                {/if}
+            </div>
+            <div class="dialog-actions">
+                <button 
+                    class="dialog-btn cancel-dialog-btn" 
+                    onclick={() => { showCompleteDialog = false; completeError = null; }}
+                    disabled={isCompleting}
+                >
+                    Abbrechen
+                </button>
+                <form method="POST" action="?/completeTermin" use:enhance={() => {
+                    isCompleting = true;
+                    completeError = null;
+                    return async ({ result, update }) => {
+                        await update();
+                    };
+                }}>
+                    <button 
+                        type="submit" 
+                        class="dialog-btn confirm-btn"
+                        style="background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);"
+                        disabled={isCompleting}
+                    >
+                        {#if isCompleting}
+                            <i class="bi bi-hourglass-split"></i>
+                            Wird abgeschlossen...
+                        {:else}
+                            <i class="bi bi-check-circle"></i>
+                            Als abgeschlossen markieren
+                        {/if}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/if}
+
+<!-- Release to Flex Confirmation Dialog -->
+{#if showReleaseFlexDialog}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="dialog-overlay" onclick={() => showReleaseFlexDialog = false}>
+        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
+            <div class="dialog-header">
+                <i class="bi bi-lightning" style="color: #FFC107;"></i>
+                <h3>Flex-Termin freigeben</h3>
+            </div>
+            <div class="dialog-body">
+                <p>Möchten Sie diesen abgesagten Termin als Flex-Termin freigeben?</p>
+                <div class="dialog-info">
+                    <div class="info-row">
+                        <strong>Behandlung:</strong>
+                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Datum:</strong>
+                        <span>{formatDate(termin.datum)}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Uhrzeit:</strong>
+                        <span>{formatTime(termin.datum)} Uhr</span>
+                    </div>
+                </div>
+                <p class="warning-text" style="background: #fff9e6; color: #856404;">
+                    <i class="bi bi-info-circle"></i>
+                    Der Termin wird als Flex-Termin für Patienten auf der Warteliste verfügbar.
+                </p>
+                {#if releaseFlexError}
+                    <div class="error-message">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {releaseFlexError}
+                    </div>
+                {/if}
+            </div>
+            <div class="dialog-actions">
+                <button 
+                    class="dialog-btn cancel-dialog-btn" 
+                    onclick={() => { showReleaseFlexDialog = false; releaseFlexError = null; }}
+                    disabled={isReleasingToFlex}
+                >
+                    Abbrechen
+                </button>
+                <form method="POST" action="?/releaseToFlex" use:enhance={() => {
+                    isReleasingToFlex = true;
+                    releaseFlexError = null;
+                    return async ({ result, update }) => {
+                        await update();
+                    };
+                }}>
+                    <button 
+                        type="submit" 
+                        class="dialog-btn confirm-btn"
+                        style="background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%); box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);"
+                        disabled={isReleasingToFlex}
+                    >
+                        {#if isReleasingToFlex}
+                            <i class="bi bi-hourglass-split"></i>
+                            Wird freigegeben...
+                        {:else}
+                            <i class="bi bi-lightning"></i>
+                            Als Flex-Termin freigeben
                         {/if}
                     </button>
                 </form>

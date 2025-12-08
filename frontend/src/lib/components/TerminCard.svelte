@@ -31,6 +31,7 @@
             case 'GEBUCHT': return '#4caf50';
             case 'ABGESCHLOSSEN': return '#30B0C7';
             case 'VERFUEGBAR': return '#FFC107';
+            case 'FLEX': return '#FFC107';
             default: return '#9e9e9e';
         }
     };
@@ -40,6 +41,7 @@
             case 'GEBUCHT': return 'Gebucht';
             case 'ABGESCHLOSSEN': return 'Abgeschlossen';
             case 'VERFUEGBAR': return 'Verfügbar';
+            case 'FLEX': return 'Flex-Termin';
             default: return status;
         }
     };
