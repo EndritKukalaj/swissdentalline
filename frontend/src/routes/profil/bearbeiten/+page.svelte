@@ -6,6 +6,7 @@
   let { data, form } = $props();
 
   let showNewAdresseForm = $state(false);
+  let showEditAdresseForm = $state(false);
   let formLoading = $state(false);
   let adresseFormLoading = $state(false);
 
@@ -44,12 +45,40 @@
     bezeichnung: ''
   });
 
+  // Edit Adresse Form State
+  let editAdresseForm = $state({
+    id: '',
+    strasse: '',
+    plz: '',
+    ort: '',
+    bezeichnung: ''
+  });
+
   const handleCancel = () => {
     goto('/profil');
   };
 
+  // Close edit form after successful update
+  $effect(() => {
+    if (form?.success && form?.updated) {
+      showEditAdresseForm = false;
+    }
+    // Close new form and select newly created address
+    if (form?.success && form?.adresse) {
+      showNewAdresseForm = false;
+      // Wähle die neu erstellte Praxis aus
+      if (data.userRole === 'Zahnarzt' && form.adresse.id) {
+        zahnarztForm.praxisAdresseId = form.adresse.id;
+      }
+    }
+  });
+
   const toggleNewAdresseForm = () => {
     showNewAdresseForm = !showNewAdresseForm;
+    if (showNewAdresseForm) {
+      // Schließe Edit-Formular wenn New-Formular geöffnet wird
+      showEditAdresseForm = false;
+    }
     if (!showNewAdresseForm) {
       // Reset form
       newAdresseForm = {
@@ -57,6 +86,40 @@
         plz: '',
         ort: '',
         typ: data.userRole === 'Zahnarzt' ? 'PRAXIS' : 'HOME',
+        bezeichnung: ''
+      };
+    }
+  };
+
+  const toggleEditAdresseForm = () => {
+    if (!zahnarztForm.praxisAdresseId) {
+      return; // Keine Praxis ausgewählt
+    }
+
+    showEditAdresseForm = !showEditAdresseForm;
+    
+    if (showEditAdresseForm) {
+      // Schließe New-Formular wenn Edit-Formular geöffnet wird
+      showNewAdresseForm = false;
+      
+      // Lade ausgewählte Praxis-Daten
+      const selectedAdresse = data.adressen.find(a => a.id === zahnarztForm.praxisAdresseId);
+      if (selectedAdresse) {
+        editAdresseForm = {
+          id: selectedAdresse.id,
+          strasse: selectedAdresse.strasse,
+          plz: selectedAdresse.plz,
+          ort: selectedAdresse.ort,
+          bezeichnung: selectedAdresse.bezeichnung || ''
+        };
+      }
+    } else {
+      // Reset form
+      editAdresseForm = {
+        id: '',
+        strasse: '',
+        plz: '',
+        ort: '',
         bezeichnung: ''
       };
     }
@@ -98,6 +161,13 @@
       <div class="alert alert-success">
         <i class="bi bi-check-circle"></i>
         <span>Adresse erfolgreich erstellt!</span>
+      </div>
+    {/if}
+
+    {#if form?.success && form?.updated}
+      <div class="alert alert-success">
+        <i class="bi bi-check-circle"></i>
+        <span>Adresse erfolgreich aktualisiert!</span>
       </div>
     {/if}
 
@@ -317,25 +387,43 @@
               <i class="bi bi-geo-alt"></i>
               Praxisadresse auswählen
             </label>
-            <select 
-              id="praxisAdresseId" 
-              name="praxisAdresseId" 
-              bind:value={zahnarztForm.praxisAdresseId}
-              required
-            >
-              <option value="">-- Bitte wählen --</option>
-              {#each data.adressen.filter(a => a.typ === 'PRAXIS') as adresse}
-                <option value={adresse.id}>
-                  {adresse.bezeichnung ? `${adresse.bezeichnung} - ` : ''}{adresse.strasse}, {adresse.plz} {adresse.ort}
-                </option>
-              {/each}
-            </select>
+            <div class="input-with-action">
+              <select 
+                id="praxisAdresseId" 
+                name="praxisAdresseId" 
+                bind:value={zahnarztForm.praxisAdresseId}
+                required
+              >
+                <option value="">-- Bitte wählen --</option>
+                {#each data.adressen.filter(a => a.typ === 'PRAXIS') as adresse}
+                  <option value={adresse.id}>
+                    {adresse.bezeichnung ? `${adresse.bezeichnung} - ` : ''}{adresse.strasse}, {adresse.plz} {adresse.ort}
+                  </option>
+                {/each}
+              </select>
+              {#if zahnarztForm.praxisAdresseId}
+                <button 
+                  type="button" 
+                  class="btn-icon" 
+                  onclick={toggleEditAdresseForm}
+                  title="Praxis bearbeiten"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+              {/if}
+            </div>
           </div>
 
-          <button type="button" class="btn-link" onclick={toggleNewAdresseForm}>
-            <i class="bi bi-plus-circle"></i>
-            {showNewAdresseForm ? 'Formular schliessen' : 'Neue Praxisadresse erstellen'}
-          </button>
+          <div class="action-buttons">
+            <button type="button" class="btn-link" onclick={toggleEditAdresseForm} disabled={!zahnarztForm.praxisAdresseId}>
+              <i class="bi bi-pencil-square"></i>
+              {showEditAdresseForm ? 'Bearbeitung schliessen' : 'Ausgewählte Praxis bearbeiten'}
+            </button>
+            <button type="button" class="btn-link" onclick={toggleNewAdresseForm}>
+              <i class="bi bi-plus-circle"></i>
+              {showNewAdresseForm ? 'Formular schliessen' : 'Neue Praxisadresse erstellen'}
+            </button>
+          </div>
         </div>
 
         <div class="form-actions">
@@ -354,6 +442,106 @@
           </button>
         </div>
       </form>
+    {/if}
+
+    <!-- Edit Adresse Formular (Collapsible) -->
+    {#if showEditAdresseForm}
+      <div class="edit-adresse-section">
+        <form method="POST" action="?/updateAdresse" use:enhance={() => {
+          adresseFormLoading = true;
+          return async ({ update }) => {
+            await update({ reset: false });
+            adresseFormLoading = false;
+          };
+        }}>
+          <input type="hidden" name="id" value={editAdresseForm.id} />
+          <input type="hidden" name="typ" value="PRAXIS" />
+          
+          <div class="form-section">
+            <div class="section-header">
+              <i class="bi bi-pencil-square"></i>
+              <h2>Praxisadresse bearbeiten</h2>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group span-2">
+                <label for="edit-strasse">
+                  <i class="bi bi-signpost"></i>
+                  Strasse & Nr.
+                </label>
+                <input 
+                  type="text" 
+                  id="edit-strasse" 
+                  name="strasse" 
+                  bind:value={editAdresseForm.strasse}
+                  required 
+                  placeholder="z.B. Musterstrasse 123"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="edit-plz">
+                  <i class="bi bi-mailbox"></i>
+                  PLZ
+                </label>
+                <input 
+                  type="text" 
+                  id="edit-plz" 
+                  name="plz" 
+                  bind:value={editAdresseForm.plz}
+                  required 
+                  placeholder="8000"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="edit-ort">
+                  <i class="bi bi-pin-map"></i>
+                  Ort
+                </label>
+                <input 
+                  type="text" 
+                  id="edit-ort" 
+                  name="ort" 
+                  bind:value={editAdresseForm.ort}
+                  required 
+                  placeholder="Zürich"
+                />
+              </div>
+
+              <div class="form-group span-2">
+                <label for="edit-bezeichnung">
+                  <i class="bi bi-tag"></i>
+                  Praxisbezeichnung
+                </label>
+                <input 
+                  type="text" 
+                  id="edit-bezeichnung" 
+                  name="bezeichnung" 
+                  bind:value={editAdresseForm.bezeichnung}
+                  placeholder="z.B. Zahnarztpraxis Dr. Muster"
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick={toggleEditAdresseForm} disabled={adresseFormLoading}>
+                <i class="bi bi-x-circle"></i>
+                Abbrechen
+              </button>
+              <button type="submit" class="btn btn-primary" disabled={adresseFormLoading}>
+                {#if adresseFormLoading}
+                  <i class="bi bi-arrow-repeat spinning"></i>
+                  Speichern...
+                {:else}
+                  <i class="bi bi-check-circle"></i>
+                  Änderungen speichern
+                {/if}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     {/if}
 
     <!-- Neue Adresse Formular (Collapsible) -->
