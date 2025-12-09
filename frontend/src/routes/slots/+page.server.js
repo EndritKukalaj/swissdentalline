@@ -75,12 +75,47 @@ export const actions = {
       const datum = formData.get('datum');
       const uhrzeit = formData.get('uhrzeit');
       const dateTimeString = `${datum}T${uhrzeit}:00`;
+      const dauerMinuten = parseInt(formData.get('dauerMinuten'));
+
+      const slotStartTime = new Date(dateTimeString);
+      const slotEndTime = new Date(slotStartTime.getTime() + dauerMinuten * 60000);
+
+      // Prüfe auf überlappende Termine
+      try {
+        const existingTermineResponse = await axios.get(`${API_BASE_URL}/api/termine`, {
+          headers: { 'Authorization': `Bearer ${jwt_token}` }
+        });
+
+        // Filtere Termine nach Zahnarzt
+        const existingTermine = existingTermineResponse.data.filter(
+          termin => termin.zahnarztId === zahnarztId
+        );
+
+        // Prüfe Überlappungen
+        const hasOverlap = existingTermine.some(termin => {
+          const existingStart = new Date(termin.datum);
+          const existingEnd = new Date(existingStart.getTime() + termin.dauerMinuten * 60000);
+
+          return slotStartTime < existingEnd && slotEndTime > existingStart;
+        });
+
+        if (hasOverlap) {
+          return {
+            success: false,
+            error: 'Zu diesem Zeitpunkt existiert bereits ein Termin. Bitte wählen Sie eine andere Zeit.'
+          };
+        }
+      } catch (validationError) {
+        console.error('Error validating slot overlap:', validationError);
+        // Bei Fehler bei der Validierung, fahre trotzdem fort
+        // Das Backend sollte die finale Validierung machen
+      }
 
       const terminDTO = {
         zahnarztId: zahnarztId,
         behandlungsartId: formData.get('behandlungsartId'),
-        datum: new Date(dateTimeString).toISOString(),
-        dauerMinuten: parseInt(formData.get('dauerMinuten')),
+        datum: slotStartTime.toISOString(),
+        dauerMinuten: dauerMinuten,
         preis: parseFloat(formData.get('preis')),
         status: 'FREI'
       };
@@ -100,6 +135,15 @@ export const actions = {
         throw err;
       }
       console.error('Error creating slot:', err);
+      
+      // Handle 409 Conflict from backend
+      if (err.response?.status === 409) {
+        return {
+          success: false,
+          error: 'Zu diesem Zeitpunkt existiert bereits ein Termin. Bitte wählen Sie eine andere Zeit.'
+        };
+      }
+      
       return {
         success: false,
         error: err.response?.data?.message || 'Fehler beim Erstellen des Slots'
