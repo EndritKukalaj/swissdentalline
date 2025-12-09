@@ -200,6 +200,26 @@
         </div>
       </div>
 
+      <!-- Mehrerfassung Feature - Coming Soon -->
+      <div class="coming-soon-section">
+        <button type="button" class="btn-coming-soon" disabled>
+          <div class="coming-soon-content">
+            <div class="coming-soon-icon">
+              <i class="bi bi-grid-3x3-gap"></i>
+            </div>
+            <div class="coming-soon-text">
+              <span class="coming-soon-title">Mehrfacherfassung (Serientermine)</span>
+              <span class="coming-soon-badge">Bald verfügbar</span>
+            </div>
+          </div>
+          <i class="bi bi-lock-fill"></i>
+        </button>
+        <p class="coming-soon-description">
+          <i class="bi bi-info-circle"></i>
+          Erstellen Sie in Zukunft mehrere Slots auf einmal mit flexiblen Serienmustern (täglich, wöchentlich, monatlich)
+        </p>
+      </div>
+
       <div class="form-actions">
         <button type="button" class="btn btn-secondary" onclick={handleCancel} disabled={formLoading}>
           <i class="bi bi-x-circle"></i>
