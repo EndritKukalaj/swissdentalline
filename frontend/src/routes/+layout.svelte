@@ -67,8 +67,8 @@
               </a>
             {/if}
             {#if user.user_roles.includes("Zahnarzt")}
-              <a href="/" class="nav-link-item">
-                <i class="bi bi-clock-history"></i>
+              <a href="/slots" class="nav-link-item">
+                <i class="bi bi-calendar-plus"></i>
                 Slots erfassen
               </a>
               <a href="/" class="nav-link-item">

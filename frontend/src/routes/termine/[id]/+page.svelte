@@ -17,6 +17,8 @@
         rebookSuccess = data.rebookSuccess;
         reviewSuccess = data.reviewSuccess;
         bookingSuccess = data.bookingSuccess;
+        slotCreated = data.slotCreated;
+        slotUpdated = data.slotUpdated;
     });
     
     let termin = $state(data.termin);
@@ -28,6 +30,8 @@
     let rebookSuccess = $state(data.rebookSuccess);
     let reviewSuccess = $state(data.reviewSuccess);
     let bookingSuccess = $state(data.bookingSuccess);
+    let slotCreated = $state(data.slotCreated);
+    let slotUpdated = $state(data.slotUpdated);
     
     let isCanceling = $state(false);
     let showCancelDialog = $state(false);
@@ -43,6 +47,10 @@
     let showReleaseFlexDialog = $state(false);
     let releaseFlexError = $state(null);
     
+    let isDeleting = $state(false);
+    let showDeleteDialog = $state(false);
+    let deleteError = $state(null);
+    
     // Show success banner on mount if rebookSuccess or reviewSuccess is true
     onMount(() => {
         if (rebookSuccess) {
@@ -57,6 +65,14 @@
             showSuccessBanner = true;
             successMessage = 'Ihr Termin wurde erfolgreich gebucht!';
             autoHideSuccessBanner();
+        } else if (slotCreated) {
+            showSuccessBanner = true;
+            successMessage = 'Freier Terminslot wurde erfolgreich erfasst!';
+            autoHideSuccessBanner();
+        } else if (slotUpdated) {
+            showSuccessBanner = true;
+            successMessage = 'Terminslot wurde erfolgreich aktualisiert!';
+            autoHideSuccessBanner();
         }
     });
     
@@ -69,6 +85,8 @@
             url.searchParams.delete('rebookSuccess');
             url.searchParams.delete('reviewSuccess');
             url.searchParams.delete('bookingSuccess');
+            url.searchParams.delete('slotCreated');
+            url.searchParams.delete('slotUpdated');
             window.history.replaceState({}, '', url);
         }, 5000);
     };
@@ -98,6 +116,10 @@
                     showCancelDialog = false;
                     isCanceling = false;
                     handleActionSuccess('cancel', 'Termin wurde erfolgreich storniert.');
+                },
+                delete: () => {
+                    // Redirect to termine list after deletion
+                    goto('/termine');
                 }
             };
             
@@ -106,7 +128,8 @@
             const errorHandlers = {
                 complete: () => { completeError = form.error; isCompleting = false; },
                 releaseFlex: () => { releaseFlexError = form.error; isReleasingToFlex = false; },
-                cancel: () => { cancelError = form.error; isCanceling = false; }
+                cancel: () => { cancelError = form.error; isCanceling = false; },
+                delete: () => { deleteError = form.error; isDeleting = false; }
             };
             
             errorHandlers[form.action]?.();
@@ -415,6 +438,24 @@
     
     <!-- Action Buttons -->
     <div class="action-section">
+        {#if termin.status === 'FREI' && userRole === 'Zahnarzt'}
+            <button 
+                class="action-btn edit-btn" 
+                onclick={() => goto(`/slots/${termin.id}`)}
+            >
+                <i class="bi bi-pencil-square"></i>
+                Slot bearbeiten
+            </button>
+            <button 
+                class="action-btn delete-btn" 
+                onclick={() => showDeleteDialog = true}
+                disabled={isDeleting}
+            >
+                <i class="bi bi-trash"></i>
+                Slot löschen
+            </button>
+        {/if}
+        
         {#if termin.status === 'GEBUCHT'}
             <button 
                 class="action-btn cancel-btn" 
@@ -668,6 +709,78 @@
                         {:else}
                             <i class="bi bi-lightning"></i>
                             Als Flex-Termin freigeben
+                        {/if}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{/if}
+
+<!-- Delete Confirmation Dialog -->
+{#if showDeleteDialog}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="dialog-overlay" onclick={() => showDeleteDialog = false}>
+        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
+            <div class="dialog-header">
+                <i class="bi bi-trash" style="color: #dc2626;"></i>
+                <h3>Slot löschen</h3>
+            </div>
+            <div class="dialog-body">
+                <p>Möchten Sie diesen freien Slot wirklich löschen?</p>
+                <div class="dialog-info">
+                    <div class="info-row">
+                        <strong>Behandlung:</strong>
+                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Datum:</strong>
+                        <span>{formatDate(termin.datum)}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Uhrzeit:</strong>
+                        <span>{formatTime(termin.datum)} Uhr</span>
+                    </div>
+                </div>
+                <p class="warning-text" style="background: #fee2e2; color: #991b1b;">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Diese Aktion kann nicht rückgängig gemacht werden.
+                </p>
+                {#if deleteError}
+                    <div class="error-message">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {deleteError}
+                    </div>
+                {/if}
+            </div>
+            <div class="dialog-actions">
+                <button 
+                    class="dialog-btn cancel-dialog-btn" 
+                    onclick={() => { showDeleteDialog = false; deleteError = null; }}
+                    disabled={isDeleting}
+                >
+                    Abbrechen
+                </button>
+                <form method="POST" action="?/deleteSlot" use:enhance={() => {
+                    isDeleting = true;
+                    deleteError = null;
+                    return async ({ result, update }) => {
+                        await update();
+                    };
+                }}>
+                    <button 
+                        type="submit" 
+                        class="dialog-btn confirm-btn"
+                        style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);"
+                        disabled={isDeleting}
+                    >
+                        {#if isDeleting}
+                            <i class="bi bi-hourglass-split"></i>
+                            Wird gelöscht...
+                        {:else}
+                            <i class="bi bi-trash"></i>
+                            Slot löschen
                         {/if}
                     </button>
                 </form>
