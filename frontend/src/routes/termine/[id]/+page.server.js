@@ -7,7 +7,9 @@ export const load = async ({ params, locals, url }) => {
     const rebookSuccess = url.searchParams.get('rebookSuccess') === 'true';
     const reviewSuccess = url.searchParams.get('reviewSuccess') === 'true';
     const bookingSuccess = url.searchParams.get('bookingSuccess') === 'true';
-    
+    const slotCreated = url.searchParams.get('slotCreated') === 'true';
+    const slotUpdated = url.searchParams.get('slotUpdated') === 'true';
+
     if (!locals.isAuthenticated || !locals.user) {
         throw error(401, 'Nicht autorisiert');
     }
@@ -36,11 +38,11 @@ export const load = async ({ params, locals, url }) => {
         // Verify access rights based on role
         const terminPatientId = termin.patientId || termin.patient_id;
         const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
-        
+
         if (userRole === 'Patient' && terminPatientId !== userId) {
             throw error(403, 'Zugriff verweigert');
         }
-        
+
         if (userRole === 'Zahnarzt' && terminZahnarztId !== userId) {
             throw error(403, 'Zugriff verweigert');
         }
@@ -141,7 +143,9 @@ export const load = async ({ params, locals, url }) => {
             userRole,
             rebookSuccess,
             reviewSuccess,
-            bookingSuccess
+            bookingSuccess,
+            slotCreated,
+            slotUpdated
         };
     } catch (err) {
         if (err.status) throw err;
@@ -180,7 +184,7 @@ export const actions = {
             }
 
             const termin = await terminResponse.json();
-            
+
             // Verify ownership based on role
             if (userRole === 'Patient') {
                 const terminPatientId = termin.patientId || termin.patient_id;
@@ -208,7 +212,7 @@ export const actions = {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (!cancelResponse.ok) {
                 return fail(cancelResponse.status, { error: 'Termin konnte nicht storniert werden', action: 'cancel' });
             }
@@ -250,7 +254,7 @@ export const actions = {
 
             const termin = await terminResponse.json();
             const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
-            
+
             // Normalize both IDs for comparison (remove auth0| prefix if present)
             const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
             const normalizedUserId = userId;
@@ -272,7 +276,7 @@ export const actions = {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (!completeResponse.ok) {
                 const errorText = await completeResponse.text();
                 console.error('Complete response error:', errorText);
@@ -316,7 +320,7 @@ export const actions = {
 
             const termin = await terminResponse.json();
             const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
-            
+
             // Normalize both IDs for comparison (remove auth0| prefix if present)
             const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
             const normalizedUserId = userId;
@@ -338,7 +342,7 @@ export const actions = {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (!releaseResponse.ok) {
                 const errorText = await releaseResponse.text();
                 console.error('Release flex response error:', errorText);
@@ -350,5 +354,69 @@ export const actions = {
             console.error('Error releasing termin to flex:', err);
             return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'releaseFlex' });
         }
+    },
+
+    deleteSlot: async ({ params, locals }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            return fail(401, { error: 'Nicht autorisiert', action: 'delete' });
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Zahnarzt') {
+            return fail(403, { error: 'Nur Zahnärzte können Slots löschen', action: 'delete' });
+        }
+
+        const terminId = params.id;
+        const jwt_token = locals.jwt_token;
+        const auth0UserId = locals.user.sub;
+        const userId = auth0UserId.replace('auth0|', '');
+
+        try {
+            // Get current termin to verify ownership and status
+            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!terminResponse.ok) {
+                return fail(404, { error: 'Termin nicht gefunden', action: 'delete' });
+            }
+
+            const termin = await terminResponse.json();
+
+            // Verify termin is FREI
+            if (termin.status !== 'FREI') {
+                return fail(400, { error: 'Nur freie Slots können gelöscht werden', action: 'delete' });
+            }
+
+            // Verify ownership (Zahnarzt)
+            const terminZahnarztId = termin.zahnarztId || termin.zahnarzt_id;
+            const normalizedTerminZahnarztId = terminZahnarztId?.replace('auth0|', '');
+
+            if (normalizedTerminZahnarztId !== userId) {
+                return fail(403, { error: 'Sie sind nicht berechtigt, diesen Slot zu löschen', action: 'delete' });
+            }
+
+            // Delete the slot
+            const deleteResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!deleteResponse.ok) {
+                return fail(500, { error: 'Fehler beim Löschen des Slots', action: 'delete' });
+            }
+
+            throw redirect(303, '/termine');
+        } catch (err) {
+            if (err.status === 303) throw err;
+            console.error('Error deleting slot:', err);
+            return fail(500, { error: 'Ein Fehler ist aufgetreten', action: 'delete' });
+        }
     }
-};
+}
