@@ -372,7 +372,10 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
             
             if (rezensionenResponse.ok) {
                 const allRezensionen = await rezensionenResponse.json();
-                const zahnarztRezensionen = allRezensionen.filter(r => r.zahnarztId === zahnarztId);
+                // Only include approved reviews for rating calculation
+                const zahnarztRezensionen = allRezensionen.filter(r => 
+                    r.zahnarztId === zahnarztId && r.approved === true
+                );
                 
                 if (zahnarztRezensionen.length > 0) {
                     const summe = zahnarztRezensionen.reduce((sum, r) => sum + (r.bewertung || 0), 0);

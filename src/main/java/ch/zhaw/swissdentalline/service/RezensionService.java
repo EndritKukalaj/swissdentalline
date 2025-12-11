@@ -24,10 +24,22 @@ public class RezensionService {
     private RezensionRepository rezensionRepository;
     @Autowired
     private RezensionMapper rezensionMapper;
+    @Autowired
+    private ReviewModerationService reviewModerationService;
 
     public Rezension createRezension(RezensionCreateDTO createDTO) {
         Rezension rezension = rezensionMapper.toEntity(createDTO);
-        rezension.setApproved(false);
+        
+        // AI-Moderation durchführen
+        ReviewModerationService.ModerationResult moderationResult = 
+                reviewModerationService.moderateReview(rezension.getText());
+        
+        rezension.setApproved(moderationResult.isApproved());
+        
+        if (!moderationResult.isApproved()) {
+            rezension.setAiKommentar(moderationResult.getReason());
+        }
+        
         return rezensionRepository.save(rezension);
     }
 
@@ -40,8 +52,11 @@ public class RezensionService {
     }
 
     public Page<Rezension> getRezensionenByZahnarzt(String zahnarztId, Pageable pageable) {
-        Page<Rezension> approved = rezensionRepository.findByZahnarztId(zahnarztId, pageable);
-        return approved;
+        return rezensionRepository.findByZahnarztId(zahnarztId, pageable);
+    }
+    
+    public Page<Rezension> getRezensionenByZahnarztApproved(String zahnarztId, boolean approved, Pageable pageable) {
+        return rezensionRepository.findByZahnarztIdAndApproved(zahnarztId, approved, pageable);
     }
     
     public Page<Rezension> getRezensionenByPatient(String patientId, Pageable pageable) {
@@ -72,8 +87,13 @@ public class RezensionService {
         existing.setBewertung(updateDTO.getBewertung());
         existing.setText(updateDTO.getText());
         existing.setDatum(updateDTO.getDatum());
-        existing.setApproved(false);
-        existing.setAiKommentar(null);
+        
+        // AI-Moderation bei Update durchführen
+        ReviewModerationService.ModerationResult moderationResult = 
+                reviewModerationService.moderateReview(updateDTO.getText());
+        
+        existing.setApproved(moderationResult.isApproved());
+        existing.setAiKommentar(moderationResult.isApproved() ? null : moderationResult.getReason());
 
         return rezensionRepository.save(existing);
     }

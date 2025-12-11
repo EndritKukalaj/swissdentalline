@@ -2,7 +2,6 @@ package ch.zhaw.swissdentalline.controller;
 
 import ch.zhaw.swissdentalline.dto.GesamtBewertungDTO;
 import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
-import ch.zhaw.swissdentalline.dto.RezensionModerationDTO;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.service.RezensionService;
 import ch.zhaw.swissdentalline.service.UserService;
@@ -62,12 +61,20 @@ public class RezensionController {
     public ResponseEntity<Page<Rezension>> getRezensionenByZahnarzt(
             @PathVariable String zahnarztId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Boolean approved) {
         if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Pageable pageable = PageRequest.of(page, size);
-        Page<Rezension> rezensionen = rezensionService.getRezensionenByZahnarzt(zahnarztId, pageable);
+        Page<Rezension> rezensionen;
+        
+        if (approved != null) {
+            rezensionen = rezensionService.getRezensionenByZahnarztApproved(zahnarztId, approved, pageable);
+        } else {
+            rezensionen = rezensionService.getRezensionenByZahnarzt(zahnarztId, pageable);
+        }
+        
         return new ResponseEntity<>(rezensionen, HttpStatus.OK);
     }
     
@@ -106,21 +113,6 @@ public class RezensionController {
         try {
             Rezension updated = rezensionService.updateRezension(id, rezensionDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping("/rezensionen/{id}/moderieren")
-    public ResponseEntity<Rezension> moderateRezension(
-            @PathVariable String id,
-            @Valid @RequestBody RezensionModerationDTO moderationDTO) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        try {
-            Rezension moderated = rezensionService.moderateRezension(id, moderationDTO);
-            return new ResponseEntity<>(moderated, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

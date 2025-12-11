@@ -86,7 +86,7 @@ export async function load({ url, locals }) {
         
         try {
             const rezensionenRes = await fetch(
-                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=${reviewPage}&size=${reviewSize}`,
+                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=${reviewPage}&size=${reviewSize}&approved=true`,
                 {
                     headers: {
                         'Authorization': `Bearer ${locals.jwt_token}`,
@@ -97,7 +97,6 @@ export async function load({ url, locals }) {
             
             if (rezensionenRes.ok) {
                 const rezensionenData = await rezensionenRes.json();
-                const approvedRezensionen = rezensionenData.content.filter(r => r.approved);
                 
                 reviewPagination = {
                     currentPage: rezensionenData.number,
@@ -108,7 +107,7 @@ export async function load({ url, locals }) {
                 
                 // Fetch patient names for each review
                 rezensionen = await Promise.all(
-                    approvedRezensionen.map(async (review) => {
+                    rezensionenData.content.map(async (review) => {
                         try {
                             const patientRes = await fetch(
                                 `${API_BASE_URL}/patienten/${review.patientId}`,
