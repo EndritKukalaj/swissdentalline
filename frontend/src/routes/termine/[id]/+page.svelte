@@ -438,7 +438,7 @@
     
     <!-- Action Buttons -->
     <div class="action-section">
-        {#if termin.status === 'FREI' && userRole === 'Zahnarzt'}
+        {#if (termin.status === 'FREI' || termin.status === 'FLEX') && userRole === 'Zahnarzt'}
             <button 
                 class="action-btn edit-btn" 
                 onclick={() => goto(`/slots/${termin.id}`)}

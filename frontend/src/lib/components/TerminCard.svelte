@@ -30,8 +30,10 @@
         switch(status) {
             case 'GEBUCHT': return '#4caf50';
             case 'ABGESCHLOSSEN': return '#30B0C7';
+            case 'ABGESAGT': return '#f44336';
             case 'VERFUEGBAR': return '#FFC107';
             case 'FLEX': return '#FFC107';
+            case 'FREI': return '#64748b';
             default: return '#9e9e9e';
         }
     };
@@ -40,8 +42,10 @@
         switch(status) {
             case 'GEBUCHT': return 'Gebucht';
             case 'ABGESCHLOSSEN': return 'Abgeschlossen';
+            case 'ABGESAGT': return 'Abgesagt';
             case 'VERFUEGBAR': return 'Verfügbar';
             case 'FLEX': return 'Flex-Termin';
+            case 'FREI': return 'Frei';
             default: return status;
         }
     };

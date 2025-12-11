@@ -13,7 +13,6 @@
     let searchQuery = $state('');
     let activeStatusFilter = $state('ALLE');
     let showOnlyWarteliste = $state(false); // Patient
-    let showOnlyFreieSlots = $state(false); // Zahnarzt
     
     // Check URL parameters for initial filter state
     onMount(() => {
@@ -25,10 +24,6 @@
         const wartelisteParam = urlParams.get('warteliste');
         if (wartelisteParam === 'true') {
             showOnlyWarteliste = true;
-        }
-        const freieSlotsParam = urlParams.get('freieSlots');
-        if (freieSlotsParam === 'true') {
-            showOnlyFreieSlots = true;
         }
     });
 
@@ -43,9 +38,6 @@
         // Role-specific toggles
         if (!isZahnarzt && showOnlyWarteliste) {
             result = result.filter((t) => t.wartelisteAktiv || t.warteliste_aktiv);
-        }
-        if (isZahnarzt && showOnlyFreieSlots) {
-            result = result.filter((t) => t.status === 'FREI' && !t.patientId);
         }
 
         // Search
@@ -172,12 +164,6 @@
                         <i class="bi bi-clock-history"></i>
                         {showOnlyWarteliste ? 'Alle anzeigen' : 'Nur Warteliste'}
                     </button>
-                {:else}
-                    <button class="filter-btn freie-slots-btn {showOnlyFreieSlots ? 'active' : ''}"
-                        onclick={() => (showOnlyFreieSlots = !showOnlyFreieSlots)}>
-                        <i class="bi bi-calendar-plus"></i>
-                        {showOnlyFreieSlots ? 'Alle anzeigen' : 'Nur freie Slots'}
-                    </button>
                 {/if}
             </div>
         </div>
@@ -194,7 +180,7 @@
                     </button>
                 {/if}
             </div>
-            {#if (searchQuery || activeStatusFilter !== 'ALLE' || showOnlyWarteliste || showOnlyFreieSlots) && filteredTermine().length < termine.length}
+            {#if (searchQuery || activeStatusFilter !== 'ALLE' || showOnlyWarteliste ) && filteredTermine().length < termine.length}
                 <p class="search-results-info">{filteredTermine().length} von {termine.length} Terminen gefunden</p>
             {/if}
         </div>
@@ -206,7 +192,7 @@
                     <TerminCard {termin} variant={variant} />
                 {/each}
             </div>
-        {:else if searchQuery || activeStatusFilter !== 'ALLE' || showOnlyWarteliste || showOnlyFreieSlots}
+        {:else if searchQuery || activeStatusFilter !== 'ALLE' || showOnlyWarteliste }
             <div class="empty-state">
                 <i class="bi bi-search"></i>
                 <p>Keine Termine gefunden</p>
@@ -416,16 +402,6 @@
     background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
     border-color: #FFC107;
     color: #6A1B9A;
-}
-
-.freie-slots-btn {
-    background: linear-gradient(135deg, #ffffff 0%, #E8F8FA 100%);
-}
-
-.freie-slots-btn.active {
-    background: linear-gradient(135deg, #b9e7fa 0%, #b6e2f8 100%);
-    border-color: #30B0C7;
-    color: #1a5f6f;
 }
 
 /* Search */
