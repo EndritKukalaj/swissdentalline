@@ -61,12 +61,20 @@ public class RezensionController {
     public ResponseEntity<Page<Rezension>> getRezensionenByZahnarzt(
             @PathVariable String zahnarztId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Boolean approved) {
         if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Pageable pageable = PageRequest.of(page, size);
-        Page<Rezension> rezensionen = rezensionService.getRezensionenByZahnarzt(zahnarztId, pageable);
+        Page<Rezension> rezensionen;
+        
+        if (approved != null) {
+            rezensionen = rezensionService.getRezensionenByZahnarztApproved(zahnarztId, approved, pageable);
+        } else {
+            rezensionen = rezensionService.getRezensionenByZahnarzt(zahnarztId, pageable);
+        }
+        
         return new ResponseEntity<>(rezensionen, HttpStatus.OK);
     }
     

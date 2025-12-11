@@ -21,5 +21,7 @@ public interface RezensionRepository extends MongoRepository<Rezension, String> 
 
     Page<Rezension> findByZahnarztId(String zahnarztId, Pageable pageable);
     
+    Page<Rezension> findByZahnarztIdAndApproved(String zahnarztId, boolean approved, Pageable pageable);
+    
     Page<Rezension> findByPatientId(String patientId, Pageable pageable);
 }

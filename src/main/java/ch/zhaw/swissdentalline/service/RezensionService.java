@@ -52,8 +52,11 @@ public class RezensionService {
     }
 
     public Page<Rezension> getRezensionenByZahnarzt(String zahnarztId, Pageable pageable) {
-        Page<Rezension> approved = rezensionRepository.findByZahnarztId(zahnarztId, pageable);
-        return approved;
+        return rezensionRepository.findByZahnarztId(zahnarztId, pageable);
+    }
+    
+    public Page<Rezension> getRezensionenByZahnarztApproved(String zahnarztId, boolean approved, Pageable pageable) {
+        return rezensionRepository.findByZahnarztIdAndApproved(zahnarztId, approved, pageable);
     }
     
     public Page<Rezension> getRezensionenByPatient(String patientId, Pageable pageable) {
