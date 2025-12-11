@@ -28,8 +28,8 @@ export async function load({ params, locals }) {
 
     const termin = terminResponse.data;
 
-    // Nur freie Slots können bearbeitet werden
-    if (termin.status !== 'FREI') {
+    // Nur freie Slots und Flex-Termine können bearbeitet werden
+    if (termin.status !== 'FREI' && termin.status !== 'FLEX') {
       throw redirect(302, `/termine/${terminId}`);
     }
 
@@ -88,7 +88,7 @@ export const actions = {
         datum: new Date(dateTimeString).toISOString(),
         dauerMinuten: parseInt(formData.get('dauerMinuten')),
         preis: parseFloat(formData.get('preis')),
-        status: 'FREI'
+        status: termin.status
       };
 
       await axios.put(`${API_BASE_URL}/api/termine/${terminId}`, terminDTO, {

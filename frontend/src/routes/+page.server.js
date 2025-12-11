@@ -360,11 +360,35 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
             })
             .reduce((sum, t) => sum + (t.preis || 0), 0);
         
+        // Fetch rezensionen to calculate average rating
+        let durchschnittsBewertung = 0;
+        try {
+            const rezensionenResponse = await fetch(`${API_BASE_URL}/rezensionen`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (rezensionenResponse.ok) {
+                const allRezensionen = await rezensionenResponse.json();
+                const zahnarztRezensionen = allRezensionen.filter(r => r.zahnarztId === zahnarztId);
+                
+                if (zahnarztRezensionen.length > 0) {
+                    const summe = zahnarztRezensionen.reduce((sum, r) => sum + (r.bewertung || 0), 0);
+                    durchschnittsBewertung = (summe / zahnarztRezensionen.length).toFixed(1);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching rezensionen for rating:', error);
+        }
+        
         console.log('Zahnarzt stats - Geplante Termine:', geplanteTermine, 
                     'Freie Slots:', freieSlots, 
                     'Abgesagte:', abgesagteTermine,
                     'Warteliste verfügbar:', wartelisteVerfuegbar,
-                    'Monatliche Einnahmen:', monatlicheEinnahmen);
+                    'Monatliche Einnahmen:', monatlicheEinnahmen,
+                    'Durchschnittsbewertung:', durchschnittsBewertung);
         
         return {
             termine: sortedTermine,
@@ -374,7 +398,8 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
                 freieSlots,
                 abgesagteTermine,
                 wartelisteVerfuegbar,
-                monatlicheEinnahmen
+                monatlicheEinnahmen,
+                durchschnittsBewertung
             },
             userRole: 'Zahnarzt'
         };
@@ -388,7 +413,8 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
                 freieSlots: 0,
                 abgesagteTermine: 0,
                 wartelisteVerfuegbar: 0,
-                monatlicheEinnahmen: 0
+                monatlicheEinnahmen: 0,
+                durchschnittsBewertung: 0
             },
             userRole: 'Zahnarzt'
         };

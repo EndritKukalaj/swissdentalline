@@ -386,9 +386,9 @@ export const actions = {
 
             const termin = await terminResponse.json();
 
-            // Verify termin is FREI
-            if (termin.status !== 'FREI') {
-                return fail(400, { error: 'Nur freie Slots können gelöscht werden', action: 'delete' });
+            // Verify termin is FREI or FLEX
+            if (termin.status !== 'FREI' && termin.status !== 'FLEX') {
+                return fail(400, { error: 'Nur freie oder Flex Slots können gelöscht werden', action: 'delete' });
             }
 
             // Verify ownership (Zahnarzt)
