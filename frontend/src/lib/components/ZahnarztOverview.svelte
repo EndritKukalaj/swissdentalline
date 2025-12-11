@@ -51,6 +51,8 @@
             title="Monatliche Einnahmen"
             value={`${stats.monatlicheEinnahmen || 0} CHF`}
             variant="blue"
+            onclick={() => goto('/statistik')}
+            clickable={true}
         />
     </div>
 

@@ -71,7 +71,7 @@
                 <i class="bi bi-calendar-plus"></i>
                 Slots erfassen
               </a>
-              <a href="/" class="nav-link-item">
+              <a href="/statistik" class="nav-link-item">
                 <i class="bi bi-bar-chart-line"></i>
                 Statistiken
               </a>
