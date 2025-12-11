@@ -130,3 +130,45 @@ export const load = async ({ locals, url }) => {
         throw error(500, 'Fehler beim Laden der Rezensionen');
     }
 };
+
+export const actions = {
+    deleteReview: async ({ request, locals, url }) => {
+        if (!locals.isAuthenticated || !locals.user) {
+            throw error(401, 'Nicht autorisiert');
+        }
+
+        const userRole = locals.user.user_roles?.[0] || 'Patient';
+        if (userRole !== 'Patient') {
+            throw error(403, 'Nur Patienten können ihre eigenen Rezensionen löschen');
+        }
+
+        const reviewId = url.searchParams.get('id');
+        if (!reviewId) {
+            throw error(400, 'Rezensions-ID fehlt');
+        }
+
+        try {
+            const jwt_token = locals.jwt_token;
+            
+            const response = await fetch(
+                `${API_BASE_URL}/rezensionen/${reviewId}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${jwt_token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw error(response.status, 'Fehler beim Löschen der Rezension');
+            }
+
+            return { success: true, message: 'Rezension wurde erfolgreich gelöscht' };
+        } catch (err) {
+            console.error('Error deleting review:', err);
+            throw error(500, 'Fehler beim Löschen der Rezension');
+        }
+    }
+};
