@@ -2,7 +2,6 @@ package ch.zhaw.swissdentalline.controller;
 
 import ch.zhaw.swissdentalline.dto.GesamtBewertungDTO;
 import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
-import ch.zhaw.swissdentalline.dto.RezensionModerationDTO;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.service.RezensionService;
 import ch.zhaw.swissdentalline.service.UserService;
@@ -106,21 +105,6 @@ public class RezensionController {
         try {
             Rezension updated = rezensionService.updateRezension(id, rezensionDTO);
             return new ResponseEntity<>(updated, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping("/rezensionen/{id}/moderieren")
-    public ResponseEntity<Rezension> moderateRezension(
-            @PathVariable String id,
-            @Valid @RequestBody RezensionModerationDTO moderationDTO) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        try {
-            Rezension moderated = rezensionService.moderateRezension(id, moderationDTO);
-            return new ResponseEntity<>(moderated, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

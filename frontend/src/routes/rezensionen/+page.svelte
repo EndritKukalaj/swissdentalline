@@ -28,14 +28,23 @@
         });
     };
     
-    const getStatusBadge = (approved) => {
-        return approved ? {
-            text: 'Veröffentlicht',
-            class: 'status-published'
-        } : {
-            text: 'In Prüfung',
-            class: 'status-pending'
-        };
+    const getStatusBadge = (approved, aiKommentar) => {
+        if (approved) {
+            return {
+                text: 'Veröffentlicht',
+                class: 'status-published'
+            };
+        } else if (aiKommentar) {
+            return {
+                text: 'Abgelehnt',
+                class: 'status-rejected'
+            };
+        } else {
+            return {
+                text: 'In Prüfung',
+                class: 'status-pending'
+            };
+        }
     };
     
     // Check if user is Zahnarzt
@@ -114,8 +123,8 @@
         <!-- Reviews List -->
         <div class="reviews-list">
             {#each rezensionen as review}
-                {@const status = getStatusBadge(review.approved)}
                 {@const aiKommentar = review.aiKommentar || review.ai_kommentar}
+                {@const status = getStatusBadge(review.approved, aiKommentar)}
                 
                 <div class="review-card">
                     <div class="review-header">
@@ -138,6 +147,8 @@
                                 <span class="status-badge {status.class}">
                                     {#if review.approved}
                                         <i class="bi bi-check-circle-fill"></i>
+                                    {:else if aiKommentar}
+                                        <i class="bi bi-x-circle-fill"></i>
                                     {:else}
                                         <i class="bi bi-clock-history"></i>
                                     {/if}
@@ -160,7 +171,7 @@
                             <div class="ai-comment">
                                 <div class="ai-comment-header">
                                     <i class="bi bi-robot"></i>
-                                    <span>Moderationshinweis</span>
+                                    <span>AI-Moderationshinweis</span>
                                 </div>
                                 <p>{aiKommentar}</p>
                             </div>
