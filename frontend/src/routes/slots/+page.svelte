@@ -1,6 +1,7 @@
 ﻿<script>
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
+  import { InfoBanner } from '$lib';
   
   let { data, form } = $props();
   
@@ -76,19 +77,21 @@
 
   <!-- Content -->
   <div class="slots-content">
-    {#if showSuccessBanner}
-      <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i>
-        <span>Slot wurde erfolgreich erstellt!</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="success"
+      message="Slot wurde erfolgreich erstellt!"
+      bind:show={showSuccessBanner}
+      variant="blue"
+      autoClose={true}
+      autoCloseDelay={5000}
+    />
 
-    {#if form?.error}
-      <div class="alert alert-error">
-        <i class="bi bi-exclamation-circle"></i>
-        <span>{form.error}</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="error"
+      message={form?.error}
+      show={!!form?.error}
+      variant="blue"
+    />
 
     <!-- Slot Creation Form -->
     <form method="POST" action="?/createSlot" use:enhance={() => {
@@ -316,33 +319,6 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 2rem;
-}
-
-/* Alerts */
-.alert {
-    padding: 1rem 1.25rem;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    animation: slideDown 0.3s ease;
-}
-
-.alert i {
-    font-size: 1.25rem;
-}
-
-.alert-success {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-error {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    color: #721c24;
-    border: 1px solid #f5c6cb;
 }
 
 /* Form Section */

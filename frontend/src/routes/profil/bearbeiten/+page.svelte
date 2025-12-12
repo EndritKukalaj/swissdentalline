@@ -1,6 +1,7 @@
 ﻿<script>
   import { goto } from '$app/navigation';
   import { enhance } from '$app/forms';
+  import { InfoBanner } from '$lib';
   
   let { data, form } = $props();
 
@@ -142,33 +143,35 @@
 
   <!-- Content -->
   <div class="edit-content">
-    {#if !data.entityId}
-      <div class="alert alert-error">
-        <i class="bi bi-exclamation-triangle"></i>
-        <span>Fehler: Ihre Benutzer-ID konnte nicht geladen werden. Bitte laden Sie die Seite neu oder kontaktieren Sie den Support.</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="error"
+      message="Fehler: Ihre Benutzer-ID konnte nicht geladen werden. Bitte laden Sie die Seite neu oder kontaktieren Sie den Support."
+      show={!data.entityId}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+    />
 
-    {#if form?.error}
-      <div class="alert alert-error">
-        <i class="bi bi-exclamation-circle"></i>
-        <span>{form.error}</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="error"
+      message={form?.error}
+      show={!!form?.error}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+    />
 
-    {#if form?.success && form?.adresse}
-      <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i>
-        <span>Adresse erfolgreich erstellt!</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="success"
+      message="Adresse erfolgreich erstellt!"
+      show={!!(form?.success && form?.adresse)}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+      autoClose={true}
+    />
 
-    {#if form?.success && form?.updated}
-      <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i>
-        <span>Adresse erfolgreich aktualisiert!</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="success"
+      message="Adresse erfolgreich aktualisiert!"
+      show={!!(form?.success && form?.updated)}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+      autoClose={true}
+    />
 
     <!-- Patient Edit Form -->
     {#if data.userRole === 'Patient'}

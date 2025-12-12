@@ -1,4 +1,6 @@
 ﻿<script>
+    import { InfoBanner } from '$lib';
+    
     let { form } = $props();
 </script>
 
@@ -24,11 +26,11 @@
         <div class="login-form">
             <h2 class="text-center mb-4">Anmelden</h2>
 
-            {#if form?.error}
-                <div class="alert alert-danger" role="alert">
-                    {form.error}
-                </div>
-            {/if}
+            <InfoBanner
+                type="error"
+                message={form?.error}
+                show={!!form?.error}
+            />
 
             <form method="POST">
                 <div class="mb-4">

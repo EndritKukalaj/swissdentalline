@@ -1,6 +1,6 @@
 ﻿<script>
     import { goto } from "$app/navigation";
-    import BookingProgressBar from "$lib/components/BookingProgressBar.svelte";
+    import { BookingProgressBar, RezensionCard, Pagination } from '$lib';
 
     let { data } = $props();
     
@@ -187,65 +187,24 @@
             
             <div class="reviews-grid">
                 {#each rezensionen as review}
-                    <div class="patient-review-card">
-                        <div class="patient-info">
-                            <div class="patient-avatar">
-                                <i class="bi bi-person-fill"></i>
-                            </div>
-                            <div class="patient-details">
-                                <h3 class="patient-name">{review.patientName || 'Patient'}</h3>
-                                <span class="verified-badge">
-                                    <i class="bi bi-patch-check-fill"></i>
-                                    Verifiziert
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="review-content">
-                            <div class="review-stars">
-                                {#each [1, 2, 3, 4, 5] as star}
-                                    <i class="bi {review.bewertung >= star ? 'bi-star-fill' : 'bi-star'}"></i>
-                                {/each}
-                            </div>
-                            <p class="review-text">{review.text}</p>
-                        </div>
-                        
-                        <div class="review-footer">
-                            <span class="review-date">
-                                <i class="bi bi-calendar3"></i>
-                                {formatReviewDate(review.datum)}
-                            </span>
-                        </div>
-                    </div>
+                    <RezensionCard
+                        patientName={review.patientName || 'Patient'}
+                        bewertung={review.bewertung}
+                        text={review.text}
+                        datum={review.datum}
+                        verified={true}
+                        variant="turquoise"
+                    />
                 {/each}
             </div>
             
             <!-- Review Pagination (always visible) -->
-            <div class="review-pagination">
-                <a 
-                    class="btn btn-secondary-pagination"
-                    class:disabled={currentPage === 1}
-                    href="/buchen/zahnarzt?terminId={termin.id}&reviewPage={currentPage - 2}"
-                    aria-disabled={currentPage === 1}
-                >
-                    <i class="bi bi-chevron-left"></i>
-                    <span>Zurück</span>
-                </a>
-                
-                <span class="page-info">
-                    Seite {currentPage} von {nrOfPages}
-                </span>
-                
-                <a 
-                    class="btn btn-secondary-pagination"
-                    class:disabled={currentPage >= nrOfPages}
-                    href="/buchen/zahnarzt?terminId={termin.id}&reviewPage={currentPage}"
-                    aria-disabled={currentPage >= nrOfPages}
-                >
-                    <span>Weiter</span>
-                    <i class="bi bi-chevron-right"></i>
-                </a>
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={nrOfPages}
+                baseUrl="/buchen/zahnarzt?terminId={termin.id}&reviewPage=PAGE_NUMBER"
+                variant="turquoise"
+            />
         </div>
     {/if}
 </div>
@@ -567,167 +526,6 @@
     gap: 1.5rem;
 }
 
-.patient-review-card {
-    background: white;
-    border: 2px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.patient-review-card:hover {
-    border-color: #fbbf24;
-    box-shadow: 0 8px 16px rgba(251, 191, 36, 0.1);
-    transform: translateY(-2px);
-}
-
-.patient-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.patient-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.patient-avatar i {
-    font-size: 1.5rem;
-    color: white;
-}
-
-.patient-details {
-    flex: 1;
-}
-
-.patient-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a202c;
-    margin: 0 0 0.25rem 0;
-}
-
-.verified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.75rem;
-    color: #009688;
-    font-weight: 500;
-}
-
-.verified-badge i {
-    font-size: 0.875rem;
-}
-
-.review-content {
-    margin-bottom: 1rem;
-}
-
-.review-stars {
-    display: flex;
-    gap: 0.25rem;
-    color: #fbbf24;
-    font-size: 1.125rem;
-    margin-bottom: 0.75rem;
-}
-
-.review-text {
-    font-size: 0.9375rem;
-    color: #475569;
-    line-height: 1.7;
-    margin: 0;
-}
-
-.review-footer {
-    display: flex;
-    align-items: center;
-    padding-top: 1rem;
-    border-top: 1px solid #f1f5f9;
-}
-
-.review-date {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-.review-date i {
-    font-size: 0.875rem;
-}
-
-/* Review Pagination */
-.review-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.btn-secondary-pagination {
-    width: 125px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.875rem 1.5rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: #4a5568;
-    background: white;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-secondary-pagination:hover:not(:disabled):not(.disabled) {
-    border-color: #009688;
-    color: #009688;
-    background: #f0fffe;
-}
-
-.btn-secondary-pagination:disabled,
-.btn-secondary-pagination.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.page-info {
-    font-size: 0.875rem;
-    color: #4a5568;
-    font-weight: 500;
-}
-
-.review-date {
-    font-size: 0.75rem;
-    color: #94a3b8;
-}
-
-.review-text {
-    font-size: 0.875rem;
-    color: #475569;
-    line-height: 1.6;
-    margin: 0;
-}
-
 @media (max-width: 768px) {
     .buchen-container {
         padding: 1rem;
@@ -861,40 +659,5 @@
 
     .reviews-header h2 {
         font-size: 1.25rem;
-    }
-
-    .review-text {
-        font-size: 0.875rem;
-        line-height: 1.5;
-    }
-
-    .review-pagination {
-        flex-direction: row;
-        gap: 0.5rem;
-        padding: 1rem;
-    }
-
-    .review-pagination .btn {
-        flex: 0 0 auto;
-        width: 80px;
-        padding: 0.375rem;
-        font-size: 0.8125rem;
-        border-width: 1px;
-    }
-
-    .review-pagination .btn i {
-        font-size: 1rem;
-        margin: 0;
-    }
-
-    .review-pagination .btn span {
-        display: none;
-    }
-
-    .review-pagination .page-info {
-        font-size: 0.75rem;
-        white-space: nowrap;
-        flex: 1;
-        text-align: center;
     }
 }</style>

@@ -1,5 +1,6 @@
 ﻿<script>
     import { goto } from '$app/navigation';
+    import { InfoBanner, EmptyState, FlexTerminCard } from '$lib';
     
     let { data } = $props();
     let { flexTermine, patientTermine, behandlungsarten, zahnaerzte, patientId } = data;
@@ -68,28 +69,26 @@
     
     {#if flexTermine.length === 0}
         <!-- No Flex Termine Available -->
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="bi bi-calendar-x"></i>
-            </div>
-            <h3>Keine Flex-Termine verfügbar</h3>
-            <p>Aktuell sind keine früheren Termine verfügbar, die zu Ihren gebuchten Terminen passen.</p>
+        <EmptyState
+            icon="calendar-x"
+            title="Keine Flex-Termine verfügbar"
+            message="Aktuell sind keine früheren Termine verfügbar, die zu Ihren gebuchten Terminen passen."
+            variant="turquoise"
+        >
             <p class="info-text">
                 <i class="bi bi-info-circle"></i>
                 Flex-Termine sind kurzfristig freigewordene Termine. Sie werden benachrichtigt, sobald ein passender Termin verfügbar ist.
             </p>
-        </div>
+        </EmptyState>
     {:else}
         <!-- Info Banner -->
-        <div class="info-banner">
-            <div class="banner-icon">
-                <i class="bi bi-gift-fill"></i>
-            </div>
-            <div class="banner-content">
-                <h4>Da Sie den neuen Termin kurzfristig wahrnehmen, erhalten Sie 10% Rabatt auf die Behandlung!</h4>
-                <p>Möchten Sie diese früheren Termine wahrnehmen?</p>
-            </div>
-        </div>
+        <InfoBanner
+            type="gift"
+            variant="turquoise"
+        >
+            <h4 class="alert-title">Da Sie den neuen Termin kurzfristig wahrnehmen, erhalten Sie 10% Rabatt auf die Behandlung!</h4>
+            <p>Möchten Sie diese früheren Termine wahrnehmen?</p>
+        </InfoBanner>
         
         <!-- Flex Termine List -->
         <div class="flex-termine-list">
@@ -100,59 +99,18 @@
                 {@const discount = getDiscount(flexTermin.datum)}
                 {@const matchingTermin = patientTermine.find(t => t.behandlungsartId === flexTermin.behandlungsartId)}
                 
-                <div class="flex-termin-card" 
-                     role="button" 
-                     tabindex="0" 
-                     onclick={() => handleFlexTerminClick(flexTermin)}
-                     onkeydown={(e) => e.key === 'Enter' && handleFlexTerminClick(flexTermin)}>
-                    <!-- Date Badge -->
-                    <div class="date-badge">
-                        <div class="date-month">{dateInfo.month}</div>
-                        <div class="date-day">{dateInfo.day}</div>
-                    </div>
-                    
-                    <!-- Termin Info -->
-                    <div class="termin-info">
-                        <div class="termin-header">
-                            <h3 class="behandlung-name">{behandlung?.name || 'Behandlung'}</h3>
-                            <div class="discount-badge">
-                                <i class="bi bi-percent"></i>
-                                {discount}% Rabatt
-                            </div>
-                        </div>
-                        
-                        <div class="termin-details">
-                            <div class="detail-item">
-                                <i class="bi bi-clock"></i>
-                                <span>{formatTime(flexTermin.datum)} Uhr</span>
-                            </div>
-                            
-                            {#if zahnarzt}
-                                <div class="detail-item">
-                                    <i class="bi bi-person"></i>
-                                    <span>{zahnarzt.name}</span>
-                                </div>
-                            {/if}
-                            
-                            <div class="detail-item">
-                                <i class="bi bi-hourglass-split"></i>
-                                <span>{flexTermin.dauerMinuten} Min.</span>
-                            </div>
-                        </div>
-                        
-                        {#if matchingTermin}
-                            <div class="replacement-info">
-                                <i class="bi bi-arrow-repeat"></i>
-                                <span>Ersetzt Ihren Termin vom {formatFullDate(matchingTermin.datum)}</span>
-                            </div>
-                        {/if}
-                    </div>
-                    
-                    <!-- Arrow Icon -->
-                    <div class="arrow-icon">
-                        <i class="bi bi-chevron-right"></i>
-                    </div>
-                </div>
+                <FlexTerminCard
+                    dateMonth={dateInfo.month}
+                    dateDay={dateInfo.day}
+                    behandlungName={behandlung?.name || 'Behandlung'}
+                    discount={discount}
+                    time={formatTime(flexTermin.datum)}
+                    zahnarztName={zahnarzt?.name}
+                    dauer={flexTermin.dauerMinuten}
+                    replacementText={matchingTermin ? `Ersetzt Ihren Termin vom ${formatFullDate(matchingTermin.datum)}` : ''}
+                    onClick={() => handleFlexTerminClick(flexTermin)}
+                    variant="turquoise"
+                />
             {/each}
         </div>
     {/if}
@@ -227,179 +185,13 @@
     color: #00695C;
 }
 
-.info-banner {
-    display: flex;
-    gap: 1rem;
-    background: #E0F2F1;
-    border: 2px solid #009688;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.banner-icon {
-    font-size: 2rem;
-    color: #009688;
-}
-
-.banner-content h4 {
-    margin: 0 0 0.5rem 0;
-    color: #004D40;
-    font-size: 1.1rem;
-}
-
-.banner-content p {
-    margin: 0;
-    color: #00695C;
-}
-
 .flex-termine-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.flex-termin-card {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 16px;
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
 
-.flex-termin-card:hover {
-    border-color: #009688;
-    box-shadow: 0 4px 12px rgba(0, 150, 136, 0.15);
-    transform: translateY(-2px);
-}
-
-.date-badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #009688 0%, #00796B 100%);
-    color: white;
-    border-radius: 12px;
-    padding: 1rem;
-    min-width: 80px;
-    text-align: center;
-}
-
-.date-month {
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    opacity: 0.9;
-}
-
-.date-day {
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-top: 0.25rem;
-}
-
-.termin-info {
-    flex: 1;
-}
-
-.termin-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-}
-
-.behandlung-name {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.discount-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: #FFB84D;
-    color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.termin-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-bottom: 0.75rem;
-}
-
-.detail-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666;
-    font-size: 0.95rem;
-}
-
-.detail-item i {
-    color: #009688;
-}
-
-.replacement-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #666;
-    font-size: 0.9rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid #e0e0e0;
-}
-
-.replacement-info i {
-    color: #FFB84D;
-}
-
-.arrow-icon {
-    font-size: 1.5rem;
-    color: #009688;
-    transition: transform 0.3s ease;
-}
-
-.flex-termin-card:hover .arrow-icon {
-    transform: translateX(4px);
-}
-
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: white;
-    border-radius: 16px;
-    border: 2px dashed #e0e0e0;
-}
-
-.empty-icon {
-    font-size: 4rem;
-    color: #ccc;
-    margin-bottom: 1rem;
-}
-
-.empty-state h3 {
-    color: #333;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-    color: #666;
-    margin-bottom: 1rem;
-}
 
 .info-text {
     display: inline-flex;
@@ -450,104 +242,11 @@
         font-size: 0.9rem;
     }
 
-    .info-banner {
-        padding: 1rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .banner-icon {
-        font-size: 1.5rem;
-    }
-
-    .banner-content h4 {
-        font-size: 0.95rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .banner-content p {
-        font-size: 0.85rem;
-    }
-
     .flex-termine-list {
         gap: 0.75rem;
     }
 
-    .flex-termin-card {
-        flex-direction: row;
-        align-items: center;
-        padding: 1rem;
-        gap: 1rem;
-    }
 
-    .date-badge {
-        min-width: 60px;
-        padding: 0.75rem;
-        flex-shrink: 0;
-    }
-
-    .date-month {
-        font-size: 0.75rem;
-    }
-
-    .date-day {
-        font-size: 1.5rem;
-    }
-
-    .termin-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .behandlung-name {
-        font-size: 1rem;
-    }
-
-    .discount-badge {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.8rem;
-    }
-
-    .termin-details {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.5rem;
-    }
-
-    .detail-item {
-        font-size: 0.85rem;
-    }
-
-    .replacement-info {
-        font-size: 0.8rem;
-        padding-top: 0.5rem;
-        margin-top: 0.5rem;
-    }
-
-    .arrow-icon {
-        display: block;
-        font-size: 1.25rem;
-    }
-
-    .empty-state {
-        padding: 2rem 1rem;
-    }
-
-    .empty-icon {
-        font-size: 2.5rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .empty-state h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .empty-state p {
-        font-size: 0.9rem;
-        margin-bottom: 0.75rem;
-    }
 
     .info-text {
         font-size: 0.85rem;

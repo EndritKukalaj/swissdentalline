@@ -1,5 +1,6 @@
 ﻿<script>
   import { goto, invalidateAll } from '$app/navigation';
+  import { EmptyState, KpiCard } from '$lib';
   
   let { data } = $props();
   
@@ -73,51 +74,39 @@
   <div class="statistik-content">
     <!-- KPI Cards Row 1 -->
     <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-icon auslastung">
-          <i class="bi bi-speedometer2"></i>
-        </div>
-        <div class="kpi-content">
-          <div class="kpi-label">Auslastung</div>
-          <div class="kpi-value">{stats.auslastung}%</div>
-        </div>
-        <div class="kpi-bar">
-          <div class="kpi-bar-fill" style="width: {stats.auslastung}%"></div>
-        </div>
-      </div>
+      <KpiCard
+        icon="speedometer2"
+        label="Auslastung"
+        value="{stats.auslastung}%"
+        iconType="auslastung"
+        progressValue={stats.auslastung}
+        variant="blue"
+      />
 
-      <div class="kpi-card">
-        <div class="kpi-icon einnahmen">
-          <i class="bi bi-cash-coin"></i>
-        </div>
-        <div class="kpi-content">
-          <div class="kpi-label">Einnahmen</div>
-          <div class="kpi-value">{formatCurrency(stats.gesamtEinnahmen)}</div>
-        </div>
-      </div>
+      <KpiCard
+        icon="cash-coin"
+        label="Einnahmen"
+        value={formatCurrency(stats.gesamtEinnahmen)}
+        iconType="einnahmen"
+        variant="blue"
+      />
 
-      <div class="kpi-card">
-        <div class="kpi-icon termine">
-          <i class="bi bi-calendar-check"></i>
-        </div>
-        <div class="kpi-content">
-          <div class="kpi-label">Abgeschlossene Termine</div>
-          <div class="kpi-value">{stats.appointmentsByStatus.abgeschlossen}</div>
-        </div>
-      </div>
+      <KpiCard
+        icon="calendar-check"
+        label="Abgeschlossene Termine"
+        value={stats.appointmentsByStatus.abgeschlossen}
+        iconType="termine"
+        variant="blue"
+      />
 
-      <div class="kpi-card">
-        <div class="kpi-icon bewertung">
-          <i class="bi bi-star-fill"></i>
-        </div>
-        <div class="kpi-content">
-          <div class="kpi-label">Durchschn. Bewertung</div>
-          <div class="kpi-value">
-            {stats.durchschnittsBewertung} 
-            <span class="kpi-subtext">({stats.anzahlRezensionen})</span>
-          </div>
-        </div>
-      </div>
+      <KpiCard
+        icon="star-fill"
+        label="Durchschn. Bewertung"
+        value={stats.durchschnittsBewertung}
+        subtext="({stats.anzahlRezensionen})"
+        iconType="bewertung"
+        variant="blue"
+      />
     </div>
 
     <!-- Charts Row -->
@@ -252,10 +241,11 @@
               </div>
             {/each}
           {:else}
-            <div class="empty-state">
-              <i class="bi bi-inbox"></i>
-              <p>Keine Daten verfügbar</p>
-            </div>
+            <EmptyState
+              icon="inbox"
+              title="Keine Daten verfügbar"
+              variant="blue"
+            />
           {/if}
         </div>
       </div>
@@ -372,99 +362,6 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
-}
-
-.kpi-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.kpi-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #30B0C7 0%, #268a9c 100%);
-}
-
-.kpi-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.kpi-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-}
-
-.kpi-icon.auslastung {
-  background: linear-gradient(135deg, #D0F0F5 0%, #b9e7fa 100%);
-  color: #30B0C7;
-}
-
-.kpi-icon.einnahmen {
-  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-  color: #28a745;
-}
-
-.kpi-icon.termine {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  color: #ffc107;
-}
-
-.kpi-icon.bewertung {
-  background: linear-gradient(135deg, #ffe6e6 0%, #ffd4d4 100%);
-  color: #ff6b6b;
-}
-
-.kpi-label {
-  font-size: 0.9rem;
-  color: #6c757d;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.kpi-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1a1a2e;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.kpi-subtext {
-  font-size: 1rem;
-  color: #6c757d;
-  font-weight: 400;
-}
-
-.kpi-bar {
-  margin-top: 1rem;
-  height: 8px;
-  background: #e9ecef;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.kpi-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #30B0C7 0%, #268a9c 100%);
-  border-radius: 4px;
-  transition: width 0.8s ease;
 }
 
 /* Charts */
@@ -788,23 +685,6 @@
   font-size: 1rem;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 2rem;
-  color: #6c757d;
-}
-
-.empty-state i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.empty-state p {
-  margin: 0;
-  font-size: 1rem;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .statistik-wrapper {
@@ -846,30 +726,6 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
   }
-
-  .kpi-card {
-    padding: 1rem;
-  }
-
-  .kpi-icon {
-    width: 42px;
-    height: 42px;
-    font-size: 1.3rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .kpi-label {
-    font-size: 0.75rem;
-  }
-
-  .kpi-value {
-    font-size: 1.3rem;
-  }
-
-  .kpi-subtext {
-    font-size: 0.85rem;
-  }
-
   .charts-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
@@ -1000,25 +856,6 @@
   .kpi-grid {
     grid-template-columns: 1fr;
     gap: 0.6rem;
-  }
-
-  .kpi-card {
-    padding: 0.85rem;
-  }
-
-  .kpi-icon {
-    width: 38px;
-    height: 38px;
-    font-size: 1.2rem;
-    margin-bottom: 0.6rem;
-  }
-
-  .kpi-label {
-    font-size: 0.7rem;
-  }
-
-  .kpi-value {
-    font-size: 1.2rem;
   }
 
   .chart-card {

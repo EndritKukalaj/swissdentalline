@@ -1,6 +1,7 @@
 <script>
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
+  import { InfoBanner } from '$lib';
   
   let { data, form } = $props();
   
@@ -66,12 +67,12 @@
 
   <!-- Content -->
   <div class="slots-content">
-    {#if form?.error}
-      <div class="alert alert-error">
-        <i class="bi bi-exclamation-circle"></i>
-        <span>{form.error}</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="error"
+      message={form?.error}
+      show={!!form?.error}
+      variant="blue"
+    />
 
     <!-- Slot Edit Form -->
     <form method="POST" action="?/updateSlot" use:enhance={() => {
@@ -288,26 +289,6 @@
     padding: 2rem;
 }
 
-/* Alerts */
-.alert {
-    padding: 1rem 1.25rem;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    animation: slideDown 0.3s ease;
-}
-
-.alert i {
-    font-size: 1.25rem;
-}
-
-.alert-error {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
 
 @keyframes slideDown {
     from {
@@ -560,14 +541,6 @@
         font-size: 0.9375rem;
     }
 
-    .alert {
-        padding: 0.875rem 1rem;
-        font-size: 0.875rem;
-    }
-
-    .alert i {
-        font-size: 1.125rem;
-    }
 }
 
 @media (max-width: 480px) {

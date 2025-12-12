@@ -1,6 +1,6 @@
 ﻿<script>
     import { goto } from '$app/navigation';
-    import BookingProgressBar from '$lib/components/BookingProgressBar.svelte';
+    import { BookingProgressBar } from '$lib';
     
     let { data } = $props();
     let { termin, behandlungsart } = data;

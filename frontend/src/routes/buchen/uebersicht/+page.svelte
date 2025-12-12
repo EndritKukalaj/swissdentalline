@@ -1,7 +1,7 @@
 ﻿<script>
     import { goto } from '$app/navigation';
     import { enhance } from '$app/forms';
-    import BookingProgressBar from '$lib/components/BookingProgressBar.svelte';
+    import { BookingProgressBar } from '$lib';
     
     let { data, form } = $props();
     let { termin, zahnarzt, behandlungsart, praxis, warteliste } = data;

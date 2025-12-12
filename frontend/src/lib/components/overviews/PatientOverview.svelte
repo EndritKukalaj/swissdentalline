@@ -1,7 +1,7 @@
 ﻿<script>
     import { goto } from '$app/navigation';
-    import StatCard from "$lib/components/StatCard.svelte";
-    import NextTerminCard from "$lib/components/NextTerminCard.svelte";
+    import StatCard from "$lib/components/cards/StatCard.svelte";
+    import NextTerminCard from "$lib/components/cards/NextTerminCard.svelte";
 
     let { nextTermin = null, stats = {} } = $props();
 </script>

@@ -1,5 +1,6 @@
 ﻿<script>
   import { enhance } from '$app/forms';
+  import { InfoBanner } from '$lib';
 
   let { data, form } = $props();
   let isAuthenticated = $derived(data.isAuthenticated);
@@ -29,11 +30,11 @@
         <div class="signup-form">
             <h2 class="text-center mb-4">Erstelle dein Konto</h2>
 
-            {#if form?.error}
-                <div class="alert alert-danger" role="alert">
-                    {form.error}
-                </div>
-            {/if}
+            <InfoBanner
+                type="error"
+                message={form?.error}
+                show={!!form?.error}
+            />
 
             <form
                 method="POST"

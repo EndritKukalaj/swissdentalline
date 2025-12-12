@@ -2,6 +2,7 @@
     import { goto, invalidateAll } from '$app/navigation';
     import { enhance } from '$app/forms';
     import { onMount } from 'svelte';
+    import { ConfirmDialog } from '$lib';
     
     let { data, form } = $props();
     
@@ -498,75 +499,33 @@
 </div>
 
 <!-- Cancel Confirmation Dialog -->
-{#if showCancelDialog}
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div class="dialog-overlay" onclick={() => showCancelDialog = false}>
-        <div class="dialog-content" onclick={(e) => e.stopPropagation()}>
-            <div class="dialog-header">
-                <i class="bi bi-exclamation-triangle"></i>
-                <h3>Termin stornieren</h3>
-            </div>
-            <div class="dialog-body">
-                <p>Möchten Sie diesen Termin wirklich stornieren?</p>
-                <div class="dialog-info">
-                    <div class="info-row">
-                        <strong>Behandlung:</strong>
-                        <span>{behandlungsart?.name || 'Unbekannt'}</span>
-                    </div>
-                    <div class="info-row">
-                        <strong>Datum:</strong>
-                        <span>{formatDate(termin.datum)}</span>
-                    </div>
-                    <div class="info-row">
-                        <strong>Uhrzeit:</strong>
-                        <span>{formatTime(termin.datum)} Uhr</span>
-                    </div>
-                </div>
-                <p class="warning-text">
-                    <i class="bi bi-info-circle"></i>
-                    Diese Aktion kann nicht rückgängig gemacht werden.
-                </p>
-                {#if cancelError}
-                    <div class="error-message">
-                        <i class="bi bi-exclamation-circle"></i>
-                        {cancelError}
-                    </div>
-                {/if}
-            </div>
-            <div class="dialog-actions">
-                <button 
-                    class="dialog-btn cancel-dialog-btn" 
-                    onclick={() => { showCancelDialog = false; cancelError = null; }}
-                    disabled={isCanceling}
-                >
-                    Abbrechen
-                </button>
-                <form method="POST" action="?/cancelTermin" use:enhance={() => {
-                    isCanceling = true;
-                    cancelError = null;
-                    return async ({ result, update }) => {
-                        await update();
-                    };
-                }}>
-                    <button 
-                        type="submit" 
-                        class="dialog-btn confirm-btn"
-                        disabled={isCanceling}
-                    >
-                        {#if isCanceling}
-                            <i class="bi bi-hourglass-split"></i>
-                            Wird storniert...
-                        {:else}
-                            <i class="bi bi-check-circle"></i>
-                            Termin stornieren
-                        {/if}
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-{/if}
+<ConfirmDialog
+    show={showCancelDialog}
+    title="Termin stornieren"
+    message="Möchten Sie diesen Termin wirklich stornieren?"
+    icon="exclamation-triangle"
+    iconColor="#f44336"
+    confirmText="Termin stornieren"
+    isSubmitting={isCanceling}
+    variant={userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+    infoRows={[
+        { label: 'Behandlung', value: behandlungsart?.name || 'Unbekannt' },
+        { label: 'Datum', value: formatDate(termin.datum) },
+        { label: 'Uhrzeit', value: formatTime(termin.datum) + ' Uhr' }
+    ]}
+    warningText="Diese Aktion kann nicht rückgängig gemacht werden."
+    errorMessage={cancelError}
+    onClose={() => { showCancelDialog = false; cancelError = null; }}
+    useForm={true}
+    formAction="?/cancelTermin"
+    formEnhance={() => {
+        isCanceling = true;
+        cancelError = null;
+        return async ({ result, update }) => {
+            await update();
+        };
+    }}
+/>
 
 <!-- Complete Confirmation Dialog -->
 {#if showCompleteDialog}
