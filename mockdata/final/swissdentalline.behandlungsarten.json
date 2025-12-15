@@ -1,0 +1,49 @@
+[{
+  "_id": {
+    "$oid": "3e615c109425204a60ff3b24"
+  },
+  "name": "Füllung (Komposit)",
+  "beschreibung": "Kariesbehandlung"
+},
+{
+  "_id": {
+    "$oid": "4c6cf827b81f7e9db83e2bc6"
+  },
+  "name": "Zahnsteinentfernung",
+  "beschreibung": "Entfernung harter Beläge"
+},
+{
+  "_id": {
+    "$oid": "7c9a16749f04d9d8ff4f1413"
+  },
+  "name": "Kontrolluntersuchung",
+  "beschreibung": "Routinekontrolle"
+},
+{
+  "_id": {
+    "$oid": "7cbf597fa85c2528a1e5a39b"
+  },
+  "name": "Zahnreinigung Kinder",
+  "beschreibung": "Prophylaxe Kinder"
+},
+{
+  "_id": {
+    "$oid": "908d569ff93e7a1091d778f0"
+  },
+  "name": "Wurzelbehandlung",
+  "beschreibung": "Endodontie"
+},
+{
+  "_id": {
+    "$oid": "f14c448a7fbd631240f5fd65"
+  },
+  "name": "Dentalhygiene",
+  "beschreibung": "Professionelle Zahnreinigung"
+},
+{
+  "_id": {
+    "$oid": "f3e4a3dc565c278142bf0b44"
+  },
+  "name": "Zahnaufhellung",
+  "beschreibung": "Bleaching"
+}]

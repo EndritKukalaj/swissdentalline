@@ -1,0 +1,128 @@
+[{
+  "_id": {
+    "$oid": "691f5a887ca177f3c694fd84"
+  },
+  "name": "Dr. Markus Huber",
+  "praxis_adresse_id": "0f66ba982373f8302d5745be",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "0118682f8e36d61b9d06ec76"
+  },
+  "name": "Dr. Franz Schneider",
+  "praxis_adresse_id": "fda89617ce65cb74abc09dca",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "0c4cc613801fb2105de27d1d"
+  },
+  "name": "Dr. Michael Stadler",
+  "praxis_adresse_id": "fda89617ce65cb74abc09dca",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "e7c9795bb3974a19349aa698"
+  },
+  "name": "Dr. Claudia Graf",
+  "praxis_adresse_id": "683cf0d4736214afa8fc0e41",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "4ee9a242a3038c873a46c8ab"
+  },
+  "name": "Dr. Franz Rossi",
+  "praxis_adresse_id": "683cf0d4736214afa8fc0e41",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "156de32d61fb9489ad771156"
+  },
+  "name": "Dr. Nina Mayer",
+  "praxis_adresse_id": "77e4fb7740c69dbdfbac3b02",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "208c22fb0ee336341fbebf2c"
+  },
+  "name": "Dr. Michael Weber",
+  "praxis_adresse_id": "77e4fb7740c69dbdfbac3b02",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "317b10ec60bdbfb86bcc374c"
+  },
+  "name": "Dr. Franz Wagner",
+  "praxis_adresse_id": "fda89617ce65cb74abc09dca",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "3bf4c877a1b3bceb20c89cde"
+  },
+  "name": "Dr. Elena Rossi",
+  "praxis_adresse_id": "2677101d588586bccf1066f1",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "e0dd38e94abe3dcf4320153c"
+  },
+  "name": "Dr. Martin Graf",
+  "praxis_adresse_id": "2677101d588586bccf1066f1",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "9e6db7c0aaade59376562284"
+  },
+  "name": "Dr. Elena Zimmer",
+  "praxis_adresse_id": "42498b6a56ad4ec818976afb",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "74aa3ff0f688b23665c83186"
+  },
+  "name": "Dr. Daniel Schneider",
+  "praxis_adresse_id": "dcc9ee1474eaa83f2be7fd0c",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "5ac37f04e9daebb52cf0bfe1"
+  },
+  "name": "Dr. Franz Bernard",
+  "praxis_adresse_id": "dcc9ee1474eaa83f2be7fd0c",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "6c8f681aedb596f4f528af35"
+  },
+  "name": "Dr. Martin Conti",
+  "praxis_adresse_id": "5f06c479173fa079bb9e7053",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "3ca2d366b489035f107a2f0f"
+  },
+  "name": "Dr. Peter Bucher",
+  "praxis_adresse_id": "5f06c479173fa079bb9e7053",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+},
+{
+  "_id": {
+    "$oid": "c5b4fa2ef6a9462ece8b93e7"
+  },
+  "name": "Dr. Franz Wagner",
+  "praxis_adresse_id": "5f06c479173fa079bb9e7053",
+  "_class": "ch.zhaw.swissdentalline.model.Zahnarzt"
+}]

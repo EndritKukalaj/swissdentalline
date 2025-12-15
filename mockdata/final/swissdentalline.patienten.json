@@ -1,0 +1,288 @@
+[{
+  "_id": {
+    "$oid": "691f59fe071b76a4cba71f2e"
+  },
+  "name": "Tim Baumann",
+  "geburtsdatum": {
+    "$date": "2002-07-28T00:00:00.000Z"
+  },
+  "krankenkasse": "CSS",
+  "adresse_id": "ce63e54dc48b477e35ccc36e",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "6929c453da42d41149dc33b9"
+  },
+  "name": "Tom Bischof",
+  "geburtsdatum": {
+    "$date": "1998-11-18T00:00:00.000Z"
+  },
+  "krankenkasse": "CSS",
+  "adresse_id": "6929c53f21c4a3428534afb6",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "6929cc4bda42d41149dc377b"
+  },
+  "name": "Tanja Merkli",
+  "geburtsdatum": {
+    "$date": "1998-05-10T00:00:00.000Z"
+  },
+  "krankenkasse": "Groupe Mutuel",
+  "adresse_id": "6929cc8e21c4a3428534afc0",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "f47addb7e3ef574f4c024d3c"
+  },
+  "name": "Julien Moreau",
+  "geburtsdatum": {
+    "$date": {
+      "$numberLong": "-860630400000"
+    }
+  },
+  "krankenkasse": "Visana",
+  "adresse_id": "ce63e54dc48b477e35ccc36e",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "c69b3b1e8b03c82afef2a603"
+  },
+  "name": "Noah Frey",
+  "geburtsdatum": {
+    "$date": "2005-03-17T00:00:00.000Z"
+  },
+  "krankenkasse": "Concordia",
+  "adresse_id": "ce63e54dc48b477e35ccc36e",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "45714571535fc08fb6914cd7"
+  },
+  "name": "Sofia Bachmann",
+  "geburtsdatum": {
+    "$date": "1985-09-02T00:00:00.000Z"
+  },
+  "krankenkasse": "CSS",
+  "adresse_id": "fda89617ce65cb74abc09dca",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "39e04693c894c745abf149a1"
+  },
+  "name": "Lucas Laurent",
+  "geburtsdatum": {
+    "$date": "2016-09-22T00:00:00.000Z"
+  },
+  "krankenkasse": "Visana",
+  "adresse_id": "6929ca5e21c4a3428534afbf",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "e53e163fa09d679a83d3493a"
+  },
+  "name": "Leon Müller",
+  "geburtsdatum": {
+    "$date": "1984-10-08T00:00:00.000Z"
+  },
+  "krankenkasse": "Visana",
+  "adresse_id": "10e7cb9c928d9cb715b0295e",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "99f9df3f5a8c8799b926fa02"
+  },
+  "name": "Sara Rossi",
+  "geburtsdatum": {
+    "$date": "2016-06-04T00:00:00.000Z"
+  },
+  "krankenkasse": "Sanitas",
+  "adresse_id": "693760d78bf16e25ba241518",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "25d55aace268570076ed26e0"
+  },
+  "name": "Camille Laurent",
+  "geburtsdatum": {
+    "$date": "2003-09-22T00:00:00.000Z"
+  },
+  "krankenkasse": "Swica",
+  "adresse_id": "fda89617ce65cb74abc09dca",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "de4a82bfbbbc4e75d30068cd"
+  },
+  "name": "Mia Frey",
+  "geburtsdatum": {
+    "$date": "2010-01-23T00:00:00.000Z"
+  },
+  "krankenkasse": "Sanitas",
+  "adresse_id": "10e7cb9c928d9cb715b0295e",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "f333ad842968a7b55a1a014e"
+  },
+  "name": "Sofia Huber",
+  "geburtsdatum": {
+    "$date": {
+      "$numberLong": "-320371200000"
+    }
+  },
+  "krankenkasse": "CSS",
+  "adresse_id": "693760d78bf16e25ba241518",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "c91d0033254fb4052082d389"
+  },
+  "name": "Sofia Frey",
+  "geburtsdatum": {
+    "$date": {
+      "$numberLong": "-814924800000"
+    }
+  },
+  "krankenkasse": "Groupe Mutuel",
+  "adresse_id": "1834d339daee4305922cfd46",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "109f9920de40bb6ca20d9d67"
+  },
+  "name": "Julien Lefevre",
+  "geburtsdatum": {
+    "$date": {
+      "$numberLong": "-299808000000"
+    }
+  },
+  "krankenkasse": "Sanitas",
+  "adresse_id": "cbd584a516c5614b9bed0d2f",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "55a26955e82467e2896c57e0"
+  },
+  "name": "Francesca Bianchi",
+  "geburtsdatum": {
+    "$date": "1977-05-21T00:00:00.000Z"
+  },
+  "krankenkasse": "ÖKK",
+  "adresse_id": "6929ca5e21c4a3428534afbf",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "f8c7ec59a4b667718178f43b"
+  },
+  "name": "Anna Zimmermann",
+  "geburtsdatum": {
+    "$date": "2013-10-13T00:00:00.000Z"
+  },
+  "krankenkasse": "Swica",
+  "adresse_id": "693761a58bf16e25ba241519",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "6784b553fe64bade3ffbf061"
+  },
+  "name": "Léa Moreau",
+  "geburtsdatum": {
+    "$date": "1988-06-18T00:00:00.000Z"
+  },
+  "krankenkasse": "Helsana",
+  "adresse_id": "6920f07658fa9be1021beba1",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "89995fe10a75c2cec5a9164e"
+  },
+  "name": "Camille Moreau",
+  "geburtsdatum": {
+    "$date": "1979-11-22T00:00:00.000Z"
+  },
+  "krankenkasse": "Visana",
+  "adresse_id": "10e7cb9c928d9cb715b0295e",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "a653672c7e73b63f5a3c873e"
+  },
+  "name": "Emma Hofmann",
+  "geburtsdatum": {
+    "$date": "2014-02-04T00:00:00.000Z"
+  },
+  "krankenkasse": "Helsana",
+  "adresse_id": "6929c53f21c4a3428534afb6",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "d5100fae410aeb5a7b041de6"
+  },
+  "name": "Sara Rossi",
+  "geburtsdatum": {
+    "$date": {
+      "$numberLong": "-419990400000"
+    }
+  },
+  "krankenkasse": "ÖKK",
+  "adresse_id": "6928c9c0f0b2975fdf022435",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "9ed2f07cf40321bbd3f86f3e"
+  },
+  "name": "Mia Meier",
+  "geburtsdatum": {
+    "$date": "1981-03-17T00:00:00.000Z"
+  },
+  "krankenkasse": "Helsana",
+  "adresse_id": "fda89617ce65cb74abc09dca",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "5c21460575b89a2cdc111c51"
+  },
+  "name": "Giulia Fontana",
+  "geburtsdatum": {
+    "$date": {
+      "$numberLong": "-277689600000"
+    }
+  },
+  "krankenkasse": "ÖKK",
+  "adresse_id": "7529bac0d89f797cca876a6f",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+},
+{
+  "_id": {
+    "$oid": "27a0360ba994d242d1f58c91"
+  },
+  "name": "Chloé Berger",
+  "geburtsdatum": {
+    "$date": "2008-11-17T00:00:00.000Z"
+  },
+  "krankenkasse": "CSS",
+  "adresse_id": "6928c9c0f0b2975fdf022435",
+  "_class": "ch.zhaw.swissdentalline.model.Patient"
+}]
