@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.model;
 
+import ch.zhaw.swissdentalline.dto.AdresseCreateDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -31,4 +32,17 @@ public class Adresse {
     private AdressTyp typ;
 
     private String bezeichnung;
+
+    /**
+     * Factory Method: Erstellt eine neue Adresse aus einem AdresseCreateDTO
+     */
+    public static Adresse fromDTO(AdresseCreateDTO dto) {
+        Adresse adresse = new Adresse();
+        adresse.setStrasse(dto.getStrasse());
+        adresse.setPlz(dto.getPlz());
+        adresse.setOrt(dto.getOrt());
+        adresse.setTyp(dto.getTyp());
+        adresse.setBezeichnung(dto.getBezeichnung());
+        return adresse;
+    }
 }

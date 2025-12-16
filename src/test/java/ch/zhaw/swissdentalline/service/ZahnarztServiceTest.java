@@ -1,7 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
-import ch.zhaw.swissdentalline.mapper.ZahnarztMapper;
 import ch.zhaw.swissdentalline.model.Zahnarzt;
 import ch.zhaw.swissdentalline.repositories.ZahnarztRepository;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
@@ -26,9 +25,6 @@ class ZahnarztServiceTest {
 
     @Mock
     ZahnarztRepository repo;
-
-    @Mock
-    ZahnarztMapper mapper;
 
     @Mock
     AdresseRepository adresseRepository;
@@ -59,8 +55,7 @@ class ZahnarztServiceTest {
         praxis.setTyp(AdressTyp.PRAXIS);
         when(adresseRepository.findById(testDTO.getPraxisAdresseId())).thenReturn(Optional.of(praxis));
         when(repo.findByNameAndPraxisAdresseId(testDTO.getName(), testDTO.getPraxisAdresseId())).thenReturn(Optional.empty());
-        when(mapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(repo.save(testEntity)).thenReturn(testEntity);
+        when(repo.save(any(Zahnarzt.class))).thenReturn(testEntity);
 
         Zahnarzt result = service.createZahnarzt(testDTO);
 

@@ -1,9 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
-import ch.zhaw.swissdentalline.dto.EinnahmenProMonatDTO;
 import ch.zhaw.swissdentalline.dto.TerminCreateDTO;
-import ch.zhaw.swissdentalline.dto.TerminStatusAggregationDTO;
-import ch.zhaw.swissdentalline.mapper.TerminMapper;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
 import ch.zhaw.swissdentalline.repositories.TerminRepository;
@@ -34,9 +31,6 @@ class TerminServiceTest {
 
     @Mock
     TerminRepository repo;
-
-    @Mock
-    TerminMapper mapper;
 
     @Mock
     ZahnarztRepository zahnarztRepository;
@@ -78,8 +72,7 @@ class TerminServiceTest {
         // Arrange
         when(zahnarztRepository.existsById(testDTO.getZahnarztId())).thenReturn(true);
         when(behandlungsartRepository.existsById(testDTO.getBehandlungsartId())).thenReturn(true);
-        when(mapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(repo.save(testEntity)).thenReturn(testEntity);
+        when(repo.save(any(Termin.class))).thenReturn(testEntity);
 
         Termin result = service.createTermin(testDTO);
 
@@ -151,72 +144,6 @@ class TerminServiceTest {
         when(repo.findByStatusAndDatumBetween(TerminStatus.GEBUCHT, start, end, pageable)).thenReturn(pageEmpty);
         assertThat(service.findTermineByStatusAndDateRange(TerminStatus.GEBUCHT, start, end, pageable).getContent())
                 .isEmpty();
-    }
-
-    @Test
-    void searchAvailable_happy() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<Termin> pageWith = new PageImpl<>(List.of(new Termin()), pageable, 1);
-        when(repo.findByStatus(TerminStatus.FREI, pageable)).thenReturn(pageWith);
-        assertThat(service.searchAvailableTermine(pageable).getContent()).hasSize(1);
-    }
-
-    @Test
-    void searchAvailable_empty() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<Termin> pageEmpty = new PageImpl<>(List.of(), pageable, 0);
-        when(repo.findByStatus(TerminStatus.FREI, pageable)).thenReturn(pageEmpty);
-        assertThat(service.searchAvailableTermine(pageable).getContent()).isEmpty();
-    }
-
-    @Test
-    void findFlexTermine_happy() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<Termin> pageWith = new PageImpl<>(List.of(new Termin()), pageable, 1);
-        when(repo.findByStatus(TerminStatus.ABGESAGT, pageable)).thenReturn(pageWith);
-        assertThat(service.findFlexTermine(pageable).getContent()).hasSize(1);
-    }
-
-    @Test
-    void findFlexTermine_empty() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<Termin> pageEmpty = new PageImpl<>(List.of(), pageable, 0);
-        when(repo.findByStatus(TerminStatus.ABGESAGT, pageable)).thenReturn(pageEmpty);
-        assertThat(service.findFlexTermine(pageable).getContent()).isEmpty();
-    }
-
-    @Test
-    void getTerminStateAggregation_happy() {
-        TerminStatusAggregationDTO dto = new TerminStatusAggregationDTO();
-        dto.setStatus(TerminStatus.FREI);
-        dto.setAnzahl(3L);
-        dto.setTerminIds(List.of("id1"));
-        List<TerminStatusAggregationDTO> agg = List.of(dto);
-        when(repo.getTerminStateAggregation("cfe29d3f75b5ab53e8a07b8d")).thenReturn(agg);
-        assertThat(service.getTerminStateAggregation("cfe29d3f75b5ab53e8a07b8d")).hasSize(1);
-    }
-
-    @Test
-    void getTerminStateAggregation_empty() {
-        when(repo.getTerminStateAggregation("cfe29d3f75b5ab53e8a07b8d")).thenReturn(List.of());
-        assertThat(service.getTerminStateAggregation("cfe29d3f75b5ab53e8a07b8d")).isEmpty();
-    }
-
-    @Test
-    void getEinnahmenProMonatByZahnarzt_happy() {
-        List<EinnahmenProMonatDTO> rev = List.of(new EinnahmenProMonatDTO("2025-01", 120.0, 1L));
-        Instant start = Instant.parse("2025-01-01T00:00:00Z");
-        Instant end = Instant.parse("2025-01-31T23:59:59Z");
-        when(repo.getEinnahmenProMonatById("cfe29d3f75b5ab53e8a07b8d", start, end)).thenReturn(rev);
-        assertThat(service.getEinnahmenProMonatByZahnarzt("cfe29d3f75b5ab53e8a07b8d", start, end)).hasSize(1);
-    }
-
-    @Test
-    void getEinnahmenProMonatByZahnarzt_empty() {
-        Instant start = Instant.parse("2025-01-01T00:00:00Z");
-        Instant end = Instant.parse("2025-01-31T23:59:59Z");
-        when(repo.getEinnahmenProMonatById("cfe29d3f75b5ab53e8a07b8d", start, end)).thenReturn(List.of());
-        assertThat(service.getEinnahmenProMonatByZahnarzt("cfe29d3f75b5ab53e8a07b8d", start, end)).isEmpty();
     }
 
     @Test

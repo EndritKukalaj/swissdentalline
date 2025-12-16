@@ -1,7 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.BehandlungsartCreateDTO;
-import ch.zhaw.swissdentalline.mapper.BehandlungsartMapper;
 import ch.zhaw.swissdentalline.model.Behandlungsart;
 import ch.zhaw.swissdentalline.repositories.BehandlungsartRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +17,13 @@ public class BehandlungsartService {
 
     @Autowired
     private BehandlungsartRepository behandlungsartRepository;
-    @Autowired
-    private BehandlungsartMapper behandlungsartMapper;
 
     public Behandlungsart createBehandlungsart(BehandlungsartCreateDTO createDTO) {
         // Check for duplicate name
         if (behandlungsartRepository.findByName(createDTO.getName()).isPresent()) {
               throw new IllegalArgumentException("Behandlungsart mit Name '" + createDTO.getName() + "' existiert bereits");
         }
-        Behandlungsart behandlungsart = behandlungsartMapper.toEntity(createDTO);
+        Behandlungsart behandlungsart = Behandlungsart.fromDTO(createDTO);
         return behandlungsartRepository.save(behandlungsart);
     }
 

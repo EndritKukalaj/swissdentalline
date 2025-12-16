@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.model;
 
+import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -30,4 +31,16 @@ public class Patient {
 
     @Field("adresse_id")
     private String adresseId;
+
+    /**
+     * Factory Method: Erstellt einen neuen Patient aus einem PatientCreateDTO
+     */
+    public static Patient fromDTO(PatientCreateDTO dto) {
+        Patient patient = new Patient();
+        patient.setName(dto.getName());
+        patient.setGeburtsdatum(dto.getGeburtsdatum());
+        patient.setKrankenkasse(dto.getKrankenkasse());
+        patient.setAdresseId(dto.getAdresseId());
+        return patient;
+    }
 }

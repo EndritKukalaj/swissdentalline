@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.model;
 
+import ch.zhaw.swissdentalline.dto.BehandlungsartCreateDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -23,4 +24,14 @@ public class Behandlungsart {
 
     @NonNull
     private String beschreibung;
+
+    /**
+     * Factory Method: Erstellt eine neue Behandlungsart aus einem BehandlungsartCreateDTO
+     */
+    public static Behandlungsart fromDTO(BehandlungsartCreateDTO dto) {
+        Behandlungsart behandlungsart = new Behandlungsart();
+        behandlungsart.setName(dto.getName());
+        behandlungsart.setBeschreibung(dto.getBeschreibung());
+        return behandlungsart;
+    }
 }

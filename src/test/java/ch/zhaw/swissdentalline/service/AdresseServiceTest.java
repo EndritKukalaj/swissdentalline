@@ -1,8 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.AdresseCreateDTO;
-import ch.zhaw.swissdentalline.dto.AdresseKompaktDTO;
-import ch.zhaw.swissdentalline.mapper.AdresseMapper;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
@@ -31,9 +29,6 @@ class AdresseServiceTest {
     @Mock
     AdresseRepository adresseRepository;
 
-    @Mock
-    AdresseMapper adresseMapper;
-
     @InjectMocks
     AdresseService adresseService;
 
@@ -58,8 +53,7 @@ class AdresseServiceTest {
 
     @Test
     void shouldCreateAdresse() {
-        when(adresseMapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(adresseRepository.save(testEntity)).thenReturn(testEntity);
+        when(adresseRepository.save(any(Adresse.class))).thenReturn(testEntity);
 
         Adresse result = adresseService.createAdresse(testDTO);
 
@@ -167,31 +161,6 @@ class AdresseServiceTest {
     void deleteAdresse_notFound() {
         when(adresseRepository.existsById("missing")).thenReturn(false);
         assertThatThrownBy(() -> adresseService.deleteAdresse("missing"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Adresse mit id: missing nicht gefunden");
-    }
-
-    @Test
-    void getAdresseKompakt_happy() {
-        Adresse a = new Adresse();
-        a.setId("ce63e54dc48b477e35ccc36e");
-        AdresseKompaktDTO kompakt = new AdresseKompaktDTO();
-        kompakt.setId("ce63e54dc48b477e35ccc36e");
-        kompakt.setPlz("8001");
-        kompakt.setOrt("Zürich");
-
-        when(adresseRepository.findById("ce63e54dc48b477e35ccc36e")).thenReturn(Optional.of(a));
-        when(adresseMapper.toKompaktDTO(a)).thenReturn(kompakt);
-
-        AdresseKompaktDTO result = adresseService.getAdresseKompakt("ce63e54dc48b477e35ccc36e");
-        assertThat(result.getId()).isEqualTo("ce63e54dc48b477e35ccc36e");
-        assertThat(result.getPlz()).isEqualTo("8001");
-    }
-
-    @Test
-    void getAdresseKompakt_notFound() {
-        when(adresseRepository.findById("missing")).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> adresseService.getAdresseKompakt("missing"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Adresse mit id: missing nicht gefunden");
     }

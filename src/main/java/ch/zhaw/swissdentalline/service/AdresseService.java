@@ -1,8 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.AdresseCreateDTO;
-import ch.zhaw.swissdentalline.dto.AdresseKompaktDTO;
-import ch.zhaw.swissdentalline.mapper.AdresseMapper;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
@@ -22,8 +20,6 @@ public class AdresseService {
 
     @Autowired
     private AdresseRepository adresseRepository;
-    @Autowired
-    private AdresseMapper adresseMapper;
 
     public Adresse createAdresse(AdresseCreateDTO createDTO) {
         // Check for duplicate Praxis Bezeichnung
@@ -32,7 +28,7 @@ public class AdresseService {
                     throw new IllegalArgumentException("Praxis mit Bezeichnung '" + createDTO.getBezeichnung() + "' existiert bereits");
             }
         }
-        Adresse adresse = adresseMapper.toEntity(createDTO);
+        Adresse adresse = Adresse.fromDTO(createDTO);
         return adresseRepository.save(adresse);
     }
 
@@ -75,11 +71,5 @@ public class AdresseService {
             throw new IllegalArgumentException("Adresse mit id: " + id + " nicht gefunden");
         }
         adresseRepository.deleteById(id);
-    }
-
-    public AdresseKompaktDTO getAdresseKompakt(String id) {
-        Adresse adresse = adresseRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Adresse mit id: " + id + " nicht gefunden"));
-        return adresseMapper.toKompaktDTO(adresse);
     }
 }

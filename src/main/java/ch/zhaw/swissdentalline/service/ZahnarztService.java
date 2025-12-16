@@ -2,7 +2,6 @@ package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
 import ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO;
-import ch.zhaw.swissdentalline.mapper.ZahnarztMapper;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
 import ch.zhaw.swissdentalline.model.Zahnarzt;
@@ -23,8 +22,6 @@ public class ZahnarztService {
     @Autowired
     private ZahnarztRepository zahnarztRepository;
     @Autowired
-    private ZahnarztMapper zahnarztMapper;
-    @Autowired
     private AdresseRepository adresseRepository;
 
     public Zahnarzt createZahnarzt(ZahnarztCreateDTO createDTO) {
@@ -42,7 +39,7 @@ public class ZahnarztService {
                 throw new IllegalArgumentException("Zahnarzt mit gleichem Namen in dieser Praxis existiert bereits");
         }
 
-        Zahnarzt zahnarzt = zahnarztMapper.toEntity(createDTO);
+        Zahnarzt zahnarzt = new Zahnarzt(createDTO);
         return zahnarztRepository.save(zahnarzt);
     }
 

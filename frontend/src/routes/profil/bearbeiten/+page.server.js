@@ -95,12 +95,27 @@ export async function load({ locals }) {
     // Adressen laden für Dropdown
     let adressen = [];
     try {
-      const adressenResponse = await axios.get(`${API_BASE_URL}/api/adressen`, {
-        headers: {
-          Authorization: `Bearer ${locals.jwt_token}`
-        }
-      });
-      adressen = adressenResponse.data;
+      if (isPatient) {
+        // Patient: Lade alle Adressen (HOME)
+        const adressenResponse = await axios.get(`${API_BASE_URL}/api/adressen`, {
+          headers: {
+            Authorization: `Bearer ${locals.jwt_token}`
+          }
+        });
+        adressen = adressenResponse.data;
+      } else {
+        // Zahnarzt: Lade nur PRAXIS-Adressen über Typ-Filter
+        const adressenResponse = await axios.get(`${API_BASE_URL}/api/adressen/typ/PRAXIS`, {
+          params: {
+            page: 0,
+            size: 100  // Alle Praxis-Adressen laden
+          },
+          headers: {
+            Authorization: `Bearer ${locals.jwt_token}`
+          }
+        });
+        adressen = adressenResponse.data.content || adressenResponse.data;
+      }
     } catch (e) {
       throw error(500, 'Adressenliste konnte nicht geladen werden');
     }

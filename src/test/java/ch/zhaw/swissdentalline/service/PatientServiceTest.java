@@ -1,7 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
-import ch.zhaw.swissdentalline.mapper.PatientMapper;
 import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.repositories.PatientRepository;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
@@ -25,9 +24,6 @@ class PatientServiceTest {
 
     @Mock
     PatientRepository repo;
-
-    @Mock
-    PatientMapper mapper;
 
     @Mock
     AdresseRepository adresseRepository;
@@ -60,8 +56,7 @@ class PatientServiceTest {
         when(adresseRepository.existsById(testDTO.getAdresseId())).thenReturn(true);
         when(repo.findByNameAndGeburtsdatumAndAdresseId(testDTO.getName(), testDTO.getGeburtsdatum(), testDTO.getAdresseId()))
             .thenReturn(Optional.empty());
-        when(mapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(repo.save(testEntity)).thenReturn(testEntity);
+        when(repo.save(any(Patient.class))).thenReturn(testEntity);
 
         Patient result = service.createPatient(testDTO);
 

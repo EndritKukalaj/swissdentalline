@@ -1,8 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
-import ch.zhaw.swissdentalline.dto.EinnahmenProMonatDTO;
 import ch.zhaw.swissdentalline.dto.TerminCreateDTO;
-import ch.zhaw.swissdentalline.dto.TerminStatusAggregationDTO;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
 import ch.zhaw.swissdentalline.service.TerminService;
@@ -73,51 +71,6 @@ public class TerminController {
         Pageable pageable = PageRequest.of(page, size);
         Page<Termin> termine = terminService.findTermineByStatusAndDateRange(status, startDatum, endDatum, pageable);
         return new ResponseEntity<>(termine, HttpStatus.OK);
-    }
-
-    @GetMapping("/termine/verfuegbar")
-    public ResponseEntity<Page<Termin>> searchAvailableTermine(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Termin> termine = terminService.searchAvailableTermine(pageable);
-        return new ResponseEntity<>(termine, HttpStatus.OK);
-    }
-
-    @GetMapping("/termine/flex")
-    public ResponseEntity<Page<Termin>> findFlexTermine(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Termin> termine = terminService.findFlexTermine(pageable);
-        return new ResponseEntity<>(termine, HttpStatus.OK);
-    }
-
-    @GetMapping("/termine/aggregation/{zahnarztId}")
-    public ResponseEntity<List<TerminStatusAggregationDTO>> getTerminStateAggregation(@PathVariable String zahnarztId) {
-        if (!userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        List<TerminStatusAggregationDTO> aggregation = terminService.getTerminStateAggregation(zahnarztId);
-        return new ResponseEntity<>(aggregation, HttpStatus.OK);
-    }
-
-    @GetMapping("/termine/einnahmen/{zahnarztId}")
-    public ResponseEntity<List<EinnahmenProMonatDTO>> getEinnahmenProMonat(
-            @PathVariable String zahnarztId,
-            @RequestParam Instant startDatum,
-            @RequestParam Instant endDatum) {
-        if (!userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        List<EinnahmenProMonatDTO> einnahmen = terminService.getEinnahmenProMonatByZahnarzt(zahnarztId, startDatum, endDatum);
-        return new ResponseEntity<>(einnahmen, HttpStatus.OK);
     }
 
     @PutMapping("/termine/{id}")
