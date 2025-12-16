@@ -11,7 +11,7 @@
     let praxis = $state(data.praxis);
     let rezensionen = $state(data.rezensionen);
     let gesamtBewertung = $state(data.gesamtBewertung);
-    let currentPage = $state(data.reviewPagination ? data.reviewPagination.currentPage + 1 : 1);
+    let currentPage = $state(data.reviewPagination ? data.reviewPagination.currentPage : 1);
     let nrOfPages = $state(data.reviewPagination ? data.reviewPagination.totalPages : 1);
     const pageSize = 6;
     

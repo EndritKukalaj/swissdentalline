@@ -93,7 +93,7 @@
                 <div class="detail-icon-wrapper">
                     <i class="bi bi-wallet2"></i>
                 </div>
-                <span class="detail-text price">{termin.preis} CHF</span>
+                <span class="detail-text price">{termin.preis?.toFixed(2)} CHF</span>
             </div>
             
             <!-- Waitlist Indicator -->

@@ -45,7 +45,6 @@ export const actions = {
           },
           data: patientData
         });
-        console.log('Patient created successfully with ID:', patientId);
       } catch (apiError) {
         console.error('Failed to create patient in DB:', apiError.response?.data || apiError.message);
         // Continue anyway - user can be created later
