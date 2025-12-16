@@ -1,7 +1,7 @@
 <script>
-    import PatientOverview from '$lib/components/PatientOverview.svelte';
-    import ZahnarztOverview from '$lib/components/ZahnarztOverview.svelte';
-    import HomeLanding from '$lib/components/HomeLanding.svelte';
+    import PatientOverview from '$lib/components/overviews/PatientOverview.svelte';
+    import ZahnarztOverview from '$lib/components/overviews/ZahnarztOverview.svelte';
+    import HomeLanding from '$lib/components/overviews/HomeLanding.svelte';
     
     let { data } = $props();
     let { isAuthenticated, nextTermin = null, stats = {}, userRole = null } = data;

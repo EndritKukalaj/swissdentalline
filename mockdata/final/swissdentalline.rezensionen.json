@@ -1,0 +1,933 @@
+[{
+  "_id": {
+    "$oid": "e1f7994e3277452389db3652"
+  },
+  "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
+  "patient_id": "5161a0678d3801413a6143a9",
+  "bewertung": 3,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2025-05-02T09:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "ecce60da5759f3c9d79c67bf"
+  },
+  "zahnarzt_id": "9e6db7c0aaade59376562284",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 2,
+  "text": "Sehr schlechte Erfahrung. Arschloch Verdammter Blödsinn.",
+  "datum": {
+    "$date": "2024-03-28T16:30:00.000Z"
+  },
+  "approved": false,
+  "ai_kommentar": "Ablehnung: enthält beleidigende/unanständige Ausdrücke: Verdammter Blödsinn, Arschloch.",
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "05746ef19f1a7f55b72fa20f"
+  },
+  "zahnarzt_id": "74aa3ff0f688b23665c83186",
+  "patient_id": "c1e6f836dc15b4cb7aefe237",
+  "bewertung": 5,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-04-30T17:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "e36e23e2751b80a9bbb5c79a"
+  },
+  "zahnarzt_id": "6c8f681aedb596f4f528af35",
+  "patient_id": "26c36f4c5d6b2f30a2547e18",
+  "bewertung": 4,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-05-15T12:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "db7ce8254b2c460eb6d993e9"
+  },
+  "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 5,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-08-20T08:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "24f06ec584f964c9140a7065"
+  },
+  "zahnarzt_id": "0c4cc613801fb2105de27d1d",
+  "patient_id": "6d74457c230246e49203f2a9",
+  "bewertung": 5,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2025-07-02T12:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "348b557c027701f01957af3b"
+  },
+  "zahnarzt_id": "e7c9795bb3974a19349aa698",
+  "patient_id": "5161a0678d3801413a6143a9",
+  "bewertung": 4,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2024-08-06T17:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "578772cee3c8ae4d185474ea"
+  },
+  "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
+  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "bewertung": 4,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2025-06-10T17:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "a444f58db2b7a097db779816"
+  },
+  "zahnarzt_id": "74aa3ff0f688b23665c83186",
+  "patient_id": "59b19c1a76fe3e0b6c0260ce",
+  "bewertung": 3,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2024-10-09T11:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "48e394ac7c7dc6fa3a983101"
+  },
+  "zahnarzt_id": "74aa3ff0f688b23665c83186",
+  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "bewertung": 5,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2024-12-30T15:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "f8097811e22a708b08ae4f60"
+  },
+  "zahnarzt_id": "6c8f681aedb596f4f528af35",
+  "patient_id": "e9fa711d60318a6595dcc30d",
+  "bewertung": 5,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-06-20T10:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "1c0d0967cde2654644a4502d"
+  },
+  "zahnarzt_id": "6c8f681aedb596f4f528af35",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 4,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-03-29T15:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "dc7819472d9690c7b9a20e9a"
+  },
+  "zahnarzt_id": "74aa3ff0f688b23665c83186",
+  "patient_id": "a09b479eda04475339edaaca",
+  "bewertung": 4,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-10-07T14:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "2461a833a765ce84b654c1a9"
+  },
+  "zahnarzt_id": "e7c9795bb3974a19349aa698",
+  "patient_id": "11537c2a8c8dfb255a51120a",
+  "bewertung": 3,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-11-11T10:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "6188ad12f438e3e82db850f6"
+  },
+  "zahnarzt_id": "9e6db7c0aaade59376562284",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 5,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-10-22T14:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "3a058e345a13fa56cc288d24"
+  },
+  "zahnarzt_id": "74aa3ff0f688b23665c83186",
+  "patient_id": "59b19c1a76fe3e0b6c0260ce",
+  "bewertung": 5,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-08-11T18:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "28ee578aa7763f6b163586c4"
+  },
+  "zahnarzt_id": "0118682f8e36d61b9d06ec76",
+  "patient_id": "a09b479eda04475339edaaca",
+  "bewertung": 3,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2024-05-29T17:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "83a5ac570da3e3d2eb1dceef"
+  },
+  "zahnarzt_id": "3ca2d366b489035f107a2f0f",
+  "patient_id": "64acacba0879f92f1e10e1ba",
+  "bewertung": 4,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2024-05-08T10:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "ef86f626815296f5bd6f3913"
+  },
+  "zahnarzt_id": "9e6db7c0aaade59376562284",
+  "patient_id": "5161a0678d3801413a6143a9",
+  "bewertung": 2,
+  "text": "Sehr schlechte Erfahrung. Verdammter Blödsinn Verdammter Blödsinn.",
+  "datum": {
+    "$date": "2025-10-29T13:30:00.000Z"
+  },
+  "approved": false,
+  "ai_kommentar": "Ablehnung: enthält beleidigende/unanständige Ausdrücke: Verdammter Blödsinn.",
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "98c53d3c2354faf8f80476c5"
+  },
+  "zahnarzt_id": "c5b4fa2ef6a9462ece8b93e7",
+  "patient_id": "3eb2de24056a5fdaf9219990",
+  "bewertung": 3,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-09-10T16:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "4540fbdc2b1ab5f0cb06f9db"
+  },
+  "zahnarzt_id": "0c4cc613801fb2105de27d1d",
+  "patient_id": "64acacba0879f92f1e10e1ba",
+  "bewertung": 4,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2024-08-13T12:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "7e8ba270733bf9edcbaf69db"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "bewertung": 5,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2025-06-23T08:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "469944862ffd168ed9472e5c"
+  },
+  "zahnarzt_id": "156de32d61fb9489ad771156",
+  "patient_id": "5161a0678d3801413a6143a9",
+  "bewertung": 4,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-06-17T17:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "37fc983a678c02acccd45c9c"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "64acacba0879f92f1e10e1ba",
+  "bewertung": 4,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2025-11-21T11:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "16077b9513e78554e0f2fc97"
+  },
+  "zahnarzt_id": "3ca2d366b489035f107a2f0f",
+  "patient_id": "64acacba0879f92f1e10e1ba",
+  "bewertung": 1,
+  "text": "Sehr schlechte Erfahrung. verflucht.",
+  "datum": {
+    "$date": "2025-04-17T16:30:00.000Z"
+  },
+  "approved": false,
+  "ai_kommentar": "Ablehnung: enthält beleidigende/unanständige Ausdrücke: verflucht.",
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "36bf52d9707fa9c812787117"
+  },
+  "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
+  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "bewertung": 4,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-09-29T12:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "81671e2c29061deedd178a84"
+  },
+  "zahnarzt_id": "9e6db7c0aaade59376562284",
+  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "bewertung": 4,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2025-09-29T15:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "a6d12f9cc6ebf495595d9ed5"
+  },
+  "zahnarzt_id": "c5b4fa2ef6a9462ece8b93e7",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 5,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-02-13T13:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "1d4820abc7f6a04e71219846"
+  },
+  "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
+  "patient_id": "e9fa711d60318a6595dcc30d",
+  "bewertung": 5,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-09-26T14:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "e928c4a986b85c43cb2432bd"
+  },
+  "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
+  "patient_id": "6d74457c230246e49203f2a9",
+  "bewertung": 4,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2024-05-02T08:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "3b1f532e4ee726df04eea7fe"
+  },
+  "zahnarzt_id": "3ca2d366b489035f107a2f0f",
+  "patient_id": "3eb2de24056a5fdaf9219990",
+  "bewertung": 4,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2025-01-13T18:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "69c2120409c0af320d7a3211"
+  },
+  "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
+  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "bewertung": 3,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-01-22T08:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "f22aee6d15248987a4ff1a65"
+  },
+  "zahnarzt_id": "156de32d61fb9489ad771156",
+  "patient_id": "da18138e7fb9bb16a13e07b4",
+  "bewertung": 1,
+  "text": "Sehr schlechte Erfahrung. Verdammter Blödsinn.",
+  "datum": {
+    "$date": "2024-04-05T17:00:00.000Z"
+  },
+  "approved": false,
+  "ai_kommentar": "Ablehnung: enthält beleidigende/unanständige Ausdrücke: Verdammter Blödsinn.",
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "16335c09bee6c8efbdedcffd"
+  },
+  "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
+  "patient_id": "83486f1146922ec58d82fce3",
+  "bewertung": 5,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-01-09T15:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "acc15e7b95b9f12472669473"
+  },
+  "zahnarzt_id": "9e6db7c0aaade59376562284",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 4,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2024-06-26T10:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "c1faad287adc05037568485e"
+  },
+  "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
+  "patient_id": "5161a0678d3801413a6143a9",
+  "bewertung": 5,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-03-15T09:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "a77b5c996df62aa064b3feac"
+  },
+  "zahnarzt_id": "9e6db7c0aaade59376562284",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 3,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2024-01-29T17:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "525708d62286ff502dcea22b"
+  },
+  "zahnarzt_id": "c5b4fa2ef6a9462ece8b93e7",
+  "patient_id": "6929cc4bda42d41149dc377b",
+  "bewertung": 5,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2024-03-07T09:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "67ef7d909d52ec1dae244a23"
+  },
+  "zahnarzt_id": "317b10ec60bdbfb86bcc374c",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 2,
+  "text": "Sehr schlechte Erfahrung. Riesen Müll Verdammter Blödsinn.",
+  "datum": {
+    "$date": "2024-01-11T09:00:00.000Z"
+  },
+  "approved": false,
+  "ai_kommentar": "Ablehnung: enthält beleidigende/unanständige Ausdrücke: Verdammter Blödsinn, Riesen Müll.",
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "a0bd9394de6fdb0910f94338"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "6d74457c230246e49203f2a9",
+  "bewertung": 4,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-04-23T18:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "4b000fafd51f4e1f5a05a3e1"
+  },
+  "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
+  "patient_id": "5161a0678d3801413a6143a9",
+  "bewertung": 3,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2024-03-01T18:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "70d9a6b7a788c4c97e9026a3"
+  },
+  "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
+  "patient_id": "6d74457c230246e49203f2a9",
+  "bewertung": 5,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2024-05-31T15:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "8f8028d9edddc1560d055661"
+  },
+  "zahnarzt_id": "317b10ec60bdbfb86bcc374c",
+  "patient_id": "d4789a84469f09b5a88ad924",
+  "bewertung": 4,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2024-07-02T11:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "33ff4d1d20a77833f67b56ec"
+  },
+  "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
+  "patient_id": "83486f1146922ec58d82fce3",
+  "bewertung": 3,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-09-06T16:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "31300f626612f59192c125eb"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "bewertung": 3,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2025-04-03T11:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "04bef63d1b938e096dfc5628"
+  },
+  "zahnarzt_id": "e7c9795bb3974a19349aa698",
+  "patient_id": "da18138e7fb9bb16a13e07b4",
+  "bewertung": 3,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2025-04-18T11:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "19052b754c13baeb0fb0d8c5"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "6d74457c230246e49203f2a9",
+  "bewertung": 4,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2024-03-15T14:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "c631b21d0c1eeb17d11940a5"
+  },
+  "zahnarzt_id": "317b10ec60bdbfb86bcc374c",
+  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "bewertung": 4,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-04-24T16:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "20502596db1c580a6615c78b"
+  },
+  "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
+  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "bewertung": 5,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-03-19T13:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "5155ac417a296f9dd327ff13"
+  },
+  "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
+  "patient_id": "83486f1146922ec58d82fce3",
+  "bewertung": 5,
+  "text": "Kompetenter Zahnarzt, empfehlenswert.",
+  "datum": {
+    "$date": "2025-02-03T11:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "9515ab33854b2716d4aeb760"
+  },
+  "zahnarzt_id": "0118682f8e36d61b9d06ec76",
+  "patient_id": "e9fa711d60318a6595dcc30d",
+  "bewertung": 2,
+  "text": "Unangenehme Erfahrung, Kommunikation schwach.",
+  "datum": {
+    "$date": "2024-08-08T03:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "bd077b6fa1ea7ff718e43fc1"
+  },
+  "zahnarzt_id": "0c4cc613801fb2105de27d1d",
+  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "bewertung": 1,
+  "text": "Unangenehme Erfahrung, Kommunikation schwach.",
+  "datum": {
+    "$date": "2025-02-25T10:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "5513f07698c12cdff0f975c0"
+  },
+  "zahnarzt_id": "0c4cc613801fb2105de27d1d",
+  "patient_id": "83486f1146922ec58d82fce3",
+  "bewertung": 5,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-03-25T03:00:00.000Z"
+  },
+  "approved": false,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension",
+  "ai_kommentar": "Automatisch abgelehnt: enthält unangemessene Sprache oder beleidigende Ausdrücke."
+},
+{
+  "_id": {
+    "$oid": "fb42c84daf28a8222b3e9d5c"
+  },
+  "zahnarzt_id": "0c4cc613801fb2105de27d1d",
+  "patient_id": "e9fa711d60318a6595dcc30d",
+  "bewertung": 2,
+  "text": "Zu lange Wartezeit, Behandlung nicht gut erklärt.",
+  "datum": {
+    "$date": "2025-09-21T23:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "36c400db1293c9c735a27339"
+  },
+  "zahnarzt_id": "e7c9795bb3974a19349aa698",
+  "patient_id": "e9fa711d60318a6595dcc30d",
+  "bewertung": 1,
+  "text": "Nicht zufrieden, zu kurze Behandlung.",
+  "datum": {
+    "$date": "2025-03-18T03:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "d3b03297883ed06a4e0bbc9e"
+  },
+  "zahnarzt_id": "e7c9795bb3974a19349aa698",
+  "patient_id": "fec5d5391584e58dc356322d",
+  "bewertung": 1,
+  "text": "Hatte Schmerzen nach dem Termin, enttäuscht.",
+  "datum": {
+    "$date": "2024-05-12T08:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "d698b45e96b3720217d135b3"
+  },
+  "zahnarzt_id": "156de32d61fb9489ad771156",
+  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "bewertung": 5,
+  "text": "Gute Beratung und schmerzfrei.",
+  "datum": {
+    "$date": "2025-06-14T08:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "160d39d43da0e8758019fd7e"
+  },
+  "zahnarzt_id": "208c22fb0ee336341fbebf2c",
+  "patient_id": "26c36f4c5d6b2f30a2547e18",
+  "bewertung": 5,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2024-12-03T20:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "6601ea833b5887c98b10689c"
+  },
+  "zahnarzt_id": "208c22fb0ee336341fbebf2c",
+  "patient_id": "d4789a84469f09b5a88ad924",
+  "bewertung": 4,
+  "text": "Freundliches Team und professionelle Arbeit.",
+  "datum": {
+    "$date": "2024-10-27T12:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "0a648a96d056ec7275640f99"
+  },
+  "zahnarzt_id": "208c22fb0ee336341fbebf2c",
+  "patient_id": "6929c453da42d41149dc33b9",
+  "bewertung": 4,
+  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "datum": {
+    "$date": "2024-05-27T06:30:00.000Z"
+  },
+  "approved": false,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension",
+  "ai_kommentar": "Automatisch abgelehnt: enthält unangemessene Sprache oder beleidigende Ausdrücke."
+},
+{
+  "_id": {
+    "$oid": "779ba672b872c48b0ff37dcd"
+  },
+  "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
+  "patient_id": "6929cc4bda42d41149dc377b",
+  "bewertung": 3,
+  "text": "Unangenehme Erfahrung, Kommunikation schwach.",
+  "datum": {
+    "$date": "2024-03-16T21:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "be4f118588e423cfb687c0bf"
+  },
+  "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
+  "patient_id": "64acacba0879f92f1e10e1ba",
+  "bewertung": 2,
+  "text": "Hatte Schmerzen nach dem Termin, enttäuscht.",
+  "datum": {
+    "$date": "2025-04-15T10:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "9b11ae08e0f121468eb4c62f"
+  },
+  "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
+  "patient_id": "6929cc4bda42d41149dc377b",
+  "bewertung": 4,
+  "text": "Sehr zufrieden mit der Behandlung, danke!",
+  "datum": {
+    "$date": "2025-03-24T11:30:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "00fd14b5241200fd6ee449b2"
+  },
+  "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
+  "patient_id": "6929c453da42d41149dc33b9",
+  "bewertung": 3,
+  "text": "Zu lange Wartezeit, Behandlung nicht gut erklärt.",
+  "datum": {
+    "$date": "2024-01-12T18:00:00.000Z"
+  },
+  "approved": false,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension",
+  "ai_kommentar": "Automatisch abgelehnt: enthält unangemessene Sprache oder beleidigende Ausdrücke."
+},
+{
+  "_id": {
+    "$oid": "306bb71614055dcdbc4c6cb6"
+  },
+  "zahnarzt_id": "6c8f681aedb596f4f528af35",
+  "patient_id": "26c36f4c5d6b2f30a2547e18",
+  "bewertung": 1,
+  "text": "Unangenehme Erfahrung, Kommunikation schwach.",
+  "datum": {
+    "$date": "2024-08-04T13:00:00.000Z"
+  },
+  "approved": false,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension",
+  "ai_kommentar": "Automatisch abgelehnt: enthält unangemessene Sprache oder beleidigende Ausdrücke."
+},
+{
+  "_id": {
+    "$oid": "bec6ee12a099622643158741"
+  },
+  "zahnarzt_id": "c5b4fa2ef6a9462ece8b93e7",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 2,
+  "text": "Zu lange Wartezeit, Behandlung nicht gut erklärt.",
+  "datum": {
+    "$date": "2024-02-24T04:00:00.000Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+}]

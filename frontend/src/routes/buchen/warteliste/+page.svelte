@@ -1,7 +1,6 @@
-<script>
-    import './styles.css';
+﻿<script>
     import { goto } from '$app/navigation';
-    import BookingProgressBar from '$lib/components/BookingProgressBar.svelte';
+    import { BookingProgressBar } from '$lib';
     
     let { data } = $props();
     let { termin, behandlungsart } = data;
@@ -112,3 +111,309 @@
         </button>
     </div>
 </div>
+
+<style>
+.buchen-container {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2rem;
+}
+
+/* Header */
+.page-header {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4a5568;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 1.5rem;
+}
+
+.back-btn:hover {
+    border-color: #009688;
+    color: #009688;
+    background: #f0fffe;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Info Card */
+.info-card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.card-icon-header {
+    background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 150, 136, 0.15);
+}
+
+.icon-circle i {
+    font-size: 2rem;
+    color: #009688;
+}
+
+.info-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.info-section h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.75rem 0;
+}
+
+.info-section p {
+    margin: 0;
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* Benefits List */
+.benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.benefit-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.benefit-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #d1f4f0 0%, #b8eee9 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.benefit-icon i {
+    font-size: 1.5rem;
+    color: #009688;
+}
+
+.benefit-text h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.benefit-text p {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Info Note */
+.info-note {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #f0f9ff;
+    border: 2px solid #bae6fd;
+    border-radius: 12px;
+    align-items: center;
+}
+
+.info-note i {
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    color: #0284c7;
+}
+
+.info-note p {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: #0c4a6e;
+    line-height: 1.5;
+}
+
+/* Action Buttons */
+.action-buttons {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 1.125rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 150, 136, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+    .buchen-container {
+        padding: 1rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .back-btn {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.875rem;
+    }
+    
+    .card-icon-header {
+        padding: 1rem;
+    }
+    
+    .card-icon-header h4 {
+        font-size: 1rem;
+    }
+    
+    .icon-circle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .icon-circle i {
+        font-size: 1.25rem;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .info-card {
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .info-card i {
+        font-size: 1.25rem;
+    }
+
+    .info-card p {
+        font-size: 0.875rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9375rem;
+    }
+    
+    .benefits-list {
+        gap: 1rem;
+    }
+    
+    .benefit-item {
+        gap: 0.75rem;
+    }
+    
+    .benefit-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .benefit-icon i {
+        font-size: 1.125rem;
+    }
+}</style>
+

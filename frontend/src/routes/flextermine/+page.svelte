@@ -1,6 +1,6 @@
-<script>
-    import './styles.css';
+﻿<script>
     import { goto } from '$app/navigation';
+    import { InfoBanner, EmptyState, FlexTerminCard } from '$lib';
     
     let { data } = $props();
     let { flexTermine, patientTermine, behandlungsarten, zahnaerzte, patientId } = data;
@@ -69,28 +69,26 @@
     
     {#if flexTermine.length === 0}
         <!-- No Flex Termine Available -->
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="bi bi-calendar-x"></i>
-            </div>
-            <h3>Keine Flex-Termine verfügbar</h3>
-            <p>Aktuell sind keine früheren Termine verfügbar, die zu Ihren gebuchten Terminen passen.</p>
+        <EmptyState
+            icon="calendar-x"
+            title="Keine Flex-Termine verfügbar"
+            message="Aktuell sind keine früheren Termine verfügbar, die zu Ihren gebuchten Terminen passen."
+            variant="turquoise"
+        >
             <p class="info-text">
                 <i class="bi bi-info-circle"></i>
                 Flex-Termine sind kurzfristig freigewordene Termine. Sie werden benachrichtigt, sobald ein passender Termin verfügbar ist.
             </p>
-        </div>
+        </EmptyState>
     {:else}
         <!-- Info Banner -->
-        <div class="info-banner">
-            <div class="banner-icon">
-                <i class="bi bi-gift-fill"></i>
-            </div>
-            <div class="banner-content">
-                <h4>Da Sie den neuen Termin kurzfristig wahrnehmen, erhalten Sie 10% Rabatt auf die Behandlung!</h4>
-                <p>Möchten Sie diese früheren Termine wahrnehmen?</p>
-            </div>
-        </div>
+        <InfoBanner
+            type="gift"
+            variant="turquoise"
+        >
+            <h4 class="alert-title">Da Sie den neuen Termin kurzfristig wahrnehmen, erhalten Sie 10% Rabatt auf die Behandlung!</h4>
+            <p>Möchten Sie diese früheren Termine wahrnehmen?</p>
+        </InfoBanner>
         
         <!-- Flex Termine List -->
         <div class="flex-termine-list">
@@ -101,60 +99,157 @@
                 {@const discount = getDiscount(flexTermin.datum)}
                 {@const matchingTermin = patientTermine.find(t => t.behandlungsartId === flexTermin.behandlungsartId)}
                 
-                <div class="flex-termin-card" 
-                     role="button" 
-                     tabindex="0" 
-                     onclick={() => handleFlexTerminClick(flexTermin)}
-                     onkeydown={(e) => e.key === 'Enter' && handleFlexTerminClick(flexTermin)}>
-                    <!-- Date Badge -->
-                    <div class="date-badge">
-                        <div class="date-month">{dateInfo.month}</div>
-                        <div class="date-day">{dateInfo.day}</div>
-                    </div>
-                    
-                    <!-- Termin Info -->
-                    <div class="termin-info">
-                        <div class="termin-header">
-                            <h3 class="behandlung-name">{behandlung?.name || 'Behandlung'}</h3>
-                            <div class="discount-badge">
-                                <i class="bi bi-percent"></i>
-                                {discount}% Rabatt
-                            </div>
-                        </div>
-                        
-                        <div class="termin-details">
-                            <div class="detail-item">
-                                <i class="bi bi-clock"></i>
-                                <span>{formatTime(flexTermin.datum)} Uhr</span>
-                            </div>
-                            
-                            {#if zahnarzt}
-                                <div class="detail-item">
-                                    <i class="bi bi-person"></i>
-                                    <span>{zahnarzt.name}</span>
-                                </div>
-                            {/if}
-                            
-                            <div class="detail-item">
-                                <i class="bi bi-hourglass-split"></i>
-                                <span>{flexTermin.dauerMinuten} Min.</span>
-                            </div>
-                        </div>
-                        
-                        {#if matchingTermin}
-                            <div class="replacement-info">
-                                <i class="bi bi-arrow-repeat"></i>
-                                <span>Ersetzt Ihren Termin vom {formatFullDate(matchingTermin.datum)}</span>
-                            </div>
-                        {/if}
-                    </div>
-                    
-                    <!-- Arrow Icon -->
-                    <div class="arrow-icon">
-                        <i class="bi bi-chevron-right"></i>
-                    </div>
-                </div>
+                <FlexTerminCard
+                    dateMonth={dateInfo.month}
+                    dateDay={dateInfo.day}
+                    behandlungName={behandlung?.name || 'Behandlung'}
+                    discount={discount}
+                    time={formatTime(flexTermin.datum)}
+                    zahnarztName={zahnarzt?.name}
+                    dauer={flexTermin.dauerMinuten}
+                    replacementText={matchingTermin ? `Ersetzt Ihren Termin vom ${formatFullDate(matchingTermin.datum)}` : ''}
+                    onClick={() => handleFlexTerminClick(flexTermin)}
+                    variant="turquoise"
+                />
             {/each}
         </div>
     {/if}
 </div>
+
+
+<style>
+.flex-termine-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    color: #009688;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+    color: #00796B;
+    transform: translateX(-4px);
+}
+
+.header-content-flex {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.header-icon {
+    font-size: 3rem;
+        color: #FFB84D;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #004D40;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #00695C;
+}
+
+.flex-termine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+
+.info-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #E0F2F1;
+    color: #00695C;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.info-text i {
+    color: #009688;
+}
+
+@media (max-width: 768px) {
+    .flex-termine-container {
+        padding: 1rem 0.75rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .back-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .header-content-flex {
+        flex-direction: row;
+        text-align: left;
+        gap: 1rem;
+    }
+
+    .header-icon {
+        font-size: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.25rem;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .page-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .flex-termine-list {
+        gap: 0.75rem;
+    }
+
+
+
+    .info-text {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;
+    }
+}</style>

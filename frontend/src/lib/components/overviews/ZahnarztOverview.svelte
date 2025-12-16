@@ -1,13 +1,14 @@
 ﻿<script>
     import { goto } from "$app/navigation";
-    import StatCard from "./StatCard.svelte";
-    import NextTerminCard from "./NextTerminCard.svelte";
+    import StatCard from "$lib/components/cards/StatCard.svelte";
+    import NextTerminCard from "$lib/components/cards/NextTerminCard.svelte";
+    import EmptyState from "$lib/components/functional/EmptyState.svelte";
 
     let { nextTermin = null, stats = {} } = $props();
 </script>
 
 <div class="zahnarzt-dashboard">
-    <h1 class="dashboard-title">Terminübersicht</h1>
+    <h1 class="dashboard-title">Ihr Praxis-Dashboard</h1>
 
     <!-- Stats Section -->
     <div class="stats-grid secondary-stats">
@@ -16,7 +17,7 @@
             title="Geplante Termine"
             value={stats.geplanteTermine || 0}
             variant="blue"
-            onclick={() => goto("/termine?status=GEPLANT")}
+            onclick={() => goto("/termine?status=GEBUCHT")}
             clickable={true}
         />
         <StatCard
@@ -24,7 +25,7 @@
             title="Freie Slots"
             value={stats.freieSlots || 0}
             variant="blue"
-            onclick={() => goto("/termine?freieSlots=true")}
+            onclick={() => goto("/termine?status=FREI")}
             clickable={true}
         />
 
@@ -55,7 +56,7 @@
         <StatCard
             icon="bi-star-fill"
             title="Durchschn. Bewertung"
-            value={`${stats.durchschnittsBewertung || '0.0'}`}
+            value={`${stats.durchschnittsBewertung || "0.0"}`}
             variant="blue"
             onclick={() => goto("/rezensionen")}
             clickable={true}
@@ -67,6 +68,15 @@
         <div class="next-termin-section">
             <NextTerminCard termin={nextTermin} variant="blue" />
         </div>
+    {:else}
+        <EmptyState
+            icon="calendar-plus"
+            title="Noch keine Termine geplant"
+            message="Sie haben aktuell keine geplanten Termine. Öffnen Sie neue Slots, um Patient:innen die Buchung zu ermöglichen, oder verwalten Sie Ihre Terminverfügbarkeit."
+            buttonText="Slots freigeben"
+            buttonHref="/slots"
+            variant="blue"
+        />
     {/if}
 </div>
 

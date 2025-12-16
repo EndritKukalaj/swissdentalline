@@ -23,10 +23,6 @@ export const load = async ({ locals }) => {
         // Extract ID without 'auth0|' prefix
         const userId = auth0UserId.replace('auth0|', '');
         
-        console.log('Auth0 User ID:', auth0UserId);
-        console.log('User ID (without prefix):', userId);
-        console.log('User Role:', userRole);
-        
         // Handle Zahnarzt role
         if (userRole === 'Zahnarzt') {
             return await loadZahnarztDashboard(userId, jwt_token);
@@ -64,7 +60,6 @@ async function loadPatientDashboard(patientId, jwt_token) {
         }
         
         const patient = await patientResponse.json();
-        console.log('Loaded patient:', patient);
         
         // 2. Fetch all termine
         const termineResponse = await fetch(`${API_BASE_URL}/termine`, {
@@ -81,7 +76,6 @@ async function loadPatientDashboard(patientId, jwt_token) {
         // 3. Filter termine by patient ID
         const allTermine = await termineResponse.json();
         const patientTermine = allTermine.filter(termin => termin.patientId === patientId);
-        console.log('Fetched and filtered termine count:', patientTermine.length);
 
         // Enrich termine with behandlungsart names
         const enrichedTermine = await Promise.all(
@@ -209,8 +203,6 @@ async function loadPatientDashboard(patientId, jwt_token) {
             console.error('Error loading flex termine count:', error);
         }
         
-        console.log('Dashboard stats - Geplante Termine:', geplanteTermine, 'Offene Wartelisten:', offeneWartelisten, 'Flex-Termine:', verfuegbareFlexTermine, 'Abgeschlossene Termine:', abgeschlosseneTermine);
-        
         return {
             termine: sortedTermine,
             nextTermin,
@@ -240,7 +232,6 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
         }
         
         const zahnarzt = await zahnarztResponse.json();
-        console.log('Loaded zahnarzt:', zahnarzt);
         
         // 2. Fetch all termine
         const termineResponse = await fetch(`${API_BASE_URL}/termine`, {
@@ -259,7 +250,6 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
         const zahnarztTermine = allTermine.filter(termin => 
             (termin.zahnarztId === zahnarztId || termin.zahnarzt_id === zahnarztId)
         );
-        console.log('Fetched and filtered zahnarzt termine count:', zahnarztTermine.length);
 
         // Enrich termine with behandlungsart names
         const enrichedTermine = await Promise.all(
@@ -385,13 +375,6 @@ async function loadZahnarztDashboard(zahnarztId, jwt_token) {
         } catch (error) {
             console.error('Error fetching rezensionen for rating:', error);
         }
-        
-        console.log('Zahnarzt stats - Geplante Termine:', geplanteTermine, 
-                    'Freie Slots:', freieSlots, 
-                    'Abgesagte:', abgesagteTermine,
-                    'Warteliste verfügbar:', wartelisteVerfuegbar,
-                    'Monatliche Einnahmen:', monatlicheEinnahmen,
-                    'Durchschnittsbewertung:', durchschnittsBewertung);
         
         return {
             termine: sortedTermine,

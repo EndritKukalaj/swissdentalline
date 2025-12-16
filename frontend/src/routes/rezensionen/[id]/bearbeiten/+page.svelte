@@ -28,7 +28,7 @@
 
 <div class="edit-container">
     <div class="page-header">
-        <button class="btn-back" onclick={() => goto('/rezensionen')}>
+        <button class="back-btn" onclick={() => goto('/rezensionen')}>
             <i class="bi bi-arrow-left"></i>
             Zurück zur Übersicht
         </button>
@@ -125,13 +125,8 @@
                     class="btn btn-primary"
                     disabled={isSubmitting || bewertung === 0 || text.length < 10}
                 >
-                    {#if isSubmitting}
-                        <i class="bi bi-hourglass-split"></i>
-                        Wird gespeichert...
-                    {:else}
-                        <i class="bi bi-check-circle"></i>
-                        Speichern
-                    {/if}
+                    <i class="bi {isSubmitting ? 'bi-hourglass-split' : 'bi-check-circle'}"></i>
+                    {isSubmitting ? 'Wird gespeichert...' : 'Speichern'}
                 </button>
             </div>
         </div>
@@ -149,24 +144,30 @@
         margin-bottom: 2rem;
     }
 
-    .btn-back {
+    .back-btn {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        margin-bottom: 1rem;
         background: white;
-        color: #009688;
-        border: 2px solid #009688;
+        border: 2px solid #e2e8f0;
         border-radius: 8px;
+        color: #4a5568;
         font-size: 0.875rem;
-        font-weight: 600;
+        font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease;
+        margin-bottom: 1rem;
     }
 
-    .btn-back:hover {
+    .back-btn:hover {
+        border-color: #009688;
+        color: #009688;
         background: #f0fdfa;
+    }
+
+    .back-btn i {
+        font-size: 1rem;
     }
 
     .page-title {
@@ -318,10 +319,10 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        font-weight: 600;
         border: none;
         border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
     }
@@ -332,25 +333,29 @@
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+        background: #009688;
         color: white;
-        box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
     }
 
     .btn-primary:hover:not(:disabled) {
-        box-shadow: 0 6px 16px rgba(0, 150, 136, 0.4);
-        transform: translateY(-1px);
+        background: #00bfa5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
     }
 
     .btn-secondary {
         background: white;
         color: #4a5568;
-        border: 2px solid #cbd5e0;
+        border: 2px solid #e2e8f0;
     }
 
     .btn-secondary:hover:not(:disabled) {
         background: #f7fafc;
-        border-color: #a0aec0;
+        border-color: #cbd5e0;
+    }
+
+    .btn i {
+        font-size: 1.125rem;
     }
 
     @media (max-width: 768px) {
@@ -362,13 +367,13 @@
             margin-bottom: 1rem;
         }
 
-        .btn-back {
+        .back-btn {
             padding: 0.375rem 0.75rem;
             font-size: 0.8rem;
             margin-bottom: 0.75rem;
         }
 
-        .page-title {
+       .page-title {
             font-size: 1.25rem;
             margin-bottom: 0.25rem;
         }

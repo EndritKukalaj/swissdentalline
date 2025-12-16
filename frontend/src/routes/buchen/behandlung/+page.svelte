@@ -1,7 +1,6 @@
 <script>
-    import './styles.css';
     import { goto } from "$app/navigation";
-    import BookingProgressBar from "$lib/components/BookingProgressBar.svelte";
+    import { BookingProgressBar, EmptyState, BehandlungCard } from '$lib';
 
     let { data } = $props();
     let { behandlungsarten } = data;
@@ -29,32 +28,102 @@
     <!-- Behandlungsarten Grid -->
     <div class="behandlungen-grid">
         {#each behandlungsarten as behandlung (behandlung.id)}
-            <button
-                class="behandlung-card"
-                onclick={() => handleBehandlungSelect(behandlung)}
-            >
-                <div class="card-icon">
-                    <i class="bi bi-clipboard2-pulse"></i>
-                </div>
-                <div class="card-content">
-                    <h3 class="behandlung-name">{behandlung.name}</h3>
-                    {#if behandlung.beschreibung}
-                        <p class="behandlung-beschreibung">
-                            {behandlung.beschreibung}
-                        </p>
-                    {/if}
-                </div>
-                <div class="card-button">
-                    <i class="bi bi-arrow-right-circle"></i>
-                </div>
-            </button>
+            <BehandlungCard
+                name={behandlung.name}
+                beschreibung={behandlung.beschreibung}
+                onClick={() => handleBehandlungSelect(behandlung)}
+                variant="turquoise"
+            />
         {/each}
     </div>
 
     {#if behandlungsarten.length === 0}
-        <div class="empty-state">
-            <i class="bi bi-inbox"></i>
-            <p>Keine Behandlungsarten verfügbar</p>
-        </div>
+        <EmptyState
+            icon="inbox"
+            title="Keine Behandlungsarten verfügbar"
+        />
     {/if}
 </div>
+
+<style>
+.buchen-container {
+    min-height: 100vh;
+    background: #f8fafc;
+    padding: 2rem;
+}
+
+/* Header */
+.page-header {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4a5568;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+    border-color: #009688;
+    color: #009688;
+    background: #f0fffe;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Behandlungen Grid */
+.behandlungen-grid {
+    display: grid;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .buchen-container {
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.25rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .back-btn {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .behandlungen-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+</style>

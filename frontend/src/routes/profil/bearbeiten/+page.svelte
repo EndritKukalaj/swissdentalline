@@ -1,7 +1,7 @@
-<script>
-  import './styles.css';
+﻿<script>
   import { goto } from '$app/navigation';
   import { enhance } from '$app/forms';
+  import { InfoBanner } from '$lib';
   
   let { data, form } = $props();
 
@@ -143,33 +143,35 @@
 
   <!-- Content -->
   <div class="edit-content">
-    {#if !data.entityId}
-      <div class="alert alert-error">
-        <i class="bi bi-exclamation-triangle"></i>
-        <span>Fehler: Ihre Benutzer-ID konnte nicht geladen werden. Bitte laden Sie die Seite neu oder kontaktieren Sie den Support.</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="error"
+      message="Fehler: Ihre Benutzer-ID konnte nicht geladen werden. Bitte laden Sie die Seite neu oder kontaktieren Sie den Support."
+      show={!data.entityId}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+    />
 
-    {#if form?.error}
-      <div class="alert alert-error">
-        <i class="bi bi-exclamation-circle"></i>
-        <span>{form.error}</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="error"
+      message={form?.error}
+      show={!!form?.error}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+    />
 
-    {#if form?.success && form?.adresse}
-      <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i>
-        <span>Adresse erfolgreich erstellt!</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="success"
+      message="Adresse erfolgreich erstellt!"
+      show={!!(form?.success && form?.adresse)}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+      autoClose={true}
+    />
 
-    {#if form?.success && form?.updated}
-      <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i>
-        <span>Adresse erfolgreich aktualisiert!</span>
-      </div>
-    {/if}
+    <InfoBanner
+      type="success"
+      message="Adresse erfolgreich aktualisiert!"
+      show={!!(form?.success && form?.updated)}
+      variant={data.userRole === 'Zahnarzt' ? 'blue' : 'turquoise'}
+      autoClose={true}
+    />
 
     <!-- Patient Edit Form -->
     {#if data.userRole === 'Patient'}
@@ -646,3 +648,253 @@
     {/if}
   </div>
 </div>
+
+<style>
+/* Profile Edit Page Specific Styles */
+
+.edit-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+    --edit-primary: #009688;
+    --edit-accent: #00bfa5;
+    --edit-gradient: linear-gradient(135deg, #009688 0%, #00bfa5 100%);
+}
+
+.edit-wrapper.blue-variant {
+    --edit-primary: #30B0C7;
+    --edit-accent: #268a9c;
+    --edit-gradient: linear-gradient(135deg, #30B0C7 0%, #268a9c 100%);
+}
+
+/* Header */
+.edit-header {
+    background: var(--edit-gradient);
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-btn i {
+    font-size: 1.125rem;
+    color: #1a202c;
+}
+
+.back-btn:hover {
+    background: white;
+    transform: translateX(-4px);
+}
+
+.header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 1rem;
+    text-align: center;
+    color: white;
+}
+
+.header-title {
+    font-size: 2rem;
+    color: white;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    display: block;
+    text-align: center;
+}
+
+.header-title i {
+    font-size: 1.75rem;
+}
+
+.header-subtitle {
+    font-size: 1rem;
+    opacity: 0.95;
+    margin: 0;
+}
+
+/* Content */
+.edit-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Color variants for forms */
+.edit-wrapper .section-header i {
+    color: var(--edit-primary);
+}
+
+.edit-wrapper .form-group label i {
+    color: var(--edit-primary);
+}
+
+.edit-wrapper .form-group input:focus,
+.edit-wrapper .form-group select:focus {
+    border-color: var(--edit-primary);
+    box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.1);
+}
+
+.edit-wrapper.blue-variant .form-group input:focus,
+.edit-wrapper.blue-variant .form-group select:focus {
+    box-shadow: 0 0 0 3px rgba(48, 176, 199, 0.1);
+}
+
+.edit-wrapper .btn-link {
+    color: var(--edit-primary);
+}
+
+.edit-wrapper .btn-link:hover {
+    background: rgba(0, 150, 136, 0.05);
+    border-color: var(--edit-primary);
+}
+
+.edit-wrapper.blue-variant .btn-link:hover {
+    background: rgba(48, 176, 199, 0.05);
+}
+
+.edit-wrapper .btn-primary {
+    background: var(--edit-gradient);
+    color: white;
+}
+
+.edit-wrapper .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.edit-wrapper .btn-secondary {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.edit-wrapper .btn-secondary:hover:not(:disabled) {
+    background: #cbd5e1;
+}
+
+/* New Adresse Section */
+.new-adresse-section,
+.edit-adresse-section {
+    margin-top: 1.5rem;
+    animation: slideDown 0.3s ease;
+}
+
+/* Input with Action Button */
+.input-with-action {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.input-with-action select {
+    flex: 1;
+    min-width: 0; /* Allow flexbox to shrink below content size */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-icon {
+    background: var(--edit-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0; /* Prevent icon button from shrinking */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon i {
+    font-size: 1.125rem;
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.action-buttons .btn-link {
+    text-align: left;
+    justify-content: flex-start;
+}
+
+.action-buttons .btn-link:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .edit-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .back-btn {
+        width: 36px;
+        height: 36px;
+        top: 0.875rem;
+        left: 0.875rem;
+    }
+
+    .header-title {
+        font-size: 1.5rem;
+    }
+
+    .header-title i {
+        font-size: 1.25rem;
+    }
+
+    .header-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .edit-content {
+        padding: 1.5rem 1rem;
+    }
+
+    .form-section {
+        padding: 1.25rem;
+    }
+
+    .input-with-action {
+        gap: 0.375rem;
+    }
+
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .input-with-action select {
+        font-size: 0.875rem;
+    }
+}
+</style>

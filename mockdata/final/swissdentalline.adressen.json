@@ -1,0 +1,605 @@
+[{
+  "_id": {
+    "$oid": "0f66ba982373f8302d5745be"
+  },
+  "strasse": "Rue de Bourg 12",
+  "plz": "1003",
+  "ort": "Lausanne",
+  "typ": "PRAXIS",
+  "bezeichnung": "Clinique Dentaire Lausanne",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "10e7cb9c928d9cb715b0295e"
+  },
+  "strasse": "Marktgasse 10",
+  "plz": "9000",
+  "ort": "St. Gallen",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "1834d339daee4305922cfd46"
+  },
+  "strasse": "Avenue de la Gare 7",
+  "plz": "1003",
+  "ort": "Lausanne",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "7529bac0d89f797cca876a6f"
+  },
+  "strasse": "Länggassstrasse 22",
+  "plz": "3012",
+  "ort": "Bern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "cb3abe666028006cf7bbf403"
+  },
+  "strasse": "Aeschenvorstadt 3",
+  "plz": "4051",
+  "ort": "Basel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "cbd584a516c5614b9bed0d2f"
+  },
+  "strasse": "Seestrasse 12",
+  "plz": "8008",
+  "ort": "Zürich",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "ce63e54dc48b477e35ccc36e"
+  },
+  "strasse": "Europaalle 77",
+  "plz": "8003",
+  "ort": "Zürich",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "df7ce79e44542f6e4b4ba4e3"
+  },
+  "strasse": "Kramgasse 8",
+  "plz": "3011",
+  "ort": "Bern",
+  "typ": "PRAXIS",
+  "bezeichnung": "Bern Smile Klinik",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "fda89617ce65cb74abc09dca"
+  },
+  "strasse": "Freie Strasse 45",
+  "plz": "4051",
+  "ort": "Basel",
+  "typ": "PRAXIS",
+  "bezeichnung": "Basel Dental Center",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "6920f07658fa9be1021beba1"
+  },
+  "strasse": "Praxisstrasse 20",
+  "plz": "8004",
+  "ort": "Zürich",
+  "typ": "PRAXIS",
+  "bezeichnung": "Zahnarztpraxis",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "6928c9c0f0b2975fdf022435"
+  },
+  "strasse": "Flurstrasse 70",
+  "plz": "8048",
+  "ort": "Zürich",
+  "typ": "PRAXIS",
+  "bezeichnung": "Edelweiss Praxis Flurhof Zürich",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "6929c53f21c4a3428534afb6"
+  },
+  "strasse": "Opfikonerstrasse 10",
+  "plz": "8303",
+  "ort": "Bassersdorf",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "6929ca5e21c4a3428534afbf"
+  },
+  "strasse": "Dietlikonerstrasse 23",
+  "plz": "8302",
+  "ort": "Dietlikon",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "6929cc8e21c4a3428534afc0"
+  },
+  "strasse": "Dietlikonerstrasse 23",
+  "plz": "8002",
+  "ort": "Dietlikon",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "693760d78bf16e25ba241518"
+  },
+  "strasse": "Alte Industriestrasse 50",
+  "plz": "8001",
+  "ort": "Winterthur",
+  "typ": "PRAXIS",
+  "bezeichnung": "Best-Smile Winterthur",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "693761a58bf16e25ba241519"
+  },
+  "strasse": "Winterthurerstrasse 20",
+  "plz": "8004",
+  "ort": "Schlieren",
+  "typ": "PRAXIS",
+  "bezeichnung": "Whitening World Zürich",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "612aee2f4f28a46e62c3e88c"
+  },
+  "strasse": "60 Seestrasse",
+  "plz": "8411",
+  "ort": "Winterthur",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "35db823669faf21492a3d40e"
+  },
+  "strasse": "77 Gartenweg",
+  "plz": "3647",
+  "ort": "Thun",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "fe1e563ac9c552921aa96b57"
+  },
+  "strasse": "200 Flurstrasse",
+  "plz": "3048",
+  "ort": "Bern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "ab5ddf67cb98790c484ebd90"
+  },
+  "strasse": "21 Bachweg",
+  "plz": "4063",
+  "ort": "Basel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "683cf0d4736214afa8fc0e41"
+  },
+  "strasse": "182 Bachweg",
+  "plz": "1216",
+  "ort": "Genf",
+  "typ": "PRAXIS",
+  "bezeichnung": "Zahn Praxis Sàrl",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "e3a153c56ca776aabdd60a89"
+  },
+  "strasse": "62 Industriestrasse",
+  "plz": "8242",
+  "ort": "Schaffhausen",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "2a703a48ae9d7b6322992255"
+  },
+  "strasse": "116 Industriestrasse",
+  "plz": "3027",
+  "ort": "Bern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "77e4fb7740c69dbdfbac3b02"
+  },
+  "strasse": "183 Marktgasse",
+  "plz": "6976",
+  "ort": "Lugano",
+  "typ": "PRAXIS",
+  "bezeichnung": "Dental Klinik GmbH",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "2677101d588586bccf1066f1"
+  },
+  "strasse": "164 Gartenweg",
+  "plz": "3657",
+  "ort": "Thun",
+  "typ": "PRAXIS",
+  "bezeichnung": "Clinique Praxis GmbH",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "78b6418f6bbe2d1b49051cc4"
+  },
+  "strasse": "13 Bahnhofstrasse",
+  "plz": "1237",
+  "ort": "Genf",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "36e2b2e3e1d30c7f9995d8d7"
+  },
+  "strasse": "18 Gartenweg",
+  "plz": "2539",
+  "ort": "Biel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "deac6d6b687e5f4a81fc192a"
+  },
+  "strasse": "72 Bahnhofstrasse",
+  "plz": "1023",
+  "ort": "Lausanne",
+  "typ": "PRAXIS",
+  "bezeichnung": "Praxis Praxis Sàrl",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "1cfb8eba45aa29731c6e4394"
+  },
+  "strasse": "167 Bahnhofstrasse",
+  "plz": "3044",
+  "ort": "Bern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "bc01f71b44df11df0b8609a4"
+  },
+  "strasse": "194 Bachweg",
+  "plz": "3020",
+  "ort": "Bern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "0e96d41ed8276c3669c85c6b"
+  },
+  "strasse": "29 Bachweg",
+  "plz": "8469",
+  "ort": "Winterthur",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "4d51ad4dbb80bc0d76bfb9c6"
+  },
+  "strasse": "119 Industriestrasse",
+  "plz": "6098",
+  "ort": "Luzern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "d7befaec3021b9728951044f"
+  },
+  "strasse": "144 Hauptstrasse",
+  "plz": "4052",
+  "ort": "Basel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "5824fe06c9c0b686663a6283"
+  },
+  "strasse": "198 Bahnhofstrasse",
+  "plz": "9068",
+  "ort": "St. Gallen",
+  "typ": "PRAXIS",
+  "bezeichnung": "Clinique Praxis AG",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "b901d9612b59d2ebc9a4e2dd"
+  },
+  "strasse": "156 Bachweg",
+  "plz": "2587",
+  "ort": "Biel",
+  "typ": "PRAXIS",
+  "bezeichnung": "Smile Studio AG",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "5259b63aebb12297c88b4fcd"
+  },
+  "strasse": "5 Kirchgasse",
+  "plz": "6919",
+  "ort": "Lugano",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "e09bbd2dff89d540ff650695"
+  },
+  "strasse": "124 Bahnhofstrasse",
+  "plz": "1288",
+  "ort": "Genf",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "d4e21ae90f208df1c4d4b503"
+  },
+  "strasse": "13 Industriestrasse",
+  "plz": "8023",
+  "ort": "Zürich",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "acdd0e5ebf77e59064e37185"
+  },
+  "strasse": "88 Gartenweg",
+  "plz": "6985",
+  "ort": "Lugano",
+  "typ": "PRAXIS",
+  "bezeichnung": "Praxis Klinik Sàrl",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "2aaa5a3b526eec91675eaacb"
+  },
+  "strasse": "155 Flurstrasse",
+  "plz": "6923",
+  "ort": "Lugano",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "51a8ad3cf5d3cc64c078c6a1"
+  },
+  "strasse": "131 Flurstrasse",
+  "plz": "8421",
+  "ort": "Winterthur",
+  "typ": "PRAXIS",
+  "bezeichnung": "Praxis Praxis AG",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "fcc517c54de1b077035c152c"
+  },
+  "strasse": "72 Seestrasse",
+  "plz": "1060",
+  "ort": "Lausanne",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "6bdd465a0cb21356b2d6d526"
+  },
+  "strasse": "185 Industriestrasse",
+  "plz": "6052",
+  "ort": "Luzern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "fd032f09f4da4ca6d997556a"
+  },
+  "strasse": "160 Gartenweg",
+  "plz": "1098",
+  "ort": "Lausanne",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "0c6f5ee6e80e469b87d8b4d7"
+  },
+  "strasse": "162 Bachweg",
+  "plz": "3012",
+  "ort": "Bern",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "91384d611e1de0b454d4f594"
+  },
+  "strasse": "76 Gartenweg",
+  "plz": "4057",
+  "ort": "Basel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "43de22b9cd2e70e14184c24c"
+  },
+  "strasse": "49 Schulhausstrasse",
+  "plz": "3655",
+  "ort": "Thun",
+  "typ": "PRAXIS",
+  "bezeichnung": "Smile Praxis Sàrl",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "0c472924693067d058632eaa"
+  },
+  "strasse": "37 Seestrasse",
+  "plz": "4066",
+  "ort": "Basel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "3b9b54c3bd0d17891e88bc61"
+  },
+  "strasse": "67 Schulhausstrasse",
+  "plz": "2535",
+  "ort": "Biel",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "4e327217ff6440110bb4c7e7"
+  },
+  "strasse": "34 Flurstrasse",
+  "plz": "3670",
+  "ort": "Thun",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "dcc9ee1474eaa83f2be7fd0c"
+  },
+  "strasse": "82 Hauptstrasse",
+  "plz": "4093",
+  "ort": "Basel",
+  "typ": "PRAXIS",
+  "bezeichnung": "Zahn Studio GmbH",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "72fe974ab7c0ea56d395ff89"
+  },
+  "strasse": "43 Marktgasse",
+  "plz": "2537",
+  "ort": "Biel",
+  "typ": "PRAXIS",
+  "bezeichnung": "Smile Studio SA",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "3d28fe0e37549a281aa8ed7f"
+  },
+  "strasse": "126 Kirchgasse",
+  "plz": "9085",
+  "ort": "St. Gallen",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "744882e53e2fc6b7b69987e2"
+  },
+  "strasse": "99 Marktgasse",
+  "plz": "3671",
+  "ort": "Thun",
+  "typ": "HOME",
+  "bezeichnung": null,
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+},
+{
+  "_id": {
+    "$oid": "5f06c479173fa079bb9e7053"
+  },
+  "strasse": "77 Bachweg",
+  "plz": "2511",
+  "ort": "Biel",
+  "typ": "PRAXIS",
+  "bezeichnung": "Dental Center AG",
+  "_class": "ch.zhaw.swissdentalline.model.Adresse"
+}]

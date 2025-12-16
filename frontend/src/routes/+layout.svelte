@@ -36,7 +36,7 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <i class="bi bi-list" style="font-size: 1.5rem; color: var(--nav-primary);"></i>
     </button>
 
     <!-- Navigation Content -->
@@ -89,7 +89,7 @@
               <span class="user-name">{user.name}</span>
             </a>
             <form method="POST" action="/logout" style="display: inline;">
-              <button type="submit" class="btn btn-outline-primary btn-sm">
+              <button type="submit" class={`logout-btn ${variant}-variant`}>
                 Abmelden
               </button>
             </form>
@@ -304,6 +304,36 @@
     color: var(--text-dark);
   }
 
+  .logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: var(--radius-lg);
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .logout-btn.turquoise-variant {
+    background: linear-gradient(135deg, var(--primary-turquoise), var(--primary-turquoise));
+    color: var(--white);
+  }
+
+  .logout-btn.blue-variant {
+    background: linear-gradient(135deg, #30B0C7, #268a9c);
+    color: var(--white);
+  }
+
+  .logout-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+    opacity: 0.95;
+  }
+
   /* Mobile Styles */
   @media (max-width: 991px) {
     .mobile-toggle {
@@ -325,6 +355,7 @@
       flex-direction: column;
       padding: 1.5rem;
       gap: 1.5rem;
+      margin-left: 0;
     }
 
     .nav-links {
@@ -334,7 +365,7 @@
 
     .nav-link-item {
       width: 100%;
-      justify-content: flex-start;
+      justify-content: center;
     }
 
     .nav-actions {

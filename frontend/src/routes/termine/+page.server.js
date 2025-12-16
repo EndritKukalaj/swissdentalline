@@ -24,8 +24,6 @@ export const load = async ({ locals }) => {
         // Extract ID without 'auth0|' prefix
         const userId = auth0UserId.replace('auth0|', '');
         
-        console.log('Termine Page - User Role:', userRole);
-        
         // Handle Zahnarzt role
         if (userRole === 'Zahnarzt') {
             return await loadZahnarztTermine(userId, jwt_token);

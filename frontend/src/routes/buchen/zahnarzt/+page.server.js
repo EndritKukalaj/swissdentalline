@@ -34,7 +34,6 @@ export async function load({ url, locals }) {
         }
         
         const termin = await terminRes.json();
-        console.log('Loaded termin:', termin);
         
         // Fetch zahnarzt details
         const zahnarztRes = await fetch(`${API_BASE_URL}/zahnaerzte/${termin.zahnarztId}`, {
@@ -49,7 +48,6 @@ export async function load({ url, locals }) {
         }
         
         const zahnarzt = await zahnarztRes.json();
-        console.log('Loaded zahnarzt:', zahnarzt);
         
         // Fetch behandlungsart details
         const behandlungRes = await fetch(`${API_BASE_URL}/behandlungsarten/${termin.behandlungsartId}`, {
@@ -81,12 +79,12 @@ export async function load({ url, locals }) {
         let gesamtBewertung = null;
         let reviewPagination = null;
         
-        const reviewPage = parseInt(url.searchParams.get('reviewPage') || '0');
+        const reviewPage = parseInt(url.searchParams.get('reviewPage') || '1');
         const reviewSize = 3;
         
         try {
             const rezensionenRes = await fetch(
-                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=${reviewPage}&size=${reviewSize}&approved=true`,
+                `${API_BASE_URL}/rezensionen/zahnarzt/${zahnarzt.id}?page=${reviewPage - 1}&size=${reviewSize}&approved=true`,
                 {
                     headers: {
                         'Authorization': `Bearer ${locals.jwt_token}`,
