@@ -211,4 +211,87 @@ class AdresseServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Praxis mit Bezeichnung 'Zahnarztpraxis am Bahnhof' existiert bereits");
     }
+
+    // NEW TESTS FOR 100% COVERAGE
+
+    @Test
+    void update_praxisWithSameBezeichnung_success() {
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        dto.setStrasse("Neue Strasse 10");
+        dto.setPlz("8002");
+        dto.setOrt("Zürich");
+        dto.setTyp(AdressTyp.PRAXIS);
+        dto.setBezeichnung("Zahnarztpraxis Zentrum");
+
+        Adresse existing = new Adresse();
+        existing.setId("id1");
+        existing.setBezeichnung("Zahnarztpraxis Zentrum"); // Same name
+        existing.setTyp(AdressTyp.PRAXIS);
+
+        when(adresseRepository.findById("id1")).thenReturn(Optional.of(existing));
+        when(adresseRepository.save(existing)).thenReturn(existing);
+
+        Adresse updated = adresseService.updateAdresse("id1", dto);
+
+        assertThat(updated).isNotNull();
+        assertThat(updated.getStrasse()).isEqualTo("Neue Strasse 10");
+        verify(adresseRepository, never()).findByBezeichnung(anyString());
+    }
+
+    @Test
+    void update_nonPraxisAdresse_doesNotCheckBezeichnung() {
+        // Test the false branch of Praxis check (Line 52)
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        dto.setStrasse("Musterstrasse 10");
+        dto.setPlz("8001");
+        dto.setOrt("Zürich");
+        dto.setTyp(AdressTyp.HOME); // Not a Praxis
+        dto.setBezeichnung(null);
+
+        Adresse existing = new Adresse();
+        existing.setId("adresse123");
+        existing.setStrasse("Alte Strasse 5");
+        existing.setPlz("8001");
+        existing.setOrt("Zürich");
+        existing.setTyp(AdressTyp.HOME);
+        existing.setBezeichnung(null);
+
+        when(adresseRepository.findById("adresse123")).thenReturn(Optional.of(existing));
+        when(adresseRepository.save(existing)).thenReturn(existing);
+
+        Adresse result = adresseService.updateAdresse("adresse123", dto);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getStrasse()).isEqualTo("Musterstrasse 10");
+        // findByBezeichnung should not be called for non-Praxis addresses
+        verify(adresseRepository, never()).findByBezeichnung(any());
+    }
+
+    @Test
+    void update_praxisWithNullBezeichnung_doesNotCheckDuplicate() {
+        // Test when Bezeichnung is null (Line 52 - second condition)
+        AdresseCreateDTO dto = new AdresseCreateDTO();
+        dto.setStrasse("Bahnhofstrasse 100");
+        dto.setPlz("8000");
+        dto.setOrt("Zürich");
+        dto.setTyp(AdressTyp.PRAXIS);
+        dto.setBezeichnung(null); // Null Bezeichnung
+
+        Adresse existing = new Adresse();
+        existing.setId("praxis123");
+        existing.setStrasse("Bahnhofstrasse 50");
+        existing.setPlz("8000");
+        existing.setOrt("Zürich");
+        existing.setTyp(AdressTyp.PRAXIS);
+        existing.setBezeichnung(null);
+
+        when(adresseRepository.findById("praxis123")).thenReturn(Optional.of(existing));
+        when(adresseRepository.save(existing)).thenReturn(existing);
+
+        Adresse result = adresseService.updateAdresse("praxis123", dto);
+
+        assertThat(result).isNotNull();
+        // findByBezeichnung should not be called when Bezeichnung is null
+        verify(adresseRepository, never()).findByBezeichnung(any());
+    }
 }

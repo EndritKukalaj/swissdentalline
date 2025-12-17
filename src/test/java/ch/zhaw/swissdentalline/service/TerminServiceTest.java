@@ -424,4 +424,417 @@ class TerminServiceTest {
                 .hasMessageContaining("Patient hat bereits einen Termin am")
                 .hasMessageContaining("der sich mit dem neuen Termin überschneidet");
     }
+
+    // NEW TESTS FOR 100% COVERAGE
+
+    @Test
+    void update_withNonExistentBehandlungsart_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("nonexistent");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.FREI);
+
+        Termin existing = new Termin();
+        existing.setId("terminId");
+
+        when(repo.findById("terminId")).thenReturn(Optional.of(existing));
+        when(zahnarztRepository.existsById("cfe29d3f75b5ab53e8a07b8d")).thenReturn(true);
+        when(behandlungsartRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.updateTermin("terminId", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Behandlungsart mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void update_withNonExistentPatient_throws() {
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("nonexistent");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        Termin existing = new Termin();
+        existing.setId("terminId");
+
+        when(repo.findById("terminId")).thenReturn(Optional.of(existing));
+        when(zahnarztRepository.existsById("cfe29d3f75b5ab53e8a07b8d")).thenReturn(true);
+        when(behandlungsartRepository.existsById("f3e4a3dc565c278142bf0b44")).thenReturn(true);
+        when(patientRepository.existsById("nonexistent")).thenReturn(false);
+
+        assertThatThrownBy(() -> service.updateTermin("terminId", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Patient mit id: nonexistent nicht gefunden");
+    }
+
+    @Test
+    void findRelevantFlexTermineForPatient_withNoBookedAppointments_returnsEmpty() {
+        String patientId = "patient123";
+        when(repo.findByPatientIdAndStatusAndWartelisteAktiv(patientId, TerminStatus.GEBUCHT, true))
+                .thenReturn(List.of());
+
+        List<Termin> result = service.findRelevantFlexTermineForPatient(patientId);
+
+        assertThat(result).isEmpty();
+        verify(repo, never()).findByStatusAndBehandlungsartId(any(), any());
+    }
+
+    @Test
+    void findRelevantFlexTermineForPatient_withBookedAppointments_returnsRelevantFlexTermine() {
+        String patientId = "patient123";
+        String behandlungsartId1 = "behandlung1";
+        String behandlungsartId2 = "behandlung2";
+
+        Termin bookedTermin1 = new Termin();
+        bookedTermin1.setId("booked1");
+        bookedTermin1.setPatientId(patientId);
+        bookedTermin1.setStatus(TerminStatus.GEBUCHT);
+        bookedTermin1.setWartelisteAktiv(true);
+        bookedTermin1.setBehandlungsartId(behandlungsartId1);
+
+        Termin bookedTermin2 = new Termin();
+        bookedTermin2.setId("booked2");
+        bookedTermin2.setPatientId(patientId);
+        bookedTermin2.setStatus(TerminStatus.GEBUCHT);
+        bookedTermin2.setWartelisteAktiv(true);
+        bookedTermin2.setBehandlungsartId(behandlungsartId2);
+
+        Termin flexTermin1 = new Termin();
+        flexTermin1.setId("flex1");
+        flexTermin1.setStatus(TerminStatus.FLEX);
+        flexTermin1.setBehandlungsartId(behandlungsartId1);
+        flexTermin1.setDatum(Instant.now().plusSeconds(86400 * 10)); // 10 days in future
+
+        Termin flexTermin2Past = new Termin();
+        flexTermin2Past.setId("flex2");
+        flexTermin2Past.setStatus(TerminStatus.FLEX);
+        flexTermin2Past.setBehandlungsartId(behandlungsartId1);
+        flexTermin2Past.setDatum(Instant.now().minusSeconds(86400)); // Past
+
+        Termin flexTermin3 = new Termin();
+        flexTermin3.setId("flex3");
+        flexTermin3.setStatus(TerminStatus.FLEX);
+        flexTermin3.setBehandlungsartId(behandlungsartId2);
+        flexTermin3.setDatum(Instant.now().plusSeconds(86400 * 5)); // 5 days in future
+
+        when(repo.findByPatientIdAndStatusAndWartelisteAktiv(patientId, TerminStatus.GEBUCHT, true))
+                .thenReturn(List.of(bookedTermin1, bookedTermin2));
+        when(repo.findByStatusAndBehandlungsartId(TerminStatus.FLEX, behandlungsartId1))
+                .thenReturn(List.of(flexTermin1, flexTermin2Past));
+        when(repo.findByStatusAndBehandlungsartId(TerminStatus.FLEX, behandlungsartId2))
+                .thenReturn(List.of(flexTermin3));
+
+        List<Termin> result = service.findRelevantFlexTermineForPatient(patientId);
+
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting(Termin::getId).containsExactly("flex3", "flex1"); // sorted by date
+    }
+
+    @Test
+    void rebookToFlexTermin_whenOldTerminNotGebucht_throws() {
+        String oldTerminId = "old";
+        String flexTerminId = "flex";
+        String patientId = "patient123";
+
+        Termin oldTermin = new Termin();
+        oldTermin.setId(oldTerminId);
+        oldTermin.setPatientId(patientId);
+        oldTermin.setStatus(TerminStatus.ABGESAGT);
+
+        when(repo.findById(oldTerminId)).thenReturn(Optional.of(oldTermin));
+
+        assertThatThrownBy(() -> service.rebookToFlexTermin(oldTerminId, flexTerminId, patientId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Nur gebuchte Termine können umgebucht werden");
+    }
+
+    @Test
+    void rebookToFlexTermin_whenFlexTerminNotFlex_throws() {
+        String oldTerminId = "old";
+        String flexTerminId = "flex";
+        String patientId = "patient123";
+
+        Termin oldTermin = new Termin();
+        oldTermin.setId(oldTerminId);
+        oldTermin.setPatientId(patientId);
+        oldTermin.setStatus(TerminStatus.GEBUCHT);
+
+        Termin flexTermin = new Termin();
+        flexTermin.setId(flexTerminId);
+        flexTermin.setStatus(TerminStatus.GEBUCHT);
+
+        when(repo.findById(oldTerminId)).thenReturn(Optional.of(oldTermin));
+        when(repo.findById(flexTerminId)).thenReturn(Optional.of(flexTermin));
+
+        assertThatThrownBy(() -> service.rebookToFlexTermin(oldTerminId, flexTerminId, patientId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Termin ist kein verfügbarer Flex-Termin");
+    }
+
+    @Test
+    void rebookToFlexTermin_whenBehandlungsartDoesNotMatch_throws() {
+        String oldTerminId = "old";
+        String flexTerminId = "flex";
+        String patientId = "patient123";
+
+        Termin oldTermin = new Termin();
+        oldTermin.setId(oldTerminId);
+        oldTermin.setPatientId(patientId);
+        oldTermin.setStatus(TerminStatus.GEBUCHT);
+        oldTermin.setBehandlungsartId("behandlung1");
+
+        Termin flexTermin = new Termin();
+        flexTermin.setId(flexTerminId);
+        flexTermin.setStatus(TerminStatus.FLEX);
+        flexTermin.setBehandlungsartId("behandlung2");
+
+        when(repo.findById(oldTerminId)).thenReturn(Optional.of(oldTermin));
+        when(repo.findById(flexTerminId)).thenReturn(Optional.of(flexTermin));
+
+        assertThatThrownBy(() -> service.rebookToFlexTermin(oldTerminId, flexTerminId, patientId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Behandlungsart des Flex-Termins stimmt nicht überein");
+    }
+
+    @Test
+    void rebookToFlexTermin_within7Days_applies10PercentDiscount() {
+        String oldTerminId = "old";
+        String flexTerminId = "flex";
+        String patientId = "patient123";
+
+        Termin oldTermin = new Termin();
+        oldTermin.setId(oldTerminId);
+        oldTermin.setPatientId(patientId);
+        oldTermin.setStatus(TerminStatus.GEBUCHT);
+        oldTermin.setBehandlungsartId("behandlung1");
+        oldTermin.setWartelisteAktiv(true);
+
+        Termin flexTermin = new Termin();
+        flexTermin.setId(flexTerminId);
+        flexTermin.setStatus(TerminStatus.FLEX);
+        flexTermin.setBehandlungsartId("behandlung1");
+        flexTermin.setDatum(Instant.now().plusSeconds(86400 * 5)); // 5 days in future
+        flexTermin.setPreis(100.0);
+
+        when(repo.findById(oldTerminId)).thenReturn(Optional.of(oldTermin));
+        when(repo.findById(flexTerminId)).thenReturn(Optional.of(flexTermin));
+        when(repo.save(any(Termin.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Termin result = service.rebookToFlexTermin(oldTerminId, flexTerminId, patientId);
+
+        assertThat(result.getPreis()).isEqualTo(90.0); // 10% discount
+        assertThat(result.getStatus()).isEqualTo(TerminStatus.GEBUCHT);
+        assertThat(result.getPatientId()).isEqualTo(patientId);
+    }
+
+    @Test
+    void rebookToFlexTermin_within8to14Days_applies7PercentDiscount() {
+        String oldTerminId = "old";
+        String flexTerminId = "flex";
+        String patientId = "patient123";
+
+        Termin oldTermin = new Termin();
+        oldTermin.setId(oldTerminId);
+        oldTermin.setPatientId(patientId);
+        oldTermin.setStatus(TerminStatus.GEBUCHT);
+        oldTermin.setBehandlungsartId("behandlung1");
+        oldTermin.setWartelisteAktiv(false);
+
+        Termin flexTermin = new Termin();
+        flexTermin.setId(flexTerminId);
+        flexTermin.setStatus(TerminStatus.FLEX);
+        flexTermin.setBehandlungsartId("behandlung1");
+        flexTermin.setDatum(Instant.now().plusSeconds(86400 * 10)); // 10 days in future
+        flexTermin.setPreis(100.0);
+
+        when(repo.findById(oldTerminId)).thenReturn(Optional.of(oldTermin));
+        when(repo.findById(flexTerminId)).thenReturn(Optional.of(flexTermin));
+        when(repo.save(any(Termin.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Termin result = service.rebookToFlexTermin(oldTerminId, flexTerminId, patientId);
+
+        assertThat(result.getPreis()).isEqualTo(93.0); // 7% discount
+        assertThat(result.getStatus()).isEqualTo(TerminStatus.GEBUCHT);
+        assertThat(result.getPatientId()).isEqualTo(patientId);
+        assertThat(result.isWartelisteAktiv()).isFalse();
+    }
+
+    @Test
+    void releaseFlexTermin_happy() {
+        String terminId = "termin123";
+        Termin termin = new Termin();
+        termin.setId(terminId);
+        termin.setStatus(TerminStatus.ABGESAGT);
+        termin.setPatientId("patient123");
+
+        when(repo.findById(terminId)).thenReturn(Optional.of(termin));
+        when(repo.save(any(Termin.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Termin result = service.releaseFlexTermin(terminId);
+
+        assertThat(result.getStatus()).isEqualTo(TerminStatus.FLEX);
+        assertThat(result.getPatientId()).isNull();
+        assertThat(result.isWartelisteAktiv()).isFalse();
+    }
+
+    @Test
+    void releaseFlexTermin_whenNotAbgesagt_throws() {
+        String terminId = "termin123";
+        Termin termin = new Termin();
+        termin.setId(terminId);
+        termin.setStatus(TerminStatus.GEBUCHT);
+
+        when(repo.findById(terminId)).thenReturn(Optional.of(termin));
+
+        assertThatThrownBy(() -> service.releaseFlexTermin(terminId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Nur abgesagte Termine können als Flex-Termin freigegeben werden");
+    }
+
+    // EDGE CASE TESTS FOR 100% COVERAGE
+
+    @Test
+    void create_withPatientIdSet_callsOverlapCheck() {
+        // Test that checkPatientOverlap is actually called when PatientId is set (Line 48)
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("8aae436c3591dd4f961332e8");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        when(zahnarztRepository.existsById(dto.getZahnarztId())).thenReturn(true);
+        when(behandlungsartRepository.existsById(dto.getBehandlungsartId())).thenReturn(true);
+        when(patientRepository.existsById(dto.getPatientId())).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq(dto.getPatientId()), any(), any())).thenReturn(List.of());
+        when(repo.save(any(Termin.class))).thenReturn(testEntity);
+
+        Termin result = service.createTermin(dto);
+
+        assertThat(result).isNotNull();
+        verify(repo).findByPatientIdAndDatumBetween(eq(dto.getPatientId()), any(), any());
+    }
+
+    @Test
+    void update_withPatientIdSet_callsOverlapCheck() {
+        // Test that checkPatientOverlap is actually called in update when PatientId is set (Line 115)
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("8aae436c3591dd4f961332e8");
+        dto.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        dto.setDauerMinuten(45);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        Termin existing = new Termin();
+        existing.setId("terminId");
+
+        when(repo.findById("terminId")).thenReturn(Optional.of(existing));
+        when(zahnarztRepository.existsById(dto.getZahnarztId())).thenReturn(true);
+        when(behandlungsartRepository.existsById(dto.getBehandlungsartId())).thenReturn(true);
+        when(patientRepository.existsById(dto.getPatientId())).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq(dto.getPatientId()), any(), any())).thenReturn(List.of());
+        when(repo.save(existing)).thenReturn(existing);
+
+        Termin result = service.updateTermin("terminId", dto);
+
+        assertThat(result).isNotNull();
+        verify(repo).findByPatientIdAndDatumBetween(eq(dto.getPatientId()), any(), any());
+    }
+
+    @Test
+    void checkPatientOverlap_skipsOwnTerminWhenUpdating() {
+        // Test self-exclusion logic (Line 68-69)
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("8aae436c3591dd4f961332e8");
+        dto.setDatum(Instant.parse("2025-01-10T09:00:00Z"));
+        dto.setDauerMinuten(60);
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        Termin existing = new Termin();
+        existing.setId("id1");
+
+        // Same appointment in the query window, but should be skipped
+        Termin sameTermin = new Termin();
+        sameTermin.setId("id1"); // Same ID
+        sameTermin.setDatum(Instant.parse("2025-01-10T09:00:00Z"));
+        sameTermin.setDauerMinuten(60);
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(zahnarztRepository.existsById(dto.getZahnarztId())).thenReturn(true);
+        when(behandlungsartRepository.existsById(dto.getBehandlungsartId())).thenReturn(true);
+        when(patientRepository.existsById(dto.getPatientId())).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq(dto.getPatientId()), any(), any()))
+                .thenReturn(List.of(sameTermin)); // Returns the same appointment
+        when(repo.save(existing)).thenReturn(existing);
+
+        // Should NOT throw because it's the same appointment being updated
+        Termin result = service.updateTermin("id1", dto);
+
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    void checkPatientOverlap_noOverlapWhenAppointmentsDoNotActuallyOverlap() {
+        // Test the false branch of overlap detection (Line 76)
+        TerminCreateDTO dto = new TerminCreateDTO();
+        dto.setZahnarztId("cfe29d3f75b5ab53e8a07b8d");
+        dto.setBehandlungsartId("f3e4a3dc565c278142bf0b44");
+        dto.setPatientId("8aae436c3591dd4f961332e8");
+        dto.setDatum(Instant.parse("2025-01-10T09:00:00Z"));
+        dto.setDauerMinuten(30); // 9:00 - 9:30
+        dto.setPreis(120.0);
+        dto.setStatus(TerminStatus.GEBUCHT);
+
+        // Existing appointment that's in the query window but doesn't overlap
+        Termin existingBefore = new Termin();
+        existingBefore.setId("before");
+        existingBefore.setDatum(Instant.parse("2025-01-10T08:00:00Z"));
+        existingBefore.setDauerMinuten(30); // 8:00 - 8:30, no overlap
+
+        when(zahnarztRepository.existsById(dto.getZahnarztId())).thenReturn(true);
+        when(behandlungsartRepository.existsById(dto.getBehandlungsartId())).thenReturn(true);
+        when(patientRepository.existsById(dto.getPatientId())).thenReturn(true);
+        when(repo.findByPatientIdAndDatumBetween(eq(dto.getPatientId()), any(), any()))
+                .thenReturn(List.of(existingBefore));
+        when(repo.save(any(Termin.class))).thenReturn(testEntity);
+
+        // Should NOT throw because appointments don't overlap
+        Termin result = service.createTermin(dto);
+
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    void rebookToFlexTermin_whenFlexTerminNotFound_throws() {
+        // Test the lambda exception (Line 244)
+        String oldTerminId = "old";
+        String flexTerminId = "nonexistent";
+        String patientId = "patient123";
+
+        Termin oldTermin = new Termin();
+        oldTermin.setId(oldTerminId);
+        oldTermin.setPatientId(patientId);
+        oldTermin.setStatus(TerminStatus.GEBUCHT);
+        oldTermin.setBehandlungsartId("behandlung1");
+
+        when(repo.findById(oldTerminId)).thenReturn(Optional.of(oldTermin));
+        when(repo.findById(flexTerminId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.rebookToFlexTermin(oldTerminId, flexTerminId, patientId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Flex-Termin mit id: nonexistent nicht gefunden");
+    }
 }

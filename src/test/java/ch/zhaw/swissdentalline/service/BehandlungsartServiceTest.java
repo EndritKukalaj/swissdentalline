@@ -170,4 +170,26 @@ class BehandlungsartServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Behandlungsart mit Name 'Dentalhygiene' existiert bereits");
     }
+
+    // NEW TESTS FOR 100% COVERAGE
+
+    @Test
+    void update_withSameName_success() {
+        BehandlungsartCreateDTO dto = new BehandlungsartCreateDTO();
+        dto.setName("Dentalhygiene");
+        dto.setBeschreibung("Updated description");
+
+        Behandlungsart existing = new Behandlungsart();
+        existing.setId("id1");
+        existing.setName("Dentalhygiene"); // Same name
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(repo.save(existing)).thenReturn(existing);
+
+        Behandlungsart updated = service.updateBehandlungsart("id1", dto);
+
+        assertThat(updated).isNotNull();
+        assertThat(updated.getBeschreibung()).isEqualTo("Updated description");
+        verify(repo, never()).findByName(anyString());
+    }
 }

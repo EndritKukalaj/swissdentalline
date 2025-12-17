@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -232,5 +233,194 @@ class PatientServiceTest {
         assertThatThrownBy(() -> service.updatePatient("id1", dto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Patient mit gleichem Namen, Geburtsdatum und Adresse existiert bereits");
+    }
+
+    // NEW TESTS FOR 100% COVERAGE
+
+    @Test
+    void create_withoutAdresseId_success() {
+        PatientCreateDTO dto = new PatientCreateDTO();
+        dto.setName("Hans Müller");
+        dto.setGeburtsdatum(new Date().toInstant());
+        dto.setKrankenkasse("Helsana");
+        dto.setAdresseId(null); // No address
+
+        Patient savedPatient = new Patient();
+        savedPatient.setId("patient123");
+        savedPatient.setName(dto.getName());
+        savedPatient.setGeburtsdatum(dto.getGeburtsdatum());
+        savedPatient.setKrankenkasse(dto.getKrankenkasse());
+
+        when(repo.save(any(Patient.class))).thenReturn(savedPatient);
+
+        Patient result = service.createPatient(dto);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo("patient123");
+        assertThat(result.getName()).isEqualTo("Hans Müller");
+        verify(adresseRepository, never()).existsById(anyString());
+    }
+
+    @Test
+    void create_withProvidedId_usesProvidedId() {
+        PatientCreateDTO dto = new PatientCreateDTO();
+        dto.setId("auth0|123456789"); // ID from Auth0
+        dto.setName("Maria Weber");
+        dto.setGeburtsdatum(new Date().toInstant());
+        dto.setKrankenkasse("Swica");
+        dto.setAdresseId("address123");
+
+        Patient savedPatient = new Patient();
+        savedPatient.setId("auth0|123456789");
+        savedPatient.setName(dto.getName());
+
+        when(adresseRepository.existsById(dto.getAdresseId())).thenReturn(true);
+        when(repo.findByNameAndGeburtsdatumAndAdresseId(any(), any(), any())).thenReturn(Optional.empty());
+        when(repo.save(any(Patient.class))).thenReturn(savedPatient);
+
+        Patient result = service.createPatient(dto);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo("auth0|123456789");
+    }
+
+    @Test
+    void getProfilByName_whenPatientDoesNotExist_returnsMinimalProfile() {
+        String name = "NewPatient";
+        String email = "new@patient.ch";
+        String role = "PATIENT";
+
+        when(repo.findByName(name)).thenReturn(List.of());
+
+        ch.zhaw.swissdentalline.dto.PatientProfilDTO result = service.getProfilByName(name, email, role);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo(role);
+        assertThat(result.getAdresse()).isNull();
+        assertThat(result.getGeburtsdatum()).isNull();
+        assertThat(result.getKrankenkasse()).isNull();
+    }
+
+    @Test
+    void getProfilByName_whenPatientExists_returnsFullProfile() {
+        String name = "Laura Meier";
+        String email = "laura@patient.ch";
+        String role = "PATIENT";
+
+        Patient patient = new Patient();
+        patient.setId("patient1");
+        patient.setName(name);
+        patient.setGeburtsdatum(new Date().toInstant());
+        patient.setKrankenkasse("CSS");
+        patient.setAdresseId("address1");
+
+        ch.zhaw.swissdentalline.model.Adresse adresse = new ch.zhaw.swissdentalline.model.Adresse();
+        adresse.setId("address1");
+        adresse.setStrasse("Hauptstrasse 45");
+        adresse.setPlz("8000");
+        adresse.setOrt("Zürich");
+
+        when(repo.findByName(name)).thenReturn(List.of(patient));
+        when(adresseRepository.findById("address1")).thenReturn(Optional.of(adresse));
+
+        ch.zhaw.swissdentalline.dto.PatientProfilDTO result = service.getProfilByName(name, email, role);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo(role);
+        assertThat(result.getAdresse()).isEqualTo("Hauptstrasse 45, 8000 Zürich");
+        assertThat(result.getGeburtsdatum()).isEqualTo(patient.getGeburtsdatum());
+        assertThat(result.getKrankenkasse()).isEqualTo("CSS");
+    }
+
+    @Test
+    void getProfilByName_whenPatientExistsButAdresseNotFound_returnsProfileWithoutAdresse() {
+        String name = "Tim Baumann";
+        String email = "tim@patient.ch";
+        String role = "PATIENT";
+
+        Patient patient = new Patient();
+        patient.setId("patient2");
+        patient.setName(name);
+        patient.setGeburtsdatum(new Date().toInstant());
+        patient.setKrankenkasse("Helsana");
+        patient.setAdresseId("address2");
+
+        when(repo.findByName(name)).thenReturn(List.of(patient));
+        when(adresseRepository.findById("address2")).thenReturn(Optional.empty());
+
+        ch.zhaw.swissdentalline.dto.PatientProfilDTO result = service.getProfilByName(name, email, role);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo(role);
+        assertThat(result.getAdresse()).isNull();
+        assertThat(result.getGeburtsdatum()).isEqualTo(patient.getGeburtsdatum());
+        assertThat(result.getKrankenkasse()).isEqualTo("Helsana");
+    }
+
+    // EDGE CASE TESTS FOR 100% COVERAGE
+
+    @Test
+    void update_withDuplicateNameGeburtsdatumAndAdresse_whenIsDifferentPatient_throws() {
+        // Test the full duplicate check branch (Line 74)
+        Instant birthDate = Instant.parse("1985-03-20T00:00:00Z");
+        
+        PatientCreateDTO updateDTO = new PatientCreateDTO();
+        updateDTO.setName("Jane Doe");
+        updateDTO.setGeburtsdatum(birthDate);
+        updateDTO.setKrankenkasse("Swica");
+        updateDTO.setAdresseId("adresse123");
+
+        Patient existing = new Patient();
+        existing.setId("patient1");
+
+        Patient duplicate = new Patient();
+        duplicate.setId("patient2"); // Different ID
+        duplicate.setName("Jane Doe");
+        duplicate.setGeburtsdatum(birthDate);
+        duplicate.setAdresseId("adresse123");
+
+        when(repo.findById("patient1")).thenReturn(Optional.of(existing));
+        when(adresseRepository.existsById("adresse123")).thenReturn(true);
+        when(repo.findByNameAndGeburtsdatumAndAdresseId(
+                "Jane Doe", birthDate, "adresse123"))
+                .thenReturn(Optional.of(duplicate));
+
+        assertThatThrownBy(() -> service.updatePatient("patient1", updateDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Patient mit gleichem Namen, Geburtsdatum und Adresse existiert bereits");
+    }
+
+    @Test
+    void getProfilByName_whenPatientExistsWithoutAdresseId_returnsProfileWithoutAdresse() {
+        // Test the false branch of adresseId null check (Line 108)
+        Instant birthDate = Instant.parse("1990-05-15T00:00:00Z");
+        
+        Patient patient = new Patient();
+        patient.setId("patient123");
+        patient.setName("John Doe");
+        patient.setGeburtsdatum(birthDate);
+        patient.setKrankenkasse("Helsana");
+        patient.setAdresseId(null); // No address
+
+        when(repo.findByName("John Doe")).thenReturn(List.of(patient));
+
+        ch.zhaw.swissdentalline.dto.PatientProfilDTO result = service.getProfilByName("John Doe", "john@example.com", "PATIENT");
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo("John Doe");
+        assertThat(result.getEmail()).isEqualTo("john@example.com");
+        assertThat(result.getRole()).isEqualTo("PATIENT");
+        assertThat(result.getAdresse()).isNull();
+        assertThat(result.getGeburtsdatum()).isEqualTo(birthDate);
+        assertThat(result.getKrankenkasse()).isEqualTo("Helsana");
+
+        // Verify that findById was never called on adresseRepository
+        verify(adresseRepository, never()).findById(any());
     }
 }
