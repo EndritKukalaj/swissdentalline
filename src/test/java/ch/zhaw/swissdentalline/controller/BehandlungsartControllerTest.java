@@ -149,6 +149,111 @@ public class BehandlungsartControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    // Additional tests for better coverage
+
+    @Test
+    @Order(11)
+    public void testCreateBehandlungsartWithoutAuth_Forbidden() throws Exception {
+        BehandlungsartCreateDTO behandlungsartDTO = new BehandlungsartCreateDTO();
+        behandlungsartDTO.setName("Test");
+        behandlungsartDTO.setBeschreibung("Test");
+
+        mockMvc.perform(post("/api/behandlungsarten")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(behandlungsartDTO)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(12)
+    public void testGetBehandlungsartById_NotFound() throws Exception {
+        mockMvc.perform(get("/api/behandlungsarten/{id}", "nonexistent-id")
+                        .header("Authorization", TestSecurityConfig.PATIENT))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Order(13)
+    public void testGetBehandlungsartByIdWithoutAuth_Unauthorized() throws Exception {
+        mockMvc.perform(get("/api/behandlungsarten/{id}", behandlungsartId))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Order(14)
+    public void testGetAllBehandlungsartenWithoutAuth_Unauthorized() throws Exception {
+        mockMvc.perform(get("/api/behandlungsarten"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Order(15)
+    public void testUpdateBehandlungsartWithoutAuth_Forbidden() throws Exception {
+        BehandlungsartCreateDTO updateDTO = new BehandlungsartCreateDTO();
+        updateDTO.setName("Test");
+        updateDTO.setBeschreibung("Test");
+
+        mockMvc.perform(put("/api/behandlungsarten/{id}", behandlungsartId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(16)
+    public void testUpdateBehandlungsart_NotFound() throws Exception {
+        BehandlungsartCreateDTO updateDTO = new BehandlungsartCreateDTO();
+        updateDTO.setName("Test");
+        updateDTO.setBeschreibung("Test");
+
+        mockMvc.perform(put("/api/behandlungsarten/{id}", "nonexistent-id")
+                        .header("Authorization", TestSecurityConfig.ZAHNARZT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Order(17)
+    public void testDeleteBehandlungsartWithoutAuth_Forbidden() throws Exception {
+        mockMvc.perform(delete("/api/behandlungsarten/{id}", behandlungsartId))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(18)
+    public void testDeleteBehandlungsart_NotFound() throws Exception {
+        mockMvc.perform(delete("/api/behandlungsarten/{id}", "nonexistent-id")
+                        .header("Authorization", TestSecurityConfig.ZAHNARZT))
+                .andExpect(status().isNotFound());
+    }
+
+    // Tests for exception handling paths to achieve 100% coverage
+    @Test
+    @Order(19)
+    public void testGetBehandlungsartByIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/behandlungsarten/{id}", "nonexistent-id")
+                        .header("Authorization", TestSecurityConfig.PATIENT))
+                .andExpect(status().isNotFound());
+    }
+
+    // Tests with GUEST role to achieve 100% branch coverage
+    @Test
+    @Order(20)
+    public void testGetBehandlungsartByIdAsGuest() throws Exception {
+        mockMvc.perform(get("/api/behandlungsarten/{id}", "some-id")
+                        .header("Authorization", TestSecurityConfig.GUEST))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(21)
+    public void testGetAllBehandlungsartenAsGuest() throws Exception {
+        mockMvc.perform(get("/api/behandlungsarten")
+                        .header("Authorization", TestSecurityConfig.GUEST))
+                .andExpect(status().isForbidden());
+    }
+
     @AfterAll
     public static void cleanup(@Autowired TestDataCleanup testDataCleanup) {
         testDataCleanup.cleanupAllData();
