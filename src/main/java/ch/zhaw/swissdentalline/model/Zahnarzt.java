@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.model;
 
+import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -25,4 +26,12 @@ public class Zahnarzt {
     @NonNull
     @Field("praxis_adresse_id")
     private String praxisAdresseId;
+
+    /**
+     * Constructor: Erstellt Zahnarzt aus ZahnarztCreateDTO
+     */
+    public Zahnarzt(ZahnarztCreateDTO dto) {
+        this.name = dto.getName();
+        this.praxisAdresseId = dto.getPraxisAdresseId();
+    }
 }

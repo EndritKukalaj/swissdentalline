@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 public class TestSecurityConfig {
     public static final String PATIENT = "Bearer patient";
     public static final String ZAHNARZT = "Bearer zahnarzt";
+    public static final String GUEST = "Bearer guest";
     public static final String INVALID = "Bearer invalid";
 
     @Bean
@@ -26,6 +27,8 @@ public class TestSecurityConfig {
                     return createJwtWithRole("patient", List.of("Patient"));
                 } else if (bearer.equals(ZAHNARZT)) {
                     return createJwtWithRole("zahnarzt", List.of("Zahnarzt"));
+                } else if (bearer.equals(GUEST)) {
+                    return createJwtWithRole("guest", List.of("Guest"));
                 } else if (bearer.equals(INVALID)) {
                     throw new AuthenticationException("Invalid JWT") {};
                 }

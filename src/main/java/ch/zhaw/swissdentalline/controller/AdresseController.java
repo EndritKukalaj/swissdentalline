@@ -1,7 +1,6 @@
-﻿package ch.zhaw.swissdentalline.controller;
+package ch.zhaw.swissdentalline.controller;
 
 import ch.zhaw.swissdentalline.dto.AdresseCreateDTO;
-import ch.zhaw.swissdentalline.dto.AdresseKompaktDTO;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
 import ch.zhaw.swissdentalline.service.AdresseService;
@@ -71,19 +70,6 @@ public class AdresseController {
         return new ResponseEntity<>(adressen, HttpStatus.OK);
     }
 
-    @GetMapping("/adressen/{id}/kompakt")
-    public ResponseEntity<AdresseKompaktDTO> getAdresseKompakt(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        try {
-            AdresseKompaktDTO kompakt = adresseService.getAdresseKompakt(id);
-            return new ResponseEntity<>(kompakt, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PutMapping("/adressen/{id}")
     public ResponseEntity<Adresse> updateAdresse(
             @PathVariable String id,
@@ -112,3 +98,4 @@ public class AdresseController {
         }
     }
 }
+

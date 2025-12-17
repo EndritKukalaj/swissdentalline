@@ -2,7 +2,6 @@ package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
 import ch.zhaw.swissdentalline.dto.PatientProfilDTO;
-import ch.zhaw.swissdentalline.mapper.PatientMapper;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.Patient;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
@@ -22,8 +21,6 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
-    private PatientMapper patientMapper;
-    @Autowired
     private AdresseRepository adresseRepository;
 
     public Patient createPatient(PatientCreateDTO createDTO) {
@@ -40,7 +37,7 @@ public class PatientService {
                 throw new IllegalArgumentException("Patient mit gleichem Namen, Geburtsdatum und Adresse existiert bereits");
         }
 
-        Patient patient = patientMapper.toEntity(createDTO);
+        Patient patient = Patient.fromDTO(createDTO);
         
         // If ID is provided in DTO (e.g., from Auth0 during signup), use it
         if (createDTO.getId() != null && !createDTO.getId().isEmpty()) {

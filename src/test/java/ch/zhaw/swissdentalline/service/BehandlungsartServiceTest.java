@@ -1,7 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.BehandlungsartCreateDTO;
-import ch.zhaw.swissdentalline.mapper.BehandlungsartMapper;
 import ch.zhaw.swissdentalline.model.Behandlungsart;
 import ch.zhaw.swissdentalline.repositories.BehandlungsartRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +25,6 @@ class BehandlungsartServiceTest {
     @Mock
     BehandlungsartRepository repo;
 
-    @Mock
-    BehandlungsartMapper mapper;
-
     @InjectMocks
     BehandlungsartService service;
 
@@ -50,8 +46,7 @@ class BehandlungsartServiceTest {
     @Test
     void shouldCreateBehandlungsart() {
         when(repo.findByName(testDTO.getName())).thenReturn(Optional.empty());
-        when(mapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(repo.save(testEntity)).thenReturn(testEntity);
+        when(repo.save(any(Behandlungsart.class))).thenReturn(testEntity);
 
         Behandlungsart result = service.createBehandlungsart(testDTO);
 
@@ -174,5 +169,27 @@ class BehandlungsartServiceTest {
         assertThatThrownBy(() -> service.updateBehandlungsart("id1", dto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Behandlungsart mit Name 'Dentalhygiene' existiert bereits");
+    }
+
+    // NEW TESTS FOR 100% COVERAGE
+
+    @Test
+    void update_withSameName_success() {
+        BehandlungsartCreateDTO dto = new BehandlungsartCreateDTO();
+        dto.setName("Dentalhygiene");
+        dto.setBeschreibung("Updated description");
+
+        Behandlungsart existing = new Behandlungsart();
+        existing.setId("id1");
+        existing.setName("Dentalhygiene"); // Same name
+
+        when(repo.findById("id1")).thenReturn(Optional.of(existing));
+        when(repo.save(existing)).thenReturn(existing);
+
+        Behandlungsart updated = service.updateBehandlungsart("id1", dto);
+
+        assertThat(updated).isNotNull();
+        assertThat(updated.getBeschreibung()).isEqualTo("Updated description");
+        verify(repo, never()).findByName(anyString());
     }
 }

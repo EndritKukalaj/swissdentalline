@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.model;
 
+import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -42,4 +43,18 @@ public class Rezension {
 
     @Field("ai_kommentar")
     private String aiKommentar; // may be null
+
+    /**
+     * Factory Method: Erstellt eine neue Rezension aus einem RezensionCreateDTO
+     */
+    public static Rezension fromDTO(RezensionCreateDTO dto) {
+        Rezension rezension = new Rezension();
+        rezension.setZahnarztId(dto.getZahnarztId());
+        rezension.setPatientId(dto.getPatientId());
+        rezension.setBewertung(dto.getBewertung());
+        rezension.setText(dto.getText());
+        rezension.setDatum(dto.getDatum());
+        rezension.setApproved(false); // initially not approved
+        return rezension;
+    }
 }

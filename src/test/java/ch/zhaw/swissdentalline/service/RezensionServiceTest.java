@@ -3,7 +3,6 @@ package ch.zhaw.swissdentalline.service;
 import ch.zhaw.swissdentalline.dto.GesamtBewertungDTO;
 import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
 import ch.zhaw.swissdentalline.dto.RezensionModerationDTO;
-import ch.zhaw.swissdentalline.mapper.RezensionMapper;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.repositories.RezensionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +31,7 @@ class RezensionServiceTest {
     RezensionRepository repo;
 
     @Mock
-    RezensionMapper mapper;
+    ReviewModerationService reviewModerationService;
 
     @InjectMocks
     RezensionService service;
@@ -60,8 +59,11 @@ class RezensionServiceTest {
 
     @Test
     void shouldCreateRezension_andBeInitiallyNotApproved() {
-        when(mapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(repo.save(testEntity)).thenReturn(testEntity);
+        // Mock moderation service to return approved=false
+        ReviewModerationService.ModerationResult moderationResult = 
+                new ReviewModerationService.ModerationResult(false, null);
+        when(reviewModerationService.moderateReview(anyString())).thenReturn(moderationResult);
+        when(repo.save(any(Rezension.class))).thenReturn(testEntity);
 
         Rezension result = service.createRezension(testDTO);
 
@@ -152,6 +154,11 @@ class RezensionServiceTest {
         existing.setId("f9b7dcff6c49bcc18bba692e");
         when(repo.findById("f9b7dcff6c49bcc18bba692e")).thenReturn(Optional.of(existing));
         when(repo.save(existing)).thenReturn(existing);
+
+        // Mock moderation service
+        ReviewModerationService.ModerationResult moderationResult = 
+                new ReviewModerationService.ModerationResult(false, null);
+        when(reviewModerationService.moderateReview(anyString())).thenReturn(moderationResult);
 
         RezensionCreateDTO dto = new RezensionCreateDTO();
         dto.setZahnarztId("17981e8ac4cbe09d6b9334bc");

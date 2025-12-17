@@ -1,7 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
 import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
-import ch.zhaw.swissdentalline.mapper.ZahnarztMapper;
 import ch.zhaw.swissdentalline.model.Zahnarzt;
 import ch.zhaw.swissdentalline.repositories.ZahnarztRepository;
 import ch.zhaw.swissdentalline.repositories.AdresseRepository;
@@ -26,9 +25,6 @@ class ZahnarztServiceTest {
 
     @Mock
     ZahnarztRepository repo;
-
-    @Mock
-    ZahnarztMapper mapper;
 
     @Mock
     AdresseRepository adresseRepository;
@@ -59,8 +55,7 @@ class ZahnarztServiceTest {
         praxis.setTyp(AdressTyp.PRAXIS);
         when(adresseRepository.findById(testDTO.getPraxisAdresseId())).thenReturn(Optional.of(praxis));
         when(repo.findByNameAndPraxisAdresseId(testDTO.getName(), testDTO.getPraxisAdresseId())).thenReturn(Optional.empty());
-        when(mapper.toEntity(testDTO)).thenReturn(testEntity);
-        when(repo.save(testEntity)).thenReturn(testEntity);
+        when(repo.save(any(Zahnarzt.class))).thenReturn(testEntity);
 
         Zahnarzt result = service.createZahnarzt(testDTO);
 
@@ -281,6 +276,113 @@ class ZahnarztServiceTest {
                 .thenReturn(Optional.of(duplicate));
 
         assertThatThrownBy(() -> service.updateZahnarzt("id1", dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Zahnarzt mit gleichem Namen in dieser Praxis existiert bereits");
+    }
+
+    // NEW TESTS FOR 100% COVERAGE
+
+    @Test
+    void getProfilByName_whenZahnarztDoesNotExist_returnsMinimalProfile() {
+        String name = "NewZahnarzt";
+        String email = "new@zahnarzt.ch";
+        String role = "ZAHNARZT";
+
+        when(repo.findByName("Dr. " + name)).thenReturn(List.of());
+
+        ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO result = service.getProfilByName(name, email, role);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo(role);
+        assertThat(result.getPraxisname()).isNull();
+        assertThat(result.getPraxisadresse()).isNull();
+    }
+
+    @Test
+    void getProfilByName_whenZahnarztExists_returnsFullProfile() {
+        String name = "Markus Huber";
+        String email = "markus@zahnarzt.ch";
+        String role = "ZAHNARZT";
+
+        Zahnarzt zahnarzt = new Zahnarzt();
+        zahnarzt.setId("zahnarzt1");
+        zahnarzt.setName("Dr. Markus Huber");
+        zahnarzt.setPraxisAdresseId("praxis1");
+
+        Adresse praxisAdresse = new Adresse();
+        praxisAdresse.setId("praxis1");
+        praxisAdresse.setTyp(AdressTyp.PRAXIS);
+        praxisAdresse.setBezeichnung("Zahnarztpraxis Zürich");
+        praxisAdresse.setStrasse("Bahnhofstrasse 12");
+        praxisAdresse.setPlz("8001");
+        praxisAdresse.setOrt("Zürich");
+
+        when(repo.findByName("Dr. " + name)).thenReturn(List.of(zahnarzt));
+        when(adresseRepository.findById("praxis1")).thenReturn(Optional.of(praxisAdresse));
+
+        ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO result = service.getProfilByName(name, email, role);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo(role);
+        assertThat(result.getPraxisname()).isEqualTo("Zahnarztpraxis Zürich");
+        assertThat(result.getPraxisadresse()).isEqualTo("Bahnhofstrasse 12, 8001 Zürich");
+    }
+
+    @Test
+    void getProfilByName_whenZahnarztExistsButPraxisAdresseNotFound_returnsProfileWithoutPraxisInfo() {
+        String name = "Anna Schmid";
+        String email = "anna@zahnarzt.ch";
+        String role = "ZAHNARZT";
+
+        Zahnarzt zahnarzt = new Zahnarzt();
+        zahnarzt.setId("zahnarzt2");
+        zahnarzt.setName("Dr. Anna Schmid");
+        zahnarzt.setPraxisAdresseId("praxis2");
+
+        when(repo.findByName("Dr. " + name)).thenReturn(List.of(zahnarzt));
+        when(adresseRepository.findById("praxis2")).thenReturn(Optional.empty());
+
+        ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO result = service.getProfilByName(name, email, role);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getName()).isEqualTo(name);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getRole()).isEqualTo(role);
+        assertThat(result.getPraxisname()).isNull();
+        assertThat(result.getPraxisadresse()).isNull();
+    }
+
+    // EDGE CASE TESTS FOR 100% COVERAGE
+
+    @Test
+    void update_withDuplicateNameAndPraxis_whenIsDifferentZahnarzt_throws() {
+        // Test the full duplicate check branch (Line 77)
+        ZahnarztCreateDTO updateDTO = new ZahnarztCreateDTO();
+        updateDTO.setName("Dr. Meier");
+        updateDTO.setPraxisAdresseId("praxis123");
+
+        Zahnarzt existing = new Zahnarzt();
+        existing.setId("zahnarzt1");
+
+        Zahnarzt duplicate = new Zahnarzt();
+        duplicate.setId("zahnarzt2"); // Different ID
+        duplicate.setName("Dr. Meier");
+        duplicate.setPraxisAdresseId("praxis123");
+
+        Adresse praxisAdresse = new Adresse();
+        praxisAdresse.setId("praxis123");
+        praxisAdresse.setTyp(AdressTyp.PRAXIS);
+
+        when(repo.findById("zahnarzt1")).thenReturn(Optional.of(existing));
+        when(adresseRepository.findById("praxis123")).thenReturn(Optional.of(praxisAdresse));
+        when(repo.findByNameAndPraxisAdresseId("Dr. Meier", "praxis123"))
+                .thenReturn(Optional.of(duplicate));
+
+        assertThatThrownBy(() -> service.updateZahnarzt("zahnarzt1", updateDTO))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Zahnarzt mit gleichem Namen in dieser Praxis existiert bereits");
     }

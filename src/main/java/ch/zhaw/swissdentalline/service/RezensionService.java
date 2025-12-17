@@ -3,7 +3,6 @@ package ch.zhaw.swissdentalline.service;
 import ch.zhaw.swissdentalline.dto.GesamtBewertungDTO;
 import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
 import ch.zhaw.swissdentalline.dto.RezensionModerationDTO;
-import ch.zhaw.swissdentalline.mapper.RezensionMapper;
 import ch.zhaw.swissdentalline.model.Rezension;
 import ch.zhaw.swissdentalline.repositories.RezensionRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +22,10 @@ public class RezensionService {
     @Autowired
     private RezensionRepository rezensionRepository;
     @Autowired
-    private RezensionMapper rezensionMapper;
-    @Autowired
     private ReviewModerationService reviewModerationService;
 
     public Rezension createRezension(RezensionCreateDTO createDTO) {
-        Rezension rezension = rezensionMapper.toEntity(createDTO);
+        Rezension rezension = Rezension.fromDTO(createDTO);
         
         // AI-Moderation durchführen
         ReviewModerationService.ModerationResult moderationResult = 

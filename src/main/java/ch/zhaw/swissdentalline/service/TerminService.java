@@ -1,9 +1,6 @@
 package ch.zhaw.swissdentalline.service;
 
-import ch.zhaw.swissdentalline.dto.EinnahmenProMonatDTO;
 import ch.zhaw.swissdentalline.dto.TerminCreateDTO;
-import ch.zhaw.swissdentalline.dto.TerminStatusAggregationDTO;
-import ch.zhaw.swissdentalline.mapper.TerminMapper;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
 import ch.zhaw.swissdentalline.repositories.BehandlungsartRepository;
@@ -28,8 +25,6 @@ public class TerminService {
     @Autowired
     private TerminRepository terminRepository;
     @Autowired
-    private TerminMapper terminMapper;
-    @Autowired
     private ZahnarztRepository zahnarztRepository;
     @Autowired
     private BehandlungsartRepository behandlungsartRepository;
@@ -53,7 +48,7 @@ public class TerminService {
             checkPatientOverlap(createDTO.getPatientId(), createDTO.getDatum(), createDTO.getDauerMinuten(), null);
         }
 
-        Termin termin = terminMapper.toEntity(createDTO);
+        Termin termin = Termin.fromDTO(createDTO);
         return terminRepository.save(termin);
     }
 
@@ -98,22 +93,6 @@ public class TerminService {
     public Page<Termin> findTermineByStatusAndDateRange(
             TerminStatus status, Instant start, Instant end, Pageable pageable) {
         return terminRepository.findByStatusAndDatumBetween(status, start, end, pageable);
-    }
-
-    public Page<Termin> searchAvailableTermine(Pageable pageable) {
-        return terminRepository.findByStatus(TerminStatus.FREI, pageable);
-    }
-
-    public Page<Termin> findFlexTermine(Pageable pageable) {
-        return terminRepository.findByStatus(TerminStatus.FLEX, pageable);
-    }
-
-    public List<TerminStatusAggregationDTO> getTerminStateAggregation(String zahnarztId) {
-        return terminRepository.getTerminStateAggregation(zahnarztId);
-    }
-
-    public List<EinnahmenProMonatDTO> getEinnahmenProMonatByZahnarzt(String zahnarztId, Instant start, Instant end) {
-        return terminRepository.getEinnahmenProMonatById(zahnarztId, start, end);
     }
 
     public Termin updateTermin(String id, TerminCreateDTO updateDTO) {
