@@ -124,7 +124,7 @@ export const actions = {
                         zahnarztId: originalReview.zahnarztId || originalReview.zahnarzt_id,
                         bewertung,
                         text: text.trim(),
-                        datum: originalReview.datum
+                        datum: new Date().toISOString()
                     })
                 }
             );

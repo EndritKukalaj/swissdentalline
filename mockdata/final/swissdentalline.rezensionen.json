@@ -3,7 +3,7 @@
     "$oid": "e1f7994e3277452389db3652"
   },
   "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
-  "patient_id": "5161a0678d3801413a6143a9",
+  "patient_id": "109f9920de40bb6ca20d9d67",
   "bewertung": 3,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -32,7 +32,7 @@
     "$oid": "05746ef19f1a7f55b72fa20f"
   },
   "zahnarzt_id": "74aa3ff0f688b23665c83186",
-  "patient_id": "c1e6f836dc15b4cb7aefe237",
+  "patient_id": "25d55aace268570076ed26e0",
   "bewertung": 5,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -46,7 +46,7 @@
     "$oid": "e36e23e2751b80a9bbb5c79a"
   },
   "zahnarzt_id": "6c8f681aedb596f4f528af35",
-  "patient_id": "26c36f4c5d6b2f30a2547e18",
+  "patient_id": "25d55aace268570076ed26e0",
   "bewertung": 4,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -74,7 +74,7 @@
     "$oid": "24f06ec584f964c9140a7065"
   },
   "zahnarzt_id": "0c4cc613801fb2105de27d1d",
-  "patient_id": "6d74457c230246e49203f2a9",
+  "patient_id": "27a0360ba994d242d1f58c91",
   "bewertung": 5,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -88,7 +88,7 @@
     "$oid": "348b557c027701f01957af3b"
   },
   "zahnarzt_id": "e7c9795bb3974a19349aa698",
-  "patient_id": "5161a0678d3801413a6143a9",
+  "patient_id": "27a0360ba994d242d1f58c91",
   "bewertung": 4,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -102,7 +102,7 @@
     "$oid": "578772cee3c8ae4d185474ea"
   },
   "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
-  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "patient_id": "39e04693c894c745abf149a1",
   "bewertung": 4,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -116,7 +116,7 @@
     "$oid": "a444f58db2b7a097db779816"
   },
   "zahnarzt_id": "74aa3ff0f688b23665c83186",
-  "patient_id": "59b19c1a76fe3e0b6c0260ce",
+  "patient_id": "39e04693c894c745abf149a1",
   "bewertung": 3,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -130,7 +130,7 @@
     "$oid": "48e394ac7c7dc6fa3a983101"
   },
   "zahnarzt_id": "74aa3ff0f688b23665c83186",
-  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "patient_id": "45714571535fc08fb6914cd7",
   "bewertung": 5,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -144,7 +144,7 @@
     "$oid": "f8097811e22a708b08ae4f60"
   },
   "zahnarzt_id": "6c8f681aedb596f4f528af35",
-  "patient_id": "e9fa711d60318a6595dcc30d",
+  "patient_id": "45714571535fc08fb6914cd7",
   "bewertung": 5,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -172,7 +172,7 @@
     "$oid": "dc7819472d9690c7b9a20e9a"
   },
   "zahnarzt_id": "74aa3ff0f688b23665c83186",
-  "patient_id": "a09b479eda04475339edaaca",
+  "patient_id": "55a26955e82467e2896c57e0",
   "bewertung": 4,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -186,7 +186,7 @@
     "$oid": "2461a833a765ce84b654c1a9"
   },
   "zahnarzt_id": "e7c9795bb3974a19349aa698",
-  "patient_id": "11537c2a8c8dfb255a51120a",
+  "patient_id": "55a26955e82467e2896c57e0",
   "bewertung": 3,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -214,7 +214,7 @@
     "$oid": "3a058e345a13fa56cc288d24"
   },
   "zahnarzt_id": "74aa3ff0f688b23665c83186",
-  "patient_id": "59b19c1a76fe3e0b6c0260ce",
+  "patient_id": "5c21460575b89a2cdc111c51",
   "bewertung": 5,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -228,7 +228,7 @@
     "$oid": "28ee578aa7763f6b163586c4"
   },
   "zahnarzt_id": "0118682f8e36d61b9d06ec76",
-  "patient_id": "a09b479eda04475339edaaca",
+  "patient_id": "5c21460575b89a2cdc111c51",
   "bewertung": 3,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -242,7 +242,7 @@
     "$oid": "83a5ac570da3e3d2eb1dceef"
   },
   "zahnarzt_id": "3ca2d366b489035f107a2f0f",
-  "patient_id": "64acacba0879f92f1e10e1ba",
+  "patient_id": "6784b553fe64bade3ffbf061",
   "bewertung": 4,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -256,7 +256,7 @@
     "$oid": "ef86f626815296f5bd6f3913"
   },
   "zahnarzt_id": "9e6db7c0aaade59376562284",
-  "patient_id": "5161a0678d3801413a6143a9",
+  "patient_id": "6784b553fe64bade3ffbf061",
   "bewertung": 2,
   "text": "Sehr schlechte Erfahrung. Verdammter Blödsinn Verdammter Blödsinn.",
   "datum": {
@@ -271,7 +271,7 @@
     "$oid": "98c53d3c2354faf8f80476c5"
   },
   "zahnarzt_id": "c5b4fa2ef6a9462ece8b93e7",
-  "patient_id": "3eb2de24056a5fdaf9219990",
+  "patient_id": "691f59fe071b76a4cba71f2e",
   "bewertung": 3,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -285,7 +285,7 @@
     "$oid": "4540fbdc2b1ab5f0cb06f9db"
   },
   "zahnarzt_id": "0c4cc613801fb2105de27d1d",
-  "patient_id": "64acacba0879f92f1e10e1ba",
+  "patient_id": "691f59fe071b76a4cba71f2e",
   "bewertung": 4,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -299,7 +299,7 @@
     "$oid": "7e8ba270733bf9edcbaf69db"
   },
   "zahnarzt_id": "691f5a887ca177f3c694fd84",
-  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "patient_id": "6929c453da42d41149dc33b9",
   "bewertung": 5,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -313,7 +313,7 @@
     "$oid": "469944862ffd168ed9472e5c"
   },
   "zahnarzt_id": "156de32d61fb9489ad771156",
-  "patient_id": "5161a0678d3801413a6143a9",
+  "patient_id": "6929c453da42d41149dc33b9",
   "bewertung": 4,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -327,7 +327,7 @@
     "$oid": "37fc983a678c02acccd45c9c"
   },
   "zahnarzt_id": "691f5a887ca177f3c694fd84",
-  "patient_id": "64acacba0879f92f1e10e1ba",
+  "patient_id": "6929cc4bda42d41149dc377b",
   "bewertung": 4,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -341,7 +341,7 @@
     "$oid": "16077b9513e78554e0f2fc97"
   },
   "zahnarzt_id": "3ca2d366b489035f107a2f0f",
-  "patient_id": "64acacba0879f92f1e10e1ba",
+  "patient_id": "6929cc4bda42d41149dc377b",
   "bewertung": 1,
   "text": "Sehr schlechte Erfahrung. verflucht.",
   "datum": {
@@ -356,7 +356,7 @@
     "$oid": "36bf52d9707fa9c812787117"
   },
   "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
-  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "patient_id": "69409c8f32d1519b41a33bdc",
   "bewertung": 4,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -370,7 +370,7 @@
     "$oid": "81671e2c29061deedd178a84"
   },
   "zahnarzt_id": "9e6db7c0aaade59376562284",
-  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "patient_id": "69409c8f32d1519b41a33bdc",
   "bewertung": 4,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -398,7 +398,7 @@
     "$oid": "1d4820abc7f6a04e71219846"
   },
   "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
-  "patient_id": "e9fa711d60318a6595dcc30d",
+  "patient_id": "69409ffcb9558d30f465bb0f",
   "bewertung": 5,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -412,7 +412,7 @@
     "$oid": "e928c4a986b85c43cb2432bd"
   },
   "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
-  "patient_id": "6d74457c230246e49203f2a9",
+  "patient_id": "69409ffcb9558d30f465bb0f",
   "bewertung": 4,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -426,7 +426,7 @@
     "$oid": "3b1f532e4ee726df04eea7fe"
   },
   "zahnarzt_id": "3ca2d366b489035f107a2f0f",
-  "patient_id": "3eb2de24056a5fdaf9219990",
+  "patient_id": "6941e7208606648a858d497e",
   "bewertung": 4,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -440,7 +440,7 @@
     "$oid": "69c2120409c0af320d7a3211"
   },
   "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
-  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "patient_id": "6941e7208606648a858d497e",
   "bewertung": 3,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -454,7 +454,7 @@
     "$oid": "f22aee6d15248987a4ff1a65"
   },
   "zahnarzt_id": "156de32d61fb9489ad771156",
-  "patient_id": "da18138e7fb9bb16a13e07b4",
+  "patient_id": "69432613114e5ed894e6bbae",
   "bewertung": 1,
   "text": "Sehr schlechte Erfahrung. Verdammter Blödsinn.",
   "datum": {
@@ -469,7 +469,7 @@
     "$oid": "16335c09bee6c8efbdedcffd"
   },
   "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
-  "patient_id": "83486f1146922ec58d82fce3",
+  "patient_id": "69432613114e5ed894e6bbae",
   "bewertung": 5,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -485,7 +485,7 @@
   "zahnarzt_id": "9e6db7c0aaade59376562284",
   "patient_id": "691f59fe071b76a4cba71f2e",
   "bewertung": 4,
-  "text": "Termin pünktlich, Behandlung sehr gut.",
+  "text": "Termin pünktlich, Behandlung woww",
   "datum": {
     "$date": "2024-06-26T10:00:00.000Z"
   },
@@ -497,7 +497,7 @@
     "$oid": "c1faad287adc05037568485e"
   },
   "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
-  "patient_id": "5161a0678d3801413a6143a9",
+  "patient_id": "89995fe10a75c2cec5a9164e",
   "bewertung": 5,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -554,7 +554,7 @@
     "$oid": "a0bd9394de6fdb0910f94338"
   },
   "zahnarzt_id": "691f5a887ca177f3c694fd84",
-  "patient_id": "6d74457c230246e49203f2a9",
+  "patient_id": "89995fe10a75c2cec5a9164e",
   "bewertung": 4,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -568,7 +568,7 @@
     "$oid": "4b000fafd51f4e1f5a05a3e1"
   },
   "zahnarzt_id": "4ee9a242a3038c873a46c8ab",
-  "patient_id": "5161a0678d3801413a6143a9",
+  "patient_id": "99f9df3f5a8c8799b926fa02",
   "bewertung": 3,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -582,7 +582,7 @@
     "$oid": "70d9a6b7a788c4c97e9026a3"
   },
   "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
-  "patient_id": "6d74457c230246e49203f2a9",
+  "patient_id": "99f9df3f5a8c8799b926fa02",
   "bewertung": 5,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -596,7 +596,7 @@
     "$oid": "8f8028d9edddc1560d055661"
   },
   "zahnarzt_id": "317b10ec60bdbfb86bcc374c",
-  "patient_id": "d4789a84469f09b5a88ad924",
+  "patient_id": "9ed2f07cf40321bbd3f86f3e",
   "bewertung": 4,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -610,7 +610,7 @@
     "$oid": "33ff4d1d20a77833f67b56ec"
   },
   "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
-  "patient_id": "83486f1146922ec58d82fce3",
+  "patient_id": "9ed2f07cf40321bbd3f86f3e",
   "bewertung": 3,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -624,7 +624,7 @@
     "$oid": "31300f626612f59192c125eb"
   },
   "zahnarzt_id": "691f5a887ca177f3c694fd84",
-  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "patient_id": "a653672c7e73b63f5a3c873e",
   "bewertung": 3,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -638,7 +638,7 @@
     "$oid": "04bef63d1b938e096dfc5628"
   },
   "zahnarzt_id": "e7c9795bb3974a19349aa698",
-  "patient_id": "da18138e7fb9bb16a13e07b4",
+  "patient_id": "a653672c7e73b63f5a3c873e",
   "bewertung": 3,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -652,7 +652,7 @@
     "$oid": "19052b754c13baeb0fb0d8c5"
   },
   "zahnarzt_id": "691f5a887ca177f3c694fd84",
-  "patient_id": "6d74457c230246e49203f2a9",
+  "patient_id": "c69b3b1e8b03c82afef2a603",
   "bewertung": 4,
   "text": "Termin pünktlich, Behandlung sehr gut.",
   "datum": {
@@ -666,7 +666,7 @@
     "$oid": "c631b21d0c1eeb17d11940a5"
   },
   "zahnarzt_id": "317b10ec60bdbfb86bcc374c",
-  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "patient_id": "c69b3b1e8b03c82afef2a603",
   "bewertung": 4,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -680,7 +680,7 @@
     "$oid": "20502596db1c580a6615c78b"
   },
   "zahnarzt_id": "e0dd38e94abe3dcf4320153c",
-  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "patient_id": "c91d0033254fb4052082d389",
   "bewertung": 5,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -694,7 +694,7 @@
     "$oid": "5155ac417a296f9dd327ff13"
   },
   "zahnarzt_id": "5ac37f04e9daebb52cf0bfe1",
-  "patient_id": "83486f1146922ec58d82fce3",
+  "patient_id": "c91d0033254fb4052082d389",
   "bewertung": 5,
   "text": "Kompetenter Zahnarzt, empfehlenswert.",
   "datum": {
@@ -708,7 +708,7 @@
     "$oid": "9515ab33854b2716d4aeb760"
   },
   "zahnarzt_id": "0118682f8e36d61b9d06ec76",
-  "patient_id": "e9fa711d60318a6595dcc30d",
+  "patient_id": "d5100fae410aeb5a7b041de6",
   "bewertung": 2,
   "text": "Unangenehme Erfahrung, Kommunikation schwach.",
   "datum": {
@@ -722,7 +722,7 @@
     "$oid": "bd077b6fa1ea7ff718e43fc1"
   },
   "zahnarzt_id": "0c4cc613801fb2105de27d1d",
-  "patient_id": "b4fd1f317cb6bb8f2889212d",
+  "patient_id": "d5100fae410aeb5a7b041de6",
   "bewertung": 1,
   "text": "Unangenehme Erfahrung, Kommunikation schwach.",
   "datum": {
@@ -736,7 +736,7 @@
     "$oid": "5513f07698c12cdff0f975c0"
   },
   "zahnarzt_id": "0c4cc613801fb2105de27d1d",
-  "patient_id": "83486f1146922ec58d82fce3",
+  "patient_id": "de4a82bfbbbc4e75d30068cd",
   "bewertung": 5,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -751,7 +751,7 @@
     "$oid": "fb42c84daf28a8222b3e9d5c"
   },
   "zahnarzt_id": "0c4cc613801fb2105de27d1d",
-  "patient_id": "e9fa711d60318a6595dcc30d",
+  "patient_id": "de4a82bfbbbc4e75d30068cd",
   "bewertung": 2,
   "text": "Zu lange Wartezeit, Behandlung nicht gut erklärt.",
   "datum": {
@@ -765,7 +765,7 @@
     "$oid": "36c400db1293c9c735a27339"
   },
   "zahnarzt_id": "e7c9795bb3974a19349aa698",
-  "patient_id": "e9fa711d60318a6595dcc30d",
+  "patient_id": "e53e163fa09d679a83d3493a",
   "bewertung": 1,
   "text": "Nicht zufrieden, zu kurze Behandlung.",
   "datum": {
@@ -779,7 +779,7 @@
     "$oid": "d3b03297883ed06a4e0bbc9e"
   },
   "zahnarzt_id": "e7c9795bb3974a19349aa698",
-  "patient_id": "fec5d5391584e58dc356322d",
+  "patient_id": "e53e163fa09d679a83d3493a",
   "bewertung": 1,
   "text": "Hatte Schmerzen nach dem Termin, enttäuscht.",
   "datum": {
@@ -793,7 +793,7 @@
     "$oid": "d698b45e96b3720217d135b3"
   },
   "zahnarzt_id": "156de32d61fb9489ad771156",
-  "patient_id": "5c0933c42c3cb1fbb5d09702",
+  "patient_id": "f333ad842968a7b55a1a014e",
   "bewertung": 5,
   "text": "Gute Beratung und schmerzfrei.",
   "datum": {
@@ -807,7 +807,7 @@
     "$oid": "160d39d43da0e8758019fd7e"
   },
   "zahnarzt_id": "208c22fb0ee336341fbebf2c",
-  "patient_id": "26c36f4c5d6b2f30a2547e18",
+  "patient_id": "f333ad842968a7b55a1a014e",
   "bewertung": 5,
   "text": "Sehr zufrieden mit der Behandlung, danke!",
   "datum": {
@@ -821,7 +821,7 @@
     "$oid": "6601ea833b5887c98b10689c"
   },
   "zahnarzt_id": "208c22fb0ee336341fbebf2c",
-  "patient_id": "d4789a84469f09b5a88ad924",
+  "patient_id": "f47addb7e3ef574f4c024d3c",
   "bewertung": 4,
   "text": "Freundliches Team und professionelle Arbeit.",
   "datum": {
@@ -864,7 +864,7 @@
     "$oid": "be4f118588e423cfb687c0bf"
   },
   "zahnarzt_id": "3bf4c877a1b3bceb20c89cde",
-  "patient_id": "64acacba0879f92f1e10e1ba",
+  "patient_id": "f47addb7e3ef574f4c024d3c",
   "bewertung": 2,
   "text": "Hatte Schmerzen nach dem Termin, enttäuscht.",
   "datum": {
@@ -907,7 +907,7 @@
     "$oid": "306bb71614055dcdbc4c6cb6"
   },
   "zahnarzt_id": "6c8f681aedb596f4f528af35",
-  "patient_id": "26c36f4c5d6b2f30a2547e18",
+  "patient_id": "f333ad842968a7b55a1a014e",
   "bewertung": 1,
   "text": "Unangenehme Erfahrung, Kommunikation schwach.",
   "datum": {
@@ -929,5 +929,48 @@
     "$date": "2024-02-24T04:00:00.000Z"
   },
   "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "6941385145719016069962dc"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 3,
+  "text": "Cooler Arzt",
+  "datum": {
+    "$date": "2025-12-16T10:45:32.637Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "6941e777f8ff806ac484e9cc"
+  },
+  "zahnarzt_id": "e7c9795bb3974a19349aa698",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 5,
+  "text": "Super Behandlung!",
+  "datum": {
+    "$date": "2025-12-16T23:12:53.703Z"
+  },
+  "approved": true,
+  "_class": "ch.zhaw.swissdentalline.model.Rezension"
+},
+{
+  "_id": {
+    "$oid": "694329d682dc21d13895c51c"
+  },
+  "zahnarzt_id": "691f5a887ca177f3c694fd84",
+  "patient_id": "691f59fe071b76a4cba71f2e",
+  "bewertung": 5,
+  "text": "Scheiss Zahnarzt",
+  "datum": {
+    "$date": "2025-12-17T22:08:19.847Z"
+  },
+  "approved": false,
+  "ai_kommentar": "Die Formulierung \"Scheiss Zahnarzt\" ist eine beleidigende Äußerung gegen die Person des Zahnarztes. Solche Beschimpfungen sind unangemessen und verletzen die Richtlinien für respektvolle Bewertungen.",
   "_class": "ch.zhaw.swissdentalline.model.Rezension"
 }]

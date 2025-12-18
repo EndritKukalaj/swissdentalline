@@ -137,7 +137,7 @@
               name="preis" 
               bind:value={slotForm.preis}
               min="0"
-              step="0.01"
+              step="0.05"
               required 
               placeholder="z.B. 150.00"
             />
