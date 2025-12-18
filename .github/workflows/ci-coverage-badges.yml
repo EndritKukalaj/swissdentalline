@@ -48,7 +48,7 @@ jobs:
           retention-days: 7
 
   jacoco-badge:
-    needs: build
+    needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
