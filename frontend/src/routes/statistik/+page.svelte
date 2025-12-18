@@ -225,7 +225,7 @@
         <div class="info-header">
           <h3>
             <i class="bi bi-trophy"></i>
-            Top Behandlungsarten
+            Top abgeschlossene Behandlungsarten
           </h3>
         </div>
         <div class="treatments-list">

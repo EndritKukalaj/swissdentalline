@@ -167,6 +167,7 @@
     .pagination-btn {
         width: 60px;
         padding: 0.375rem;
+        justify-content: center;
     }
 
     .pagination-btn i {

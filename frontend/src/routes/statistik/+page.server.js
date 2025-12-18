@@ -174,9 +174,10 @@ function calculateStats(termine, behandlungsarten, rezensionen, filter) {
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
 
-  // Durchschnittliche Bewertung
-  const durchschnittsBewertung = rezensionen.length > 0
-    ? (rezensionen.reduce((sum, r) => sum + (r.bewertung || 0), 0) / rezensionen.length).toFixed(1)
+  // Durchschnittliche Bewertung (nur approved Rezensionen)
+  const approvedRezensionen = rezensionen.filter(r => r.approved === true);
+  const durchschnittsBewertung = approvedRezensionen.length > 0
+    ? (approvedRezensionen.reduce((sum, r) => sum + (r.bewertung || 0), 0) / approvedRezensionen.length).toFixed(1)
     : 0;
 
   // Einnahmen-Verlauf (letzte 12 Monate/Wochen/Tage je nach Filter)
@@ -197,7 +198,7 @@ function calculateStats(termine, behandlungsarten, rezensionen, filter) {
     gesamtEinnahmen,
     topBehandlungen,
     durchschnittsBewertung,
-    anzahlRezensionen: rezensionen.length,
+    anzahlRezensionen: approvedRezensionen.length,
     einnahmenVerlauf,
     termineVerlauf
   };

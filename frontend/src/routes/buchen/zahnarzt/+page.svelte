@@ -166,7 +166,7 @@
             Anderen Termin wählen
         </button>
         <button class="btn-primary" onclick={handleContinue}>
-            Termin bestätigen
+            Weiter
             <i class="bi bi-arrow-right-circle-fill"></i>
         </button>
     </div>
@@ -175,7 +175,7 @@
 
     <!-- Reviews Section -->
     {#if rezensionen && rezensionen.length > 0}
-        <div class="reviews-section">
+        <div class="reviews-section" id="reviews-section">
             <div class="reviews-header">
                 <h2>Patientenbewertungen</h2>
                 {#if gesamtBewertung && gesamtBewertung.anzahl > 0}
@@ -202,7 +202,7 @@
             <Pagination
                 currentPage={currentPage}
                 totalPages={nrOfPages}
-                baseUrl="/buchen/zahnarzt?terminId={termin.id}&reviewPage=PAGE_NUMBER"
+                baseUrl="/buchen/zahnarzt?terminId={termin.id}&reviewPage=PAGE_NUMBER#reviews-section"
                 variant="turquoise"
             />
         </div>
