@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  actions: read
 
 jobs:
   build-and-test:
@@ -48,6 +47,35 @@ jobs:
           path: target/site/jacoco
           retention-days: 7
 
+  jacoco-badge:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download JaCoCo report
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
+
+      - name: Generate JaCoCo badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+          generate-branches-badge: true
+
+      - name: Commit and push the badge (if it changed)
+        if: github.event_name != 'pull_request'
+        uses: EndBug/add-and-commit@v9
+        with:
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          message: 'commit badge'
+          add: '*.svg'
+
   generate-badges:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -81,6 +109,6 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout -B badges
-          git add .github/badges/*.svg
+          git add -A
           git commit -m 'Add Badges' || echo "No changes"
           git push origin badges --force
