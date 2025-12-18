@@ -2,7 +2,11 @@ name: Build and Test with Coverage Badges
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -47,7 +51,7 @@ jobs:
           path: target/site/jacoco
           retention-days: 7
 
-  jacoco-badge:
+  generate-build-badge:
     needs: build-and-test
     runs-on: ubuntu-latest
 
@@ -76,7 +80,7 @@ jobs:
           message: 'commit badge'
           add: '*.svg'
 
-  generate-badges:
+  generate-coverage-badges:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
