@@ -1,7 +1,8 @@
 import { redirect, error } from '@sveltejs/kit';
 import axios from 'axios';
+import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
 
 export async function load({ params, locals }) {
   if (!locals.isAuthenticated) {
@@ -19,7 +20,7 @@ export async function load({ params, locals }) {
 
   try {
     // Lade Termin-Details
-    const terminResponse = await axios.get(`${API_BASE_URL}/api/termine/${terminId}`, {
+    const terminResponse = await axios.get(`${API_BASE_URL}/termine/${terminId}`, {
       headers: {
         'Authorization': `Bearer ${jwt_token}`,
         'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ export async function load({ params, locals }) {
     }
 
     // Lade Behandlungsarten
-    const behandlungsartenResponse = await axios.get(`${API_BASE_URL}/api/behandlungsarten`, {
+    const behandlungsartenResponse = await axios.get(`${API_BASE_URL}/behandlungsarten`, {
       headers: {
         'Authorization': `Bearer ${jwt_token}`
       }
@@ -68,7 +69,7 @@ export const actions = {
 
     try {
       // Lade aktuellen Termin um zahnarztId zu erhalten
-      const terminResponse = await axios.get(`${API_BASE_URL}/api/termine/${terminId}`, {
+      const terminResponse = await axios.get(`${API_BASE_URL}/termine/${terminId}`, {
         headers: {
           'Authorization': `Bearer ${jwt_token}`,
           'Content-Type': 'application/json'
@@ -91,7 +92,7 @@ export const actions = {
         status: termin.status
       };
 
-      await axios.put(`${API_BASE_URL}/api/termine/${terminId}`, terminDTO, {
+      await axios.put(`${API_BASE_URL}/termine/${terminId}`, terminDTO, {
         headers: {
           'Authorization': `Bearer ${jwt_token}`,
           'Content-Type': 'application/json'

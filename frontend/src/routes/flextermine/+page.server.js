@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = env.BACKEND_URL || 'http://localhost:8080/api';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
 
 export async function load({ locals }) {
     // Check if user is authenticated

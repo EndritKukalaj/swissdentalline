@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import { error, fail, redirect } from '@sveltejs/kit';
 
-const API_BASE_URL = env.BACKEND_URL || 'http://localhost:8080/api';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
 
 export const load = async ({ params, locals, url }) => {
     const rebookSuccess = url.searchParams.get('rebookSuccess') === 'true';

@@ -1,9 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import auth from '$lib/server/auth.service.js';
 import axios from 'axios';
-import 'dotenv/config';
+import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
 
 export const actions = {
   signup: async ({ request, cookies }) => {
@@ -38,7 +38,7 @@ export const actions = {
       try {
         await axios({
           method: 'post',
-          url: `${API_BASE_URL}/api/patienten`,
+          url: `${API_BASE_URL}/patienten`,
           headers: { 
             'Authorization': `Bearer ${jwt_token}`,
             'Content-Type': 'application/json'

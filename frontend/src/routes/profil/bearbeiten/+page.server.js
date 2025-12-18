@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { error, redirect } from '@sveltejs/kit';
-import 'dotenv/config';
+import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
 
 export async function load({ locals }) {
   if (!locals.isAuthenticated) {
@@ -15,7 +15,7 @@ export async function load({ locals }) {
   const userRole = isPatient ? 'Patient' : 'Zahnarzt';
 
   try {
-    const endpoint = isPatient ? '/api/patienten/profil' : '/api/zahnaerzte/profil';
+    const endpoint = isPatient ? '/patienten/profil' : '/zahnaerzte/profil';
     
     const response = await axios.get(`${API_BASE_URL}${endpoint}`, {
       params: {
@@ -38,7 +38,7 @@ export async function load({ locals }) {
       if (isPatient) {
         // Primär: Suche über Auth0 ID
         try {
-          const patientByIdResponse = await axios.get(`${API_BASE_URL}/api/patienten/${userId}`, {
+          const patientByIdResponse = await axios.get(`${API_BASE_URL}/patienten/${userId}`, {
             headers: { Authorization: `Bearer ${locals.jwt_token}` }
           });
           if (patientByIdResponse.data) {
@@ -47,7 +47,7 @@ export async function load({ locals }) {
           }
         } catch (idError) {
           // Fallback: Suche über Name
-          const patientsResponse = await axios.get(`${API_BASE_URL}/api/patienten/name/${user.name}`, {
+          const patientsResponse = await axios.get(`${API_BASE_URL}/patienten/name/${user.name}`, {
             headers: { Authorization: `Bearer ${locals.jwt_token}` }
           });
           if (patientsResponse.data && patientsResponse.data.length > 0) {
@@ -59,7 +59,7 @@ export async function load({ locals }) {
         // Adresse-Details laden (falls vorhanden)
         if (entityData && entityData.adresseId) {
           try {
-            const adresseResponse = await axios.get(`${API_BASE_URL}/api/adressen/${entityData.adresseId}`, {
+            const adresseResponse = await axios.get(`${API_BASE_URL}/adressen/${entityData.adresseId}`, {
               headers: { Authorization: `Bearer ${locals.jwt_token}` }
             });
             currentAdresse = adresseResponse.data;
@@ -70,7 +70,7 @@ export async function load({ locals }) {
       } else {
         // Primär: Suche über Auth0 ID
         try {
-          const zahnarztByIdResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/${userId}`, {
+          const zahnarztByIdResponse = await axios.get(`${API_BASE_URL}/zahnaerzte/${userId}`, {
             headers: { Authorization: `Bearer ${locals.jwt_token}` }
           });
           if (zahnarztByIdResponse.data) {
@@ -79,7 +79,7 @@ export async function load({ locals }) {
           }
         } catch (idError) {
           // Fallback: Suche über Name
-          const zahnarztnameResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/name/${user.name}`, {
+          const zahnarztnameResponse = await axios.get(`${API_BASE_URL}/zahnaerzte/name/${user.name}`, {
             headers: { Authorization: `Bearer ${locals.jwt_token}` }
           });
           if (zahnarztnameResponse.data && zahnarztnameResponse.data.length > 0) {
@@ -97,7 +97,7 @@ export async function load({ locals }) {
     try {
       if (isPatient) {
         // Patient: Lade alle Adressen (HOME)
-        const adressenResponse = await axios.get(`${API_BASE_URL}/api/adressen`, {
+        const adressenResponse = await axios.get(`${API_BASE_URL}/adressen`, {
           headers: {
             Authorization: `Bearer ${locals.jwt_token}`
           }
@@ -105,7 +105,7 @@ export async function load({ locals }) {
         adressen = adressenResponse.data;
       } else {
         // Zahnarzt: Lade nur PRAXIS-Adressen über Typ-Filter
-        const adressenResponse = await axios.get(`${API_BASE_URL}/api/adressen/typ/PRAXIS`, {
+        const adressenResponse = await axios.get(`${API_BASE_URL}/adressen/typ/PRAXIS`, {
           params: {
             page: 0,
             size: 100  // Alle Praxis-Adressen laden
@@ -155,7 +155,7 @@ export const actions = {
 
       if (adresseId && adresseId !== '' && adresseId !== 'null') {
         // Adresse existiert bereits - aktualisieren
-        await axios.put(`${API_BASE_URL}/api/adressen/${adresseId}`, adresseDTO, {
+        await axios.put(`${API_BASE_URL}/adressen/${adresseId}`, adresseDTO, {
           headers: {
             Authorization: `Bearer ${locals.jwt_token}`,
             'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ export const actions = {
         });
       } else {
         // Keine Adresse vorhanden - neue erstellen
-        const createResponse = await axios.post(`${API_BASE_URL}/api/adressen`, adresseDTO, {
+        const createResponse = await axios.post(`${API_BASE_URL}/adressen`, adresseDTO, {
           headers: {
             Authorization: `Bearer ${locals.jwt_token}`,
             'Content-Type': 'application/json'
@@ -183,7 +183,7 @@ export const actions = {
         adresseId: adresseId
       };
 
-      await axios.put(`${API_BASE_URL}/api/patienten/${patientId}`, patientDTO, {
+      await axios.put(`${API_BASE_URL}/patienten/${patientId}`, patientDTO, {
         headers: {
           Authorization: `Bearer ${locals.jwt_token}`,
           'Content-Type': 'application/json'
@@ -222,7 +222,7 @@ export const actions = {
     };
 
     try {
-      await axios.put(`${API_BASE_URL}/api/zahnaerzte/${zahnarztId}`, zahnarztDTO, {
+      await axios.put(`${API_BASE_URL}/zahnaerzte/${zahnarztId}`, zahnarztDTO, {
         headers: {
           Authorization: `Bearer ${locals.jwt_token}`,
           'Content-Type': 'application/json'
@@ -258,7 +258,7 @@ export const actions = {
     };
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/adressen`, adresseDTO, {
+      const response = await axios.post(`${API_BASE_URL}/adressen`, adresseDTO, {
         headers: {
           Authorization: `Bearer ${locals.jwt_token}`,
           'Content-Type': 'application/json'
@@ -273,7 +273,7 @@ export const actions = {
         
         try {
           // Lade Zahnarzt-Daten
-          const zahnarztResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/${userId}`, {
+          const zahnarztResponse = await axios.get(`${API_BASE_URL}/zahnaerzte/${userId}`, {
             headers: { Authorization: `Bearer ${locals.jwt_token}` }
           });
           
@@ -281,7 +281,7 @@ export const actions = {
             const zahnarztId = zahnarztResponse.data.id;
             
             // Update Zahnarzt mit neuer Praxis-Adresse
-            await axios.put(`${API_BASE_URL}/api/zahnaerzte/${zahnarztId}`, {
+            await axios.put(`${API_BASE_URL}/zahnaerzte/${zahnarztId}`, {
               name: zahnarztResponse.data.name,
               praxisAdresseId: createdAdresse.id
             }, {
@@ -333,7 +333,7 @@ export const actions = {
     };
 
     try {
-      const response = await axios.put(`${API_BASE_URL}/api/adressen/${adresseId}`, adresseDTO, {
+      const response = await axios.put(`${API_BASE_URL}/adressen/${adresseId}`, adresseDTO, {
         headers: {
           Authorization: `Bearer ${locals.jwt_token}`,
           'Content-Type': 'application/json'
