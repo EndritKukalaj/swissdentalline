@@ -10,9 +10,6 @@ public class UserService {
     public boolean userHasRole(String role) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<String> userRoles = jwt.getClaimAsStringList("user_roles");
-        if (userRoles.contains(role)) {
-            return true;
-        }
-        return false;
+        return userRoles.contains(role);
     }
 }

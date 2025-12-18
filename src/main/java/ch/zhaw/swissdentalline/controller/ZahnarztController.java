@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
+import ch.zhaw.swissdentalline.constants.UserRoles;
 import ch.zhaw.swissdentalline.dto.ZahnarztCreateDTO;
 import ch.zhaw.swissdentalline.dto.ZahnarztProfilDTO;
 import ch.zhaw.swissdentalline.model.Zahnarzt;
@@ -26,7 +27,7 @@ public class ZahnarztController {
 
     @PostMapping("/zahnaerzte")
     public ResponseEntity<Zahnarzt> createZahnarzt(@Valid @RequestBody ZahnarztCreateDTO zahnarztDTO) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Zahnarzt created = zahnarztService.createZahnarzt(zahnarztDTO);
@@ -35,7 +36,7 @@ public class ZahnarztController {
 
     @GetMapping("/zahnaerzte/{id}")
     public ResponseEntity<Zahnarzt> getZahnarztById(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<Zahnarzt> zahnarzt = zahnarztService.getZahnarztById(id);
@@ -47,7 +48,7 @@ public class ZahnarztController {
 
     @GetMapping("/zahnaerzte")
     public ResponseEntity<List<Zahnarzt>> getAllZahnaerzte() {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Zahnarzt> zahnaerzte = zahnarztService.getAllZahnaerzte();
@@ -56,7 +57,7 @@ public class ZahnarztController {
 
     @GetMapping("/zahnaerzte/praxis/{praxisAdresseId}")
     public ResponseEntity<List<Zahnarzt>> findZahnaerzteByPraxisAdresse(@PathVariable String praxisAdresseId) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Zahnarzt> zahnaerzte = zahnarztService.findByPraxisAdresse(praxisAdresseId);
@@ -65,7 +66,7 @@ public class ZahnarztController {
 
     @GetMapping("/zahnaerzte/name/{name}")
     public ResponseEntity<List<Zahnarzt>> findZahnaerzteByName(@PathVariable String name) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Zahnarzt> zahnaerzte = zahnarztService.findByName(name);
@@ -76,7 +77,7 @@ public class ZahnarztController {
     public ResponseEntity<Zahnarzt> updateZahnarzt(
             @PathVariable String id,
             @Valid @RequestBody ZahnarztCreateDTO zahnarztDTO) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -89,7 +90,7 @@ public class ZahnarztController {
 
     @DeleteMapping("/zahnaerzte/{id}")
     public ResponseEntity<Void> deleteZahnarzt(@PathVariable String id) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -105,7 +106,7 @@ public class ZahnarztController {
             @RequestParam String name,
             @RequestParam String email,
             @RequestParam String role) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         ZahnarztProfilDTO profil = zahnarztService.getProfilByName(name, email, role);

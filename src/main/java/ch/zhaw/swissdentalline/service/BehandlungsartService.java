@@ -40,10 +40,9 @@ public class BehandlungsartService {
                 .orElseThrow(() -> new IllegalArgumentException("Behandlungsart mit id: " + id + " nicht gefunden"));
 
         // Check if name change causes duplicate
-        if (!existing.getName().equals(updateDTO.getName())) {
-            if (behandlungsartRepository.findByName(updateDTO.getName()).isPresent()) {
-                    throw new IllegalArgumentException("Behandlungsart mit Name '" + updateDTO.getName() + "' existiert bereits");
-            }
+        if (!existing.getName().equals(updateDTO.getName()) 
+                && behandlungsartRepository.findByName(updateDTO.getName()).isPresent()) {
+            throw new IllegalArgumentException("Behandlungsart mit Name '" + updateDTO.getName() + "' existiert bereits");
         }
 
         existing.setName(updateDTO.getName());

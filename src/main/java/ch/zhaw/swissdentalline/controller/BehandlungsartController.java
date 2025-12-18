@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
+import ch.zhaw.swissdentalline.constants.UserRoles;
 import ch.zhaw.swissdentalline.dto.BehandlungsartCreateDTO;
 import ch.zhaw.swissdentalline.model.Behandlungsart;
 import ch.zhaw.swissdentalline.service.BehandlungsartService;
@@ -25,7 +26,7 @@ public class BehandlungsartController {
 
     @PostMapping("/behandlungsarten")
     public ResponseEntity<Behandlungsart> createBehandlungsart(@Valid @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Behandlungsart created = behandlungsartService.createBehandlungsart(behandlungsartDTO);
@@ -34,7 +35,7 @@ public class BehandlungsartController {
 
     @GetMapping("/behandlungsarten/{id}")
     public ResponseEntity<Behandlungsart> getBehandlungsartById(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<Behandlungsart> behandlungsart = behandlungsartService.getBehandlungsartById(id);
@@ -46,7 +47,7 @@ public class BehandlungsartController {
 
     @GetMapping("/behandlungsarten")
     public ResponseEntity<List<Behandlungsart>> getAllBehandlungsarten() {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Behandlungsart> behandlungsarten = behandlungsartService.getAllBehandlungsarten();
@@ -57,7 +58,7 @@ public class BehandlungsartController {
     public ResponseEntity<Behandlungsart> updateBehandlungsart(
             @PathVariable String id,
             @Valid @RequestBody BehandlungsartCreateDTO behandlungsartDTO) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -70,7 +71,7 @@ public class BehandlungsartController {
 
     @DeleteMapping("/behandlungsarten/{id}")
     public ResponseEntity<Void> deleteBehandlungsart(@PathVariable String id) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {

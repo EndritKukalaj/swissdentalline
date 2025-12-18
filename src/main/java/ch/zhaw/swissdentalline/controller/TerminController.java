@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
+import ch.zhaw.swissdentalline.constants.UserRoles;
 import ch.zhaw.swissdentalline.dto.TerminCreateDTO;
 import ch.zhaw.swissdentalline.model.Termin;
 import ch.zhaw.swissdentalline.model.TerminStatus;
@@ -30,7 +31,7 @@ public class TerminController {
 
     @PostMapping("/termine")
     public ResponseEntity<Termin> createTermin(@Valid @RequestBody TerminCreateDTO terminDTO) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Termin created = terminService.createTermin(terminDTO);
@@ -39,7 +40,7 @@ public class TerminController {
 
     @GetMapping("/termine/{id}")
     public ResponseEntity<Termin> getTerminById(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<Termin> termin = terminService.getTerminById(id);
@@ -51,7 +52,7 @@ public class TerminController {
 
     @GetMapping("/termine")
     public ResponseEntity<List<Termin>> getAllTermine() {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Termin> termine = terminService.getAllTermine();
@@ -65,7 +66,7 @@ public class TerminController {
             @RequestParam Instant endDatum,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Pageable pageable = PageRequest.of(page, size);
@@ -77,7 +78,7 @@ public class TerminController {
     public ResponseEntity<Termin> updateTermin(
             @PathVariable String id,
             @Valid @RequestBody TerminCreateDTO terminDTO) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -93,7 +94,7 @@ public class TerminController {
             @PathVariable String id,
             @RequestParam boolean isFlex,
             @RequestParam String patientId) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -108,7 +109,7 @@ public class TerminController {
 
     @PutMapping("/termine/{id}/abbrechen")
     public ResponseEntity<Termin> cancelTermin(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -121,7 +122,7 @@ public class TerminController {
 
     @PutMapping("/termine/{id}/freigeben")
     public ResponseEntity<Termin> releaseTermin(@PathVariable String id) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -136,7 +137,7 @@ public class TerminController {
 
     @PutMapping("/termine/{id}/abschliessen")
     public ResponseEntity<Termin> completeTermin(@PathVariable String id) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -151,7 +152,7 @@ public class TerminController {
 
     @DeleteMapping("/termine/{id}")
     public ResponseEntity<Void> deleteTermin(@PathVariable String id) {
-        if (!userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -164,7 +165,7 @@ public class TerminController {
 
     @GetMapping("/termine/patient/{patientId}/flex")
     public ResponseEntity<List<Termin>> getRelevantFlexTermineForPatient(@PathVariable String patientId) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Termin> flexTermine = terminService.findRelevantFlexTermineForPatient(patientId);
@@ -176,7 +177,7 @@ public class TerminController {
             @PathVariable String oldTerminId,
             @PathVariable String flexTerminId,
             @RequestParam String patientId) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {

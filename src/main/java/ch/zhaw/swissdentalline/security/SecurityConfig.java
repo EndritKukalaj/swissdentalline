@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/**").permitAll()           
             )
-            .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
     }

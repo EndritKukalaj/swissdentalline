@@ -23,10 +23,10 @@ public class AdresseService {
 
     public Adresse createAdresse(AdresseCreateDTO createDTO) {
         // Check for duplicate Praxis Bezeichnung
-        if (createDTO.getTyp() == AdressTyp.PRAXIS && createDTO.getBezeichnung() != null) {
-            if (adresseRepository.findByBezeichnung(createDTO.getBezeichnung()).isPresent()) {
-                    throw new IllegalArgumentException("Praxis mit Bezeichnung '" + createDTO.getBezeichnung() + "' existiert bereits");
-            }
+        if (createDTO.getTyp() == AdressTyp.PRAXIS 
+                && createDTO.getBezeichnung() != null 
+                && adresseRepository.findByBezeichnung(createDTO.getBezeichnung()).isPresent()) {
+            throw new IllegalArgumentException("Praxis mit Bezeichnung '" + createDTO.getBezeichnung() + "' existiert bereits");
         }
         Adresse adresse = Adresse.fromDTO(createDTO);
         return adresseRepository.save(adresse);
@@ -49,12 +49,11 @@ public class AdresseService {
                 .orElseThrow(() -> new IllegalArgumentException("Adresse mit id: " + id + " nicht gefunden"));
 
         // Check for duplicate Praxis Bezeichnung on update
-        if (updateDTO.getTyp() == AdressTyp.PRAXIS && updateDTO.getBezeichnung() != null) {
-            if (!updateDTO.getBezeichnung().equals(existingAdresse.getBezeichnung())) {
-                if (adresseRepository.findByBezeichnung(updateDTO.getBezeichnung()).isPresent()) {
-                        throw new IllegalArgumentException("Praxis mit Bezeichnung '" + updateDTO.getBezeichnung() + "' existiert bereits");
-                }
-            }
+        if (updateDTO.getTyp() == AdressTyp.PRAXIS 
+                && updateDTO.getBezeichnung() != null 
+                && !updateDTO.getBezeichnung().equals(existingAdresse.getBezeichnung())
+                && adresseRepository.findByBezeichnung(updateDTO.getBezeichnung()).isPresent()) {
+            throw new IllegalArgumentException("Praxis mit Bezeichnung '" + updateDTO.getBezeichnung() + "' existiert bereits");
         }
 
         existingAdresse.setStrasse(updateDTO.getStrasse());
