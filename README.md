@@ -1,8 +1,8 @@
 # SwissDentalLine
 
-![Build and Test](https://github.com/zhaw-kukalend/swissdentalline/actions/workflows/ci-coverage-badges.yml/badge.svg)
-![Coverage](https://github.com/zhaw-kukalend/swissdentalline/blob/badges/.github/badges/jacoco.svg)
-![Branches](https://github.com/zhaw-kukalend/swissdentalline/blob/badges/.github/badges/branches.svg)
+![Build and Test](https://github.com/EndritKukalaj/swissdentalline/actions/workflows/ci-coverage-badges.yml/badge.svg)
+![Coverage](https://github.com/EndritKukalaj/swissdentalline/blob/badges/.github/badges/jacoco.svg)
+![Branches](https://github.com/EndritKukalaj/swissdentalline/blob/badges/.github/badges/branches.svg)
 
 SwissDentalLine ist eine webbasierte Plattform für die digitale Terminverwaltung zwischen Patienten und Zahnärzten in der Schweiz.
 Ziele sind effiziente Terminbuchung, Verwaltung von Praxis-Slots, KI-geprüfte Rezensionen und Minimierung von Leerlaufzeiten über Wartelisten & Flex-Termine.
