@@ -378,7 +378,96 @@ Das Projekt hat den **Sonar way Quality Gate** erfolgreich bestanden! 🎉
 
 ---
 
-## 🔗 SonarCloud Dashboard
+## � Automatisierte CI/CD Integration
+
+### GitHub Actions Workflow
+
+Die SonarCloud Code-Analyse wurde als **automatisierte GitHub Actions Pipeline** implementiert. Dies stellt sicher, dass die Code-Qualität bei jedem Commit kontinuierlich überwacht wird.
+
+#### Workflow-Konfiguration
+
+**Datei:** `.github/workflows/ci-sonarcloud.yml`
+
+#### Trigger-Bedingungen
+
+| Ereignis | Aktion | Status |
+|----------|--------|--------|
+| **Push zu main** | Automatische Analyse | ✅ Aktiv |
+| **Pull Request zu main** | Analyse vor Merge | ✅ Aktiv |
+| **Manueller Trigger** | Auf Anforderung | ✅ Verfügbar |
+
+**Ablauf:**
+```
+User committed code
+    ↓
+Git push zu main
+    ↓
+GitHub Actions wird ausgelöst
+    ↓
+Workflow führt aus:
+  1. Code auschecken
+  2. JDK 21 konfigurieren
+  3. Maven build
+  4. JaCoCo Test Coverage generieren
+  5. SonarCloud Scanner ausführen
+  6. Ergebnisse zu SonarCloud hochladen
+    ↓
+✅ Analyse abgeschlossen (SonarCloud Dashboard aktualisiert)
+```
+
+#### Erforderliche GitHub Secrets
+
+Für die Automatisierung sind folgende Secrets im Repository konfiguriert:
+
+| Secret | Beschreibung | Status |
+|--------|-------------|--------|
+| `SONAR_TOKEN` | SonarCloud Authentifizierung | ✅ Konfiguriert |
+| `MONGODB_URI` | MongoDB Verbindungsstring (für Build) | ✅ Konfiguriert |
+| `AUTH0_DOMAIN` | Auth0 Domain (für Build) | ✅ Konfiguriert |
+| `OPENAI_API_KEY` | OpenAI API Key (für Build) | ✅ Konfiguriert |
+
+#### Automatisierte Qualitätskontrolle
+
+Nach jedem Push führt die Pipeline automatisch folgende Prüfungen durch:
+
+✅ **Code Compilation** - Erfolgreiche Kompilierung  
+✅ **Unit Tests** - 354/354 Tests bestanden  
+✅ **Code Coverage** - JaCoCo Report generiert  
+✅ **SonarCloud Analysis** - Automatische statische Analyse  
+✅ **Quality Gate** - Sonar way Quality Gate evaluiert  
+✅ **Security Scan** - Sicherheitslücken-Check  
+✅ **Dashboard Update** - SonarCloud Dashboard aktualisiert  
+
+#### Vorteile der Automatisierung
+
+```
+🔄 Kontinuierliche Überwachung
+   └─ Code-Qualität wird bei jedem Push überprüft
+
+📊 Historische Trends
+   └─ SonarCloud speichert alle Analysen zur Trendanalyse
+
+🚨 Frühzeitige Problemerkennung
+   └─ Issues werden sofort nach dem Push erkannt
+
+🔒 Konsistente Standards
+   └─ Alle Commits unterliegen den gleichen Qualitätsanforderungen
+
+📈 Transparente Metriken
+   └─ Team hat jederzeit Zugriff auf aktuelle Code-Qualität
+```
+
+#### Integration mit Pull Requests
+
+Bei Pull Requests zum main Branch:
+- ✅ SonarCloud führt Analyse durch
+- ✅ Ergebnisse werden direkt im PR-Kommentar angezeigt
+- ✅ Quality Gate Status wird sichtbar gemacht
+- ✅ Reviewer können Code-Qualität vor dem Merge bewerten
+
+---
+
+## �🔗 SonarCloud Dashboard
 
 ### Projekt-Links
 
