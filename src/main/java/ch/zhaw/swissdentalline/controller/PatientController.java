@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
+import ch.zhaw.swissdentalline.constants.UserRoles;
 import ch.zhaw.swissdentalline.dto.PatientCreateDTO;
 import ch.zhaw.swissdentalline.dto.PatientProfilDTO;
 import ch.zhaw.swissdentalline.model.Patient;
@@ -26,7 +27,7 @@ public class PatientController {
 
     @PostMapping("/patienten")
     public ResponseEntity<Patient> createPatient(@Valid @RequestBody PatientCreateDTO patientDTO) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Patient created = patientService.createPatient(patientDTO);
@@ -35,7 +36,7 @@ public class PatientController {
 
     @GetMapping("/patienten/{id}")
     public ResponseEntity<Patient> getPatientById(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<Patient> patient = patientService.getPatientById(id);
@@ -47,7 +48,7 @@ public class PatientController {
 
     @GetMapping("/patienten")
     public ResponseEntity<List<Patient>> getAllPatients() {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Patient> patienten = patientService.getAllPatients();
@@ -56,7 +57,7 @@ public class PatientController {
 
     @GetMapping("/patienten/name/{name}")
     public ResponseEntity<List<Patient>> findPatientsByName(@PathVariable String name) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Patient> patienten = patientService.findByName(name);
@@ -67,7 +68,7 @@ public class PatientController {
     public ResponseEntity<Patient> updatePatient(
             @PathVariable String id,
             @Valid @RequestBody PatientCreateDTO patientDTO) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -80,7 +81,7 @@ public class PatientController {
 
     @DeleteMapping("/patienten/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable String id) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -96,7 +97,7 @@ public class PatientController {
             @RequestParam String name,
             @RequestParam String email,
             @RequestParam String role) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         PatientProfilDTO profil = patientService.getProfilByName(name, email, role);

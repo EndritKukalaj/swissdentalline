@@ -58,9 +58,9 @@ public class TerminService {
 
         // Query for overlapping appointments (expand search window to catch edge cases)
         List<Termin> overlapping = terminRepository.findByPatientIdAndDatumBetween(
-                patientId,
-                terminStart.minusSeconds(24 * 3600), // 1 day before
-                terminEnd.plusSeconds(24 * 3600)     // 1 day after
+            patientId,
+            terminStart.minusSeconds(24L * 3600), // 1 day before
+            terminEnd.plusSeconds(24L * 3600)     // 1 day after
         );
 
         for (Termin existing : overlapping) {
@@ -256,7 +256,7 @@ public class TerminService {
         Instant now = Instant.now();
         long daysUntil = java.time.Duration.between(now, flexTermin.getDatum()).toDays();
         
-        double discount = 0.0;
+        double discount;
         if (daysUntil <= 7) {
             discount = 0.10; // 10% Rabatt
         } else if (daysUntil <= 14) {

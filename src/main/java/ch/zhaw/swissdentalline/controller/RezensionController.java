@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
+import ch.zhaw.swissdentalline.constants.UserRoles;
 import ch.zhaw.swissdentalline.dto.GesamtBewertungDTO;
 import ch.zhaw.swissdentalline.dto.RezensionCreateDTO;
 import ch.zhaw.swissdentalline.model.Rezension;
@@ -29,7 +30,7 @@ public class RezensionController {
 
     @PostMapping("/rezensionen")
     public ResponseEntity<Rezension> createRezension(@Valid @RequestBody RezensionCreateDTO rezensionDTO) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Rezension created = rezensionService.createRezension(rezensionDTO);
@@ -38,7 +39,7 @@ public class RezensionController {
 
     @GetMapping("/rezensionen/{id}")
     public ResponseEntity<Rezension> getRezensionById(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<Rezension> rezension = rezensionService.getRezensionById(id);
@@ -50,7 +51,7 @@ public class RezensionController {
 
     @GetMapping("/rezensionen")
     public ResponseEntity<List<Rezension>> getAllRezensionen() {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Rezension> rezensionen = rezensionService.getAllRezensionen();
@@ -63,7 +64,7 @@ public class RezensionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Boolean approved) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Pageable pageable = PageRequest.of(page, size);
@@ -83,7 +84,7 @@ public class RezensionController {
             @PathVariable String patientId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Pageable pageable = PageRequest.of(page, size);
@@ -93,7 +94,7 @@ public class RezensionController {
 
     @GetMapping("/rezensionen/zahnarzt/{zahnarztId}/bewertung")
     public ResponseEntity<GesamtBewertungDTO> getGesamtBewertung(@PathVariable String zahnarztId) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<GesamtBewertungDTO> bewertung = rezensionService.getGesamtBewertungById(zahnarztId);
@@ -107,7 +108,7 @@ public class RezensionController {
     public ResponseEntity<Rezension> updateRezension(
             @PathVariable String id,
             @Valid @RequestBody RezensionCreateDTO rezensionDTO) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -120,7 +121,7 @@ public class RezensionController {
 
     @DeleteMapping("/rezensionen/{id}")
     public ResponseEntity<Void> deleteRezension(@PathVariable String id) {
-        if (!userService.userHasRole("Patient")) {
+        if (!userService.userHasRole(UserRoles.PATIENT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {

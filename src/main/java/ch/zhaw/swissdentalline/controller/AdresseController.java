@@ -1,5 +1,6 @@
 package ch.zhaw.swissdentalline.controller;
 
+import ch.zhaw.swissdentalline.constants.UserRoles;
 import ch.zhaw.swissdentalline.dto.AdresseCreateDTO;
 import ch.zhaw.swissdentalline.model.Adresse;
 import ch.zhaw.swissdentalline.model.AdressTyp;
@@ -29,7 +30,7 @@ public class AdresseController {
 
     @PostMapping("/adressen")
     public ResponseEntity<Adresse> createAdresse(@Valid @RequestBody AdresseCreateDTO adresseDTO) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Adresse created = adresseService.createAdresse(adresseDTO);
@@ -38,7 +39,7 @@ public class AdresseController {
 
     @GetMapping("/adressen/{id}")
     public ResponseEntity<Adresse> getAdresseById(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Optional<Adresse> adresse = adresseService.getAdresseById(id);
@@ -50,7 +51,7 @@ public class AdresseController {
 
     @GetMapping("/adressen")
     public ResponseEntity<List<Adresse>> getAllAdressen() {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         List<Adresse> adressen = adresseService.getAllAdressen();
@@ -62,7 +63,7 @@ public class AdresseController {
             @PathVariable AdressTyp typ,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         Pageable pageable = PageRequest.of(page, size);
@@ -74,7 +75,7 @@ public class AdresseController {
     public ResponseEntity<Adresse> updateAdresse(
             @PathVariable String id,
             @Valid @RequestBody AdresseCreateDTO adresseDTO) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
@@ -87,7 +88,7 @@ public class AdresseController {
 
     @DeleteMapping("/adressen/{id}")
     public ResponseEntity<Void> deleteAdresse(@PathVariable String id) {
-        if (!userService.userHasRole("Patient") && !userService.userHasRole("Zahnarzt")) {
+        if (!userService.userHasRole(UserRoles.PATIENT) && !userService.userHasRole(UserRoles.ZAHNARZT)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
