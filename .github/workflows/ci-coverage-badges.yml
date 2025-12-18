@@ -56,8 +56,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Download JaCoCo report
         uses: actions/download-artifact@v4
@@ -84,5 +82,5 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout -B badges
           git add .github/badges/*.svg
-          git diff --staged --quiet || git commit -m 'Update coverage badges [skip ci]'
+          git commit -m 'Add Badges' || echo "No changes"
           git push origin badges --force
