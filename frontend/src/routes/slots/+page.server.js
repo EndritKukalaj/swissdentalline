@@ -1,7 +1,11 @@
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
+import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+  ? API_BASE_URL
+  : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ locals }) {
   if (!locals.isAuthenticated) {
@@ -20,7 +24,7 @@ export async function load({ locals }) {
 
   try {
     // Lade Zahnarzt-Daten
-    const zahnarztResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/${userId}`, {
+    const zahnarztResponse = await axios.get(`${API_PREFIX}/zahnaerzte/${userId}`, {
       headers: {
         'Authorization': `Bearer ${jwt_token}`,
         'Content-Type': 'application/json'
@@ -30,7 +34,7 @@ export async function load({ locals }) {
     const zahnarzt = zahnarztResponse.data;
 
     // Lade Behandlungsarten für Dropdown
-    const behandlungsartenResponse = await axios.get(`${API_BASE_URL}/api/behandlungsarten`, {
+    const behandlungsartenResponse = await axios.get(`${API_PREFIX}/behandlungsarten`, {
       headers: {
         'Authorization': `Bearer ${jwt_token}`
       }
@@ -65,7 +69,7 @@ export const actions = {
 
     try {
       // Lade Zahnarzt-ID
-      const zahnarztResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/${userId}`, {
+      const zahnarztResponse = await axios.get(`${API_PREFIX}/zahnaerzte/${userId}`, {
         headers: { 'Authorization': `Bearer ${jwt_token}` }
       });
 
@@ -82,7 +86,7 @@ export const actions = {
 
       // Prüfe auf überlappende Termine
       try {
-        const existingTermineResponse = await axios.get(`${API_BASE_URL}/api/termine`, {
+        const existingTermineResponse = await axios.get(`${API_PREFIX}/termine`, {
           headers: { 'Authorization': `Bearer ${jwt_token}` }
         });
 
@@ -120,7 +124,7 @@ export const actions = {
         status: 'FREI'
       };
 
-      const response = await axios.post(`${API_BASE_URL}/api/termine`, terminDTO, {
+      const response = await axios.post(`${API_PREFIX}/termine`, terminDTO, {
         headers: {
           'Authorization': `Bearer ${jwt_token}`,
           'Content-Type': 'application/json'

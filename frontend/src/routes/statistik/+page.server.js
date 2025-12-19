@@ -1,7 +1,11 @@
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
+import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+  ? API_BASE_URL
+  : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ locals, url }) {
   if (!locals.isAuthenticated) {
@@ -23,7 +27,7 @@ export async function load({ locals, url }) {
 
   try {
     // Lade Zahnarzt-Daten
-    const zahnarztResponse = await axios.get(`${API_BASE_URL}/api/zahnaerzte/${userId}`, {
+    const zahnarztResponse = await axios.get(`${API_PREFIX}/zahnaerzte/${userId}`, {
       headers: {
         'Authorization': `Bearer ${jwt_token}`,
         'Content-Type': 'application/json'
@@ -34,14 +38,14 @@ export async function load({ locals, url }) {
     const zahnarztId = zahnarzt.id;
 
     // Lade alle Termine des Zahnarztes
-    const termineResponse = await axios.get(`${API_BASE_URL}/api/termine`, {
+    const termineResponse = await axios.get(`${API_PREFIX}/termine`, {
       headers: { 'Authorization': `Bearer ${jwt_token}` }
     });
 
     const alleTermine = termineResponse.data.filter(t => t.zahnarztId === zahnarztId);
 
     // Lade Behandlungsarten
-    const behandlungsartenResponse = await axios.get(`${API_BASE_URL}/api/behandlungsarten`, {
+    const behandlungsartenResponse = await axios.get(`${API_PREFIX}/behandlungsarten`, {
       headers: { 'Authorization': `Bearer ${jwt_token}` }
     });
 
@@ -50,7 +54,7 @@ export async function load({ locals, url }) {
     // Lade Rezensionen
     let rezensionen = [];
     try {
-      const rezensionenResponse = await axios.get(`${API_BASE_URL}/api/rezensionen`, {
+      const rezensionenResponse = await axios.get(`${API_PREFIX}/rezensionen`, {
         headers: { 'Authorization': `Bearer ${jwt_token}` }
       });
       rezensionen = rezensionenResponse.data.filter(r => r.zahnarztId === zahnarztId);

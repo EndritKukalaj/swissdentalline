@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { error } from '@sveltejs/kit';
-import 'dotenv/config';
+import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+	? API_BASE_URL
+	: API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ locals }) {
 	const jwt_token = locals.jwt_token;
@@ -24,8 +27,8 @@ export async function load({ locals }) {
 
 	// Wähle passenden Profil-Endpoint
 	const endpoint = isPatient
-		? `${API_BASE_URL}/api/patienten/profil`
-		: `${API_BASE_URL}/api/zahnaerzte/profil`;
+		? `${API_PREFIX}/patienten/profil`
+		: `${API_PREFIX}/zahnaerzte/profil`;
 
 	// Query-Parameter zusammenstellen
 	const params = new URLSearchParams({

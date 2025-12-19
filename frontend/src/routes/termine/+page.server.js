@@ -1,6 +1,9 @@
 import { env } from '$env/dynamic/private';
 
-const API_BASE_URL = env.BACKEND_URL || 'http://localhost:8080/api';
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ locals }) => {
     if (!locals.isAuthenticated || !locals.user) {
@@ -48,7 +51,7 @@ export const load = async ({ locals }) => {
 
 async function loadPatientTermine(patientId, jwt_token) {
     // 1. Load patient from database
-    const patientResponse = await fetch(`${API_BASE_URL}/patienten/${patientId}`, {
+    const patientResponse = await fetch(`${API_PREFIX}/patienten/${patientId}`, {
         headers: {
             'Authorization': `Bearer ${jwt_token}`,
             'Content-Type': 'application/json'
@@ -62,7 +65,7 @@ async function loadPatientTermine(patientId, jwt_token) {
     const patient = await patientResponse.json();
     
     // 2. Fetch all termine
-    const termineResponse = await fetch(`${API_BASE_URL}/termine`, {
+    const termineResponse = await fetch(`${API_PREFIX}/termine`, {
         headers: {
             'Authorization': `Bearer ${jwt_token}`,
             'Content-Type': 'application/json'
@@ -82,7 +85,7 @@ async function loadPatientTermine(patientId, jwt_token) {
         patientTermine.map(async (termin) => {
             try {
                 const behandlungsartResponse = await fetch(
-                    `${API_BASE_URL}/behandlungsarten/${termin.behandlungsartId}`,
+                    `${API_PREFIX}/behandlungsarten/${termin.behandlungsartId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${jwt_token}`,
@@ -153,7 +156,7 @@ async function loadPatientTermine(patientId, jwt_token) {
 async function loadZahnarztTermine(zahnarztId, jwt_token) {
     try {
         // 1. Load zahnarzt from database
-        const zahnarztResponse = await fetch(`${API_BASE_URL}/zahnaerzte/${zahnarztId}`, {
+        const zahnarztResponse = await fetch(`${API_PREFIX}/zahnaerzte/${zahnarztId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -167,7 +170,7 @@ async function loadZahnarztTermine(zahnarztId, jwt_token) {
         const zahnarzt = await zahnarztResponse.json();
         
         // 2. Fetch all termine
-        const termineResponse = await fetch(`${API_BASE_URL}/termine`, {
+        const termineResponse = await fetch(`${API_PREFIX}/termine`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -189,7 +192,7 @@ async function loadZahnarztTermine(zahnarztId, jwt_token) {
             zahnarztTermine.map(async (termin) => {
                 try {
                     const behandlungsartResponse = await fetch(
-                        `${API_BASE_URL}/behandlungsarten/${termin.behandlungsartId}`,
+                        `${API_PREFIX}/behandlungsarten/${termin.behandlungsartId}`,
                         {
                             headers: {
                                 'Authorization': `Bearer ${jwt_token}`,

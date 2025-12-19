@@ -1,8 +1,9 @@
 import axios from "axios";
-// Load environment variables from .env file for local development
-import 'dotenv/config'; 
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
-const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID
+import { env } from '$env/dynamic/private';
+
+const AUTH0_DOMAIN = env.AUTH0_DOMAIN;
+const AUTH0_CLIENT_ID = env.AUTH0_CLIENT_ID;
+const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
 
 // Auth0 signup endpoint documentation: see https://auth0.com/docs/libraries/custom-signup#using-the-api
 async function signup(
@@ -71,8 +72,6 @@ async function login(username, password, cookies) {
   try {
     const response = await axios(options);
     const { id_token, access_token } = response.data;
-
-    console.log(id_token);
     
     // Get user info and set cookies
     const userInfo = await getUserInfo(access_token);
