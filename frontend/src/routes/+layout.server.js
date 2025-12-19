@@ -1,6 +1,9 @@
 import { env } from '$env/dynamic/private';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ locals }) => {
 	let flexTermineCount = 0;
@@ -10,7 +13,7 @@ export const load = async ({ locals }) => {
 		try {
 			const patientId = locals.user.sub.replace('auth0|', '');
 			const response = await fetch(
-				`${API_BASE_URL}/termine/patient/${patientId}/flex`,
+				`${API_PREFIX}/termine/patient/${patientId}/flex`,
 				{
 					headers: {
 						'Authorization': `Bearer ${locals.jwt_token}`,

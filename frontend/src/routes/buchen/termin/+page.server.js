@@ -2,6 +2,9 @@ import { env } from '$env/dynamic/private';
 import { redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ locals, url, fetch }) {
     if (!locals.isAuthenticated || !locals.user) {
@@ -26,7 +29,7 @@ export async function load({ locals, url, fetch }) {
         
         // Fetch behandlungsart details
         const behandlungsartRes = await fetch(
-            `${API_BASE_URL}/behandlungsarten/${behandlungsartId}`,
+            `${API_PREFIX}/behandlungsarten/${behandlungsartId}`,
             {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
@@ -42,7 +45,7 @@ export async function load({ locals, url, fetch }) {
         const behandlungsart = await behandlungsartRes.json();
         
         // Fetch all free termine
-        const termineRes = await fetch(`${API_BASE_URL}/termine`, {
+        const termineRes = await fetch(`${API_PREFIX}/termine`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -72,7 +75,7 @@ export async function load({ locals, url, fetch }) {
                 if (termin.zahnarztId) {
                     try {
                         const zahnarztRes = await fetch(
-                            `${API_BASE_URL}/zahnaerzte/${termin.zahnarztId}`,
+                            `${API_PREFIX}/zahnaerzte/${termin.zahnarztId}`,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${jwt_token}`,

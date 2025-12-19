@@ -2,6 +2,9 @@ import { env } from '$env/dynamic/private';
 import { error } from '@sveltejs/kit';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ locals, url }) => {
     if (!locals.isAuthenticated || !locals.user) {
@@ -29,7 +32,7 @@ export const load = async ({ locals, url }) => {
         if (userRole === 'Patient') {
             // Fetch patient's reviews (page is 1-indexed from URL, API expects 0-indexed)
             const rezensionenResponse = await fetch(
-                `${API_BASE_URL}/rezensionen/patient/${userId}?page=${page - 1}&size=${size}`,
+                `${API_PREFIX}/rezensionen/patient/${userId}?page=${page - 1}&size=${size}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${jwt_token}`,
@@ -49,7 +52,7 @@ export const load = async ({ locals, url }) => {
                 rezensionenData.content.map(async (rezension) => {
                     try {
                         const zahnarztResponse = await fetch(
-                            `${API_BASE_URL}/zahnaerzte/${rezension.zahnarztId || rezension.zahnarzt_id}`,
+                            `${API_PREFIX}/zahnaerzte/${rezension.zahnarztId || rezension.zahnarzt_id}`,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${jwt_token}`,
@@ -73,7 +76,7 @@ export const load = async ({ locals, url }) => {
         } else {
             // Zahnarzt: Fetch reviews for this dentist (page is 1-indexed from URL, API expects 0-indexed)
             const rezensionenResponse = await fetch(
-                `${API_BASE_URL}/rezensionen/zahnarzt/${userId}?page=${page - 1}&size=${size}`,
+                `${API_PREFIX}/rezensionen/zahnarzt/${userId}?page=${page - 1}&size=${size}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${jwt_token}`,
@@ -93,7 +96,7 @@ export const load = async ({ locals, url }) => {
                 rezensionenData.content.map(async (rezension) => {
                     try {
                         const patientResponse = await fetch(
-                            `${API_BASE_URL}/patienten/${rezension.patientId || rezension.patient_id}`,
+                            `${API_PREFIX}/patienten/${rezension.patientId || rezension.patient_id}`,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${jwt_token}`,
@@ -151,7 +154,7 @@ export const actions = {
             const jwt_token = locals.jwt_token;
             
             const response = await fetch(
-                `${API_BASE_URL}/rezensionen/${reviewId}`,
+                `${API_PREFIX}/rezensionen/${reviewId}`,
                 {
                     method: 'DELETE',
                     headers: {

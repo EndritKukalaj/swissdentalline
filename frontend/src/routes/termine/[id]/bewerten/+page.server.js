@@ -2,6 +2,9 @@ import { env } from '$env/dynamic/private';
 import { error, fail, redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ params, locals }) => {
     if (!locals.isAuthenticated || !locals.user) {
@@ -20,7 +23,7 @@ export const load = async ({ params, locals }) => {
         const patientId = auth0UserId.replace('auth0|', '');
 
         // Fetch termin details
-        const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+        const terminResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -46,7 +49,7 @@ export const load = async ({ params, locals }) => {
 
         // Fetch zahnarzt details
         const zahnarztId = termin.zahnarztId || termin.zahnarzt_id;
-        const zahnarztResponse = await fetch(`${API_BASE_URL}/zahnaerzte/${zahnarztId}`, {
+        const zahnarztResponse = await fetch(`${API_PREFIX}/zahnaerzte/${zahnarztId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -57,7 +60,7 @@ export const load = async ({ params, locals }) => {
 
         // Fetch behandlungsart details
         const behandlungsartId = termin.behandlungsartId || termin.behandlungsart_id;
-        const behandlungsartResponse = await fetch(`${API_BASE_URL}/behandlungsarten/${behandlungsartId}`, {
+        const behandlungsartResponse = await fetch(`${API_PREFIX}/behandlungsarten/${behandlungsartId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -69,7 +72,7 @@ export const load = async ({ params, locals }) => {
         // Fetch praxis details if zahnarzt has praxisAdresseId
         let praxis = null;
         if (zahnarzt?.praxisAdresseId) {
-            const praxisResponse = await fetch(`${API_BASE_URL}/adressen/${zahnarzt.praxisAdresseId}`, {
+            const praxisResponse = await fetch(`${API_PREFIX}/adressen/${zahnarzt.praxisAdresseId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
                     'Content-Type': 'application/json'
@@ -112,7 +115,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/rezensionen`, {
+            const response = await fetch(`${API_PREFIX}/rezensionen`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${locals.jwt_token}`,

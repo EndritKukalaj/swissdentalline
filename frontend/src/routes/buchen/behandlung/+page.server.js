@@ -2,6 +2,9 @@ import { env } from '$env/dynamic/private';
 import { redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ locals }) => {
     if (!locals.isAuthenticated || !locals.user) {
@@ -19,7 +22,7 @@ export const load = async ({ locals }) => {
         const jwt_token = locals.jwt_token;
         
         // Fetch all available Behandlungsarten
-        const response = await fetch(`${API_BASE_URL}/behandlungsarten`, {
+        const response = await fetch(`${API_PREFIX}/behandlungsarten`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'

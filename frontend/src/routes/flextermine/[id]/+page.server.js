@@ -2,6 +2,9 @@ import { redirect, fail } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ params, url, locals }) {
     // Check if user is authenticated
@@ -26,7 +29,7 @@ export async function load({ params, url, locals }) {
         const patientId = locals.user.sub.replace('auth0|', '');
         
         // Fetch flex termin
-        const flexTerminRes = await fetch(`${API_BASE_URL}/termine/${flexTerminId}`, {
+        const flexTerminRes = await fetch(`${API_PREFIX}/termine/${flexTerminId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -40,7 +43,7 @@ export async function load({ params, url, locals }) {
         const flexTermin = await flexTerminRes.json();
         
         // Fetch old termin
-        const oldTerminRes = await fetch(`${API_BASE_URL}/termine/${oldTerminId}`, {
+        const oldTerminRes = await fetch(`${API_PREFIX}/termine/${oldTerminId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -59,7 +62,7 @@ export async function load({ params, url, locals }) {
         }
         
         // Fetch behandlungsart
-        const behandlungsartRes = await fetch(`${API_BASE_URL}/behandlungsarten/${flexTermin.behandlungsartId}`, {
+        const behandlungsartRes = await fetch(`${API_PREFIX}/behandlungsarten/${flexTermin.behandlungsartId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -69,7 +72,7 @@ export async function load({ params, url, locals }) {
         const behandlungsart = behandlungsartRes.ok ? await behandlungsartRes.json() : null;
         
         // Fetch zahnarzt for flex termin
-        const zahnarztRes = await fetch(`${API_BASE_URL}/zahnaerzte/${flexTermin.zahnarztId}`, {
+        const zahnarztRes = await fetch(`${API_PREFIX}/zahnaerzte/${flexTermin.zahnarztId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -79,7 +82,7 @@ export async function load({ params, url, locals }) {
         const flexZahnarzt = zahnarztRes.ok ? await zahnarztRes.json() : null;
         
         // Fetch zahnarzt for old termin
-        const oldZahnarztRes = await fetch(`${API_BASE_URL}/zahnaerzte/${oldTermin.zahnarztId}`, {
+        const oldZahnarztRes = await fetch(`${API_PREFIX}/zahnaerzte/${oldTermin.zahnarztId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -115,7 +118,7 @@ export const actions = {
         
         try {
             const response = await fetch(
-                `${API_BASE_URL}/termine/${oldTerminId}/umbuchen/${flexTerminId}?patientId=${patientId}`,
+                `${API_PREFIX}/termine/${oldTerminId}/umbuchen/${flexTerminId}?patientId=${patientId}`,
                 {
                     method: 'PUT',
                     headers: {

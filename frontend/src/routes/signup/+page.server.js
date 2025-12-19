@@ -4,6 +4,9 @@ import axios from 'axios';
 import { env } from '$env/dynamic/private';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+  ? API_BASE_URL
+  : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const actions = {
   signup: async ({ request, cookies }) => {
@@ -38,7 +41,7 @@ export const actions = {
       try {
         await axios({
           method: 'post',
-          url: `${API_BASE_URL}/patienten`,
+          url: `${API_PREFIX}/patienten`,
           headers: { 
             'Authorization': `Bearer ${jwt_token}`,
             'Content-Type': 'application/json'

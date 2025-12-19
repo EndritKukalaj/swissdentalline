@@ -2,6 +2,9 @@ import { redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ locals }) {
     // Check if user is authenticated
@@ -19,7 +22,7 @@ export async function load({ locals }) {
         const patientId = locals.user.sub.replace('auth0|', '');
         
         // Fetch relevant flex termine for patient
-        const flexTermineRes = await fetch(`${API_BASE_URL}/termine/patient/${patientId}/flex`, {
+        const flexTermineRes = await fetch(`${API_PREFIX}/termine/patient/${patientId}/flex`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -37,7 +40,7 @@ export async function load({ locals }) {
         const flexTermine = await flexTermineRes.json();
         
         // Fetch patient's booked appointments with waitlist active
-        const allTermineRes = await fetch(`${API_BASE_URL}/termine`, {
+        const allTermineRes = await fetch(`${API_PREFIX}/termine`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -69,7 +72,7 @@ export async function load({ locals }) {
         
         const behandlungsarten = {};
         for (const id of behandlungsartIds) {
-            const res = await fetch(`${API_BASE_URL}/behandlungsarten/${id}`, {
+            const res = await fetch(`${API_PREFIX}/behandlungsarten/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${locals.jwt_token}`,
                     'Content-Type': 'application/json'
@@ -85,7 +88,7 @@ export async function load({ locals }) {
         const zahnarztIds = [...new Set(flexTermine.map(t => t.zahnarztId))];
         const zahnaerzte = {};
         for (const id of zahnarztIds) {
-            const res = await fetch(`${API_BASE_URL}/zahnaerzte/${id}`, {
+            const res = await fetch(`${API_PREFIX}/zahnaerzte/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${locals.jwt_token}`,
                     'Content-Type': 'application/json'

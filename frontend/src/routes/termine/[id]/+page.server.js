@@ -2,6 +2,9 @@ import { env } from '$env/dynamic/private';
 import { error, fail, redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ params, locals, url }) => {
     const rebookSuccess = url.searchParams.get('rebookSuccess') === 'true';
@@ -22,7 +25,7 @@ export const load = async ({ params, locals, url }) => {
         const userRole = locals.user.user_roles?.[0] || 'Patient';
 
         // 1. Fetch termin details
-        const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+        const terminResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
             headers: {
                 'Authorization': `Bearer ${jwt_token}`,
                 'Content-Type': 'application/json'
@@ -53,7 +56,7 @@ export const load = async ({ params, locals, url }) => {
         if (behandlungsartId) {
             try {
                 const behandlungsartResponse = await fetch(
-                    `${API_BASE_URL}/behandlungsarten/${behandlungsartId}`,
+                    `${API_PREFIX}/behandlungsarten/${behandlungsartId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${jwt_token}`,
@@ -75,7 +78,7 @@ export const load = async ({ params, locals, url }) => {
         if (zahnarztId) {
             try {
                 const zahnarztResponse = await fetch(
-                    `${API_BASE_URL}/zahnaerzte/${zahnarztId}`,
+                    `${API_PREFIX}/zahnaerzte/${zahnarztId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${jwt_token}`,
@@ -97,7 +100,7 @@ export const load = async ({ params, locals, url }) => {
         if (adresseId) {
             try {
                 const adresseResponse = await fetch(
-                    `${API_BASE_URL}/adressen/${adresseId}`,
+                    `${API_PREFIX}/adressen/${adresseId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${jwt_token}`,
@@ -118,7 +121,7 @@ export const load = async ({ params, locals, url }) => {
         if (userRole === 'Zahnarzt' && terminPatientId) {
             try {
                 const patientResponse = await fetch(
-                    `${API_BASE_URL}/patienten/${terminPatientId}`,
+                    `${API_PREFIX}/patienten/${terminPatientId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${jwt_token}`,
@@ -172,7 +175,7 @@ export const actions = {
 
         try {
             // Verify ownership before canceling
-            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+            const terminResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
                     'Content-Type': 'application/json'
@@ -205,7 +208,7 @@ export const actions = {
             }
 
             // Cancel the appointment
-            const cancelResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/abbrechen`, {
+            const cancelResponse = await fetch(`${API_PREFIX}/termine/${terminId}/abbrechen`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
@@ -241,7 +244,7 @@ export const actions = {
 
         try {
             // Verify ownership before completing
-            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+            const terminResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
                     'Content-Type': 'application/json'
@@ -269,7 +272,7 @@ export const actions = {
             }
 
             // Complete the appointment
-            const completeResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/abschliessen`, {
+            const completeResponse = await fetch(`${API_PREFIX}/termine/${terminId}/abschliessen`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
@@ -307,7 +310,7 @@ export const actions = {
 
         try {
             // Verify ownership before releasing
-            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+            const terminResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
                     'Content-Type': 'application/json'
@@ -335,7 +338,7 @@ export const actions = {
             }
 
             // Release the appointment to FLEX
-            const releaseResponse = await fetch(`${API_BASE_URL}/termine/${terminId}/freigeben`, {
+            const releaseResponse = await fetch(`${API_PREFIX}/termine/${terminId}/freigeben`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
@@ -373,7 +376,7 @@ export const actions = {
 
         try {
             // Get current termin to verify ownership and status
-            const terminResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+            const terminResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
                     'Content-Type': 'application/json'
@@ -400,7 +403,7 @@ export const actions = {
             }
 
             // Delete the slot
-            const deleteResponse = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+            const deleteResponse = await fetch(`${API_PREFIX}/termine/${terminId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,

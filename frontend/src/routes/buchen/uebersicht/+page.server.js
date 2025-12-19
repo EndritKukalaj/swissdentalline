@@ -2,6 +2,9 @@ import { redirect, fail } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export async function load({ url, locals }) {
     // Check if user is authenticated
@@ -24,7 +27,7 @@ export async function load({ url, locals }) {
     
     try {
         // Fetch termin details
-        const terminRes = await fetch(`${API_BASE_URL}/termine/${terminId}`, {
+        const terminRes = await fetch(`${API_PREFIX}/termine/${terminId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -38,7 +41,7 @@ export async function load({ url, locals }) {
         const termin = await terminRes.json();
         
         // Fetch zahnarzt details
-        const zahnarztRes = await fetch(`${API_BASE_URL}/zahnaerzte/${termin.zahnarztId}`, {
+        const zahnarztRes = await fetch(`${API_PREFIX}/zahnaerzte/${termin.zahnarztId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -48,7 +51,7 @@ export async function load({ url, locals }) {
         const zahnarzt = zahnarztRes.ok ? await zahnarztRes.json() : null;
         
         // Fetch behandlungsart details
-        const behandlungRes = await fetch(`${API_BASE_URL}/behandlungsarten/${termin.behandlungsartId}`, {
+        const behandlungRes = await fetch(`${API_PREFIX}/behandlungsarten/${termin.behandlungsartId}`, {
             headers: {
                 'Authorization': `Bearer ${locals.jwt_token}`,
                 'Content-Type': 'application/json'
@@ -60,7 +63,7 @@ export async function load({ url, locals }) {
         // Fetch praxis details if zahnarzt has praxisAdresseId
         let praxis = null;
         if (zahnarzt?.praxisAdresseId) {
-            const praxisRes = await fetch(`${API_BASE_URL}/adressen/${zahnarzt.praxisAdresseId}`, {
+            const praxisRes = await fetch(`${API_PREFIX}/adressen/${zahnarzt.praxisAdresseId}`, {
                 headers: {
                     'Authorization': `Bearer ${locals.jwt_token}`,
                     'Content-Type': 'application/json'
@@ -100,7 +103,7 @@ export const actions = {
             const patientId = locals.user.sub.replace('auth0|', '');
             
             // Build URL with query parameters
-            const url = new URL(`${API_BASE_URL}/termine/${terminId}/buchen`);
+            const url = new URL(`${API_PREFIX}/termine/${terminId}/buchen`);
             url.searchParams.append('patientId', patientId);
             url.searchParams.append('isFlex', warteliste);
             

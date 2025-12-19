@@ -23,10 +23,14 @@ export async function api(method, resource, locals, data) {
         headers['Authorization'] = `Bearer ${jwt_token}`;
     }
 
+    // Ensure we target the backend '/api' base even if env.API_BASE_URL lacks it
+    const base = (env.API_BASE_URL || 'http://localhost:8080/api');
+    const API_PREFIX = base.endsWith('/api') ? base : base.replace(/\/$/, '') + '/api';
+
     try {
         const response = await axios({
             method,
-            url: `${env.API_BASE_URL}/${resource}`,
+            url: `${API_PREFIX}/${resource}`,
             headers,
             data
         });

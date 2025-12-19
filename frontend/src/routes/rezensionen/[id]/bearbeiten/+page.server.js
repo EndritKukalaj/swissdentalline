@@ -2,6 +2,9 @@ import { env } from '$env/dynamic/private';
 import { error, redirect } from '@sveltejs/kit';
 
 const API_BASE_URL = env.API_BASE_URL || 'http://localhost:8080/api';
+const API_PREFIX = API_BASE_URL.endsWith('/api')
+    ? API_BASE_URL
+    : API_BASE_URL.replace(/\/$/, '') + '/api';
 
 export const load = async ({ locals, params }) => {
     if (!locals.isAuthenticated || !locals.user) {
@@ -20,7 +23,7 @@ export const load = async ({ locals, params }) => {
         
         // Load review
         const reviewResponse = await fetch(
-            `${API_BASE_URL}/rezensionen/${reviewId}`,
+            `${API_PREFIX}/rezensionen/${reviewId}`,
             {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
@@ -37,7 +40,7 @@ export const load = async ({ locals, params }) => {
         
         // Load zahnarzt info
         const zahnarztResponse = await fetch(
-            `${API_BASE_URL}/zahnaerzte/${review.zahnarztId || review.zahnarzt_id}`,
+            `${API_PREFIX}/zahnaerzte/${review.zahnarztId || review.zahnarzt_id}`,
             {
                 headers: {
                     'Authorization': `Bearer ${jwt_token}`,
@@ -96,7 +99,7 @@ export const actions = {
             
             // Load original review to get zahnarztId
             const reviewResponse = await fetch(
-                `${API_BASE_URL}/rezensionen/${reviewId}`,
+                `${API_PREFIX}/rezensionen/${reviewId}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${jwt_token}`,
@@ -112,7 +115,7 @@ export const actions = {
             const originalReview = await reviewResponse.json();
             
             const response = await fetch(
-                `${API_BASE_URL}/rezensionen/${reviewId}`,
+                `${API_PREFIX}/rezensionen/${reviewId}`,
                 {
                     method: 'PUT',
                     headers: {

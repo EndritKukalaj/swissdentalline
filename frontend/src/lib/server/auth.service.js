@@ -73,68 +73,25 @@ async function login(username, password, cookies) {
     const response = await axios(options);
     const { id_token, access_token } = response.data;
     
-    // Get user info from Auth0
+    // Get user info and set cookies
     const userInfo = await getUserInfo(access_token);
     
-    // Fetch complete user data from backend (including authorCategory)
-    try {
-      // IMPORTANT: Call backend directly with axios, NOT via api.js
-      // Reason: api.js needs locals.jwt_token, but cookie is not set yet
-      const backendResponse = await axios({
-        method: 'GET',
-        url: `${API_BASE_URL}/users/me`,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${id_token}`
-        }
-      });
-      
-      const fullUser = backendResponse.data;
-      
-      // Merge: Auth0 data + Backend data (authorCategory, etc.)
-      const completeUserInfo = {
-        ...userInfo,
-        authorCategory: fullUser.authorCategory,
-        id: fullUser.id
-      };
-      
-      // Set cookies with complete data
-      cookies.set('jwt_token', id_token, {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
-      });
-      
-      cookies.set('user_info', JSON.stringify(completeUserInfo), {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
-      });
-      
-    } catch (error) {
-      console.error('Backend /users/me Error (fallback to Auth0 data):', error.message);
-      
-      // Fallback: Only Auth0 data if backend not reachable
-      cookies.set('jwt_token', id_token, {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
-      });
-      
-      cookies.set('user_info', JSON.stringify(userInfo), {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production'
-      });
-    }
+    // Set cookies via SvelteKit cookies API
+    cookies.set('jwt_token', id_token, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      sameSite: 'lax',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production'
+    });
+    
+    cookies.set('user_info', JSON.stringify(userInfo), {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      sameSite: 'lax',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production'
+    });
     
     return { success: true };
   } catch (error) {
