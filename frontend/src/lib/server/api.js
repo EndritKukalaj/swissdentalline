@@ -26,7 +26,7 @@ export async function api(method, resource, locals, data) {
     try {
         const response = await axios({
             method,
-            url: `${env.API_BASE_URL}/api/${resource}`,
+            url: `${env.API_BASE_URL}/${resource}`,
             headers,
             data
         });
