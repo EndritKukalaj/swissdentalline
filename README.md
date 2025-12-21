@@ -34,6 +34,7 @@ Die Architektur basiert auf etablierten Enterprise-Technologien: Das **Backend**
 
 
 # Inhaltsverzeichnis
+- [Überblick](#überblick)
 - [Einleitung](#einleitung)
     - [Explore-Board](#explore-board)
     - [Create-Board](#create-board)
@@ -46,8 +47,21 @@ Die Architektur basiert auf etablierten Enterprise-Technologien: Das **Backend**
     - [UI-Mockup](#ui-mockup)
 - [Implementation](#implementation)
     - [Frontend](#frontend)
+        - [Umsetzung & Technologie](#umsetzung--technologie)
+        - [Testdaten (Rollen)](#testdaten-rollen)
+        - [Screenshots (Global)](#screenshots-global)
+        - [Screenshots (Patient)](#screenshots-patient)
+        - [Screenshots (Zahnarzt)](#screenshots-zahnarzt)
     - [KI-Funktionen](#ki-funktionen)
-	- [Drittsysteme](#drittsysteme)
+        - [Einsatzbereich und Zweck](#einsatzbereich-und-zweck)
+        - [Funktionsweise und Ablauf](#funktionsweise-und-ablauf)
+- [Testing](#testing)
+    - [Unit-Tests](#unit-tests)
+    - [API-Tests (Postman)](#api-tests-postman)
+    - [End-to-End Tests](#end-to-end-tests)
+    - [SonarCloud Integration](#sonarcloud-integration)
+- [Optionale Anforderungen](#optionale-anforderungen)
+- [Out of Scope](#out-of-scope)
 - [Fazit](#fazit)
     - [Stand der Implementation](#stand-der-implementation)
     
