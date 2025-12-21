@@ -1231,6 +1231,18 @@ Die Backend-Architektur folgt strikter Schichtentrennung (Controller/Service/Rep
 
 Gemäß dem GitHub-Backlog wurden alle **MVP-Ziele termingerecht erreicht**. Sämtliche Kern-Features—Buchungsprozess, Wartelisten-Management, KI-Moderation und Analytics sind vollständig implementiert, getestet und deployed.
 
+## Bekannte Bugs
+
+### Timezone-Offset bei Slot-Erstellung (Azure-Umgebung)
+**Problem**: Bei der Erstellung und Bearbeitung von Zeitslots durch Zahnärzte tritt eine **+1 Stunde Zeitversatz** in der Azure-Produktionsumgebung auf, während die lokale Entwicklung korrekt funktioniert.
+
+**Ursache**: Das Frontend nutzt `new Date().toISOString()`, das immer zu UTC konvertiert. In lokalen Umgebungen (CET/CEST) erfolgt eine implizite Timezone-Anpassung, die jedoch nicht konsistent auf Azure-Servern (UTC-Timezone) funktioniert.
+
+**Geplante Lösung**: 
+- Backend-seitige Timezone-Konfiguration auf CET festlegen
+- Frontend: Robuste Parsing-Logik mit expliziter Timezone-Kompensation
+---
+
 ### Ausblick
 
 Die erfolgreiche MVP-Umsetzung legt den Grundstein für strategische Erweiterungen:

@@ -1,11 +1,21 @@
 <script>
   import icon from "$lib/assets/Logo.webp";
   import "./styles.css";
+  import { afterNavigate } from '$app/navigation';
+
   let { data, children } = $props();
   let { user, isAuthenticated, userRole, flexTermineCount = 0 } = data;
   
   // Determine variant based on role
   const variant = userRole === 'Zahnarzt' ? 'blue' : 'turquoise';
+
+  // Close mobile navbar after navigation
+  afterNavigate(() => {
+    const navbarCollapse = document.getElementById('navbarContent');
+    if (navbarCollapse?.classList.contains('show')) {
+      navbarCollapse.classList.remove('show');
+    }
+  });
 </script>
 
 <svelte:head>
