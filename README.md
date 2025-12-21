@@ -1,6 +1,6 @@
 # SwissDentalLine
 
-![Build and Test](https://github.com/EndritKukalaj/swissdentalline/actions/workflows/ci-coverage-badges.yml/badge.svg)
+![Build and Test](https://github.com/EndritKukalaj/swissdentalline/actions/workflows/ci-build-and-test.yml/badge.svg)
 ![Coverage](https://github.com/EndritKukalaj/swissdentalline/blob/badges/.github/badges/jacoco.svg)
 ![Branches](https://github.com/EndritKukalaj/swissdentalline/blob/badges/.github/badges/branches.svg)
 
@@ -999,7 +999,7 @@ Der Moderationsprozess läuft vollautomatisch in folgenden Schritten ab:
 
 Das SwissDentalLine Projekt verfügt über eine umfassende Test-Strategie auf drei Ebenen: Unit-Tests, API-Tests und End-to-End-Tests. Die Test-Suite ist vollständig in die CI/CD-Pipeline integriert und wird bei jedem Push automatisch ausgeführt.
 
-![Build and Test](https://github.com/EndritKukalaj/swissdentalline/actions/workflows/ci-coverage-badges.yml/badge.svg)
+![Build and Test](https://github.com/EndritKukalaj/swissdentalline/actions/workflows/ci-build-and-test.yml/badge.svg)
 ![Coverage](https://github.com/EndritKukalaj/swissdentalline/blob/badges/.github/badges/jacoco.svg)
 ![Branches](https://github.com/EndritKukalaj/swissdentalline/blob/badges/.github/badges/branches.svg)
 
