@@ -3,7 +3,7 @@
     import { enhance } from '$app/forms';
     
     let { data } = $props();
-    let { flexTermin, oldTermin, behandlungsart, flexZahnarzt, oldZahnarzt, patientId } = data;
+    let { flexTermin, oldTermin, behandlungsart, flexZahnarzt, oldZahnarzt, flexPraxis, oldPraxis, patientId } = data;
     
     let isSubmitting = $state(false);
     
@@ -99,6 +99,16 @@
                             <i class="bi bi-person-circle"></i>
                             <span>{oldZahnarzt?.name || ''}</span>
                         </div>
+                        {#if oldPraxis}
+                        <div class="detail-row">
+                            <i class="bi bi-building"></i>
+                            <span>Praxis: {oldPraxis.bezeichnung || 'Unbekannt'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>Adresse: {oldPraxis.strasse}, {oldPraxis.plz} {oldPraxis.ort}</span>
+                        </div>
+                        {/if}
                         
                         <div class="detail-row">
                             <i class="bi bi-hourglass-split"></i>
@@ -151,6 +161,16 @@
                             <i class="bi bi-person-circle"></i>
                             <span>{flexZahnarzt?.name || ''}</span>
                         </div>
+                        {#if flexPraxis}
+                        <div class="detail-row">
+                            <i class="bi bi-building"></i>
+                            <span>Praxis: {flexPraxis.bezeichnung || 'Unbekannt'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span>Adresse: {flexPraxis.strasse}, {flexPraxis.plz} {flexPraxis.ort}</span>
+                        </div>
+                        {/if}
                         
                         <div class="detail-row">
                             <i class="bi bi-hourglass-split"></i>

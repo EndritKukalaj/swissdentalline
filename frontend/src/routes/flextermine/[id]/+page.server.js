@@ -81,6 +81,20 @@ export async function load({ params, url, locals }) {
         
         const flexZahnarzt = zahnarztRes.ok ? await zahnarztRes.json() : null;
         
+        // Fetch praxis address for flex termin's zahnarzt (if available)
+        let flexPraxis = null;
+        if (flexZahnarzt?.praxisAdresseId) {
+            const praxisRes = await fetch(`${API_PREFIX}/adressen/${flexZahnarzt.praxisAdresseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${locals.jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (praxisRes.ok) {
+                flexPraxis = await praxisRes.json();
+            }
+        }
+        
         // Fetch zahnarzt for old termin
         const oldZahnarztRes = await fetch(`${API_PREFIX}/zahnaerzte/${oldTermin.zahnarztId}`, {
             headers: {
@@ -91,12 +105,28 @@ export async function load({ params, url, locals }) {
         
         const oldZahnarzt = oldZahnarztRes.ok ? await oldZahnarztRes.json() : null;
         
+        // Fetch praxis address for old termin's zahnarzt (if available)
+        let oldPraxis = null;
+        if (oldZahnarzt?.praxisAdresseId) {
+            const praxisResOld = await fetch(`${API_PREFIX}/adressen/${oldZahnarzt.praxisAdresseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${locals.jwt_token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (praxisResOld.ok) {
+                oldPraxis = await praxisResOld.json();
+            }
+        }
+        
         return {
             flexTermin,
             oldTermin,
             behandlungsart,
             flexZahnarzt,
             oldZahnarzt,
+            flexPraxis,
+            oldPraxis,
             patientId
         };
     } catch (error) {

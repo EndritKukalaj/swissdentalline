@@ -191,7 +191,7 @@
                 ></textarea>
 
                 <div class="char-counter" class:warning={text.length < 10}>
-                    {text.length} / 10 Zeichen (mindestens)
+                    {text.length} Zeichen (mindestens 10)
                 </div>
 
                 {#if form?.error && text.length < 10}
